@@ -4,7 +4,10 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 
-public class GraphHelper {
+public final class GraphHelper {
+
+    private GraphHelper() {
+    }
 
     public static Vertex addCommand(GraphTraversalSource g, String name, String desc, String longDesc) {
         final GraphTraversal<Vertex, Vertex> commandGT = g.addV(SchemaManager.VERTEX.command.toString())
@@ -16,7 +19,8 @@ public class GraphHelper {
         return commandGT.next();
     }
 
-    public static void addFlag(GraphTraversalSource g, Vertex command, String name, String alias, String prefix, String desc, String longDesc, int sequence) {
+    public static void addFlag(GraphTraversalSource g, Vertex command, String name, String alias, String prefix,
+                               String desc, String longDesc, int sequence) {
         final GraphTraversal<Vertex, Vertex> flagGT = g.addV(SchemaManager.VERTEX.flag.toString())
                 .property(SchemaManager.PROPERTIES.name.toString(), name)
                 .property(SchemaManager.PROPERTIES.prefix.toString(), prefix)
@@ -37,7 +41,9 @@ public class GraphHelper {
                 .property(SchemaManager.PROPERTIES.sequence.toString(), sequence).from("a").next();
     }
 
-    public static void addOption(GraphTraversalSource g, Vertex command, String name, String alias, String prefix, String desc, String longDesc, SchemaManager.TYPE type, boolean isMandatory, boolean isRepeatable, int sequence) {
+    public static void addOption(GraphTraversalSource g, Vertex command, String name, String alias, String prefix,
+                                 String desc, String longDesc, SchemaManager.TYPE type, boolean isMandatory,
+                                 boolean isRepeatable, int sequence) {
         final GraphTraversal<Vertex, Vertex> optionGT = g.addV(SchemaManager.VERTEX.option.toString())
                 .property(SchemaManager.PROPERTIES.name.toString(), name)
                 .property(SchemaManager.PROPERTIES.desc.toString(), desc)
@@ -59,6 +65,6 @@ public class GraphHelper {
                 .property(SchemaManager.PROPERTIES.is_repeatable.toString(), isRepeatable)
                 .property(SchemaManager.PROPERTIES.sequence.toString(), sequence).from("a").next();
 
-//        command.addEdge(SchemaManager.EDGE.has_option.toString(), optionVertex, SchemaManager.PROPERTIES.is_mandatory.toString(), isMandatory, SchemaManager.PROPERTIES.is_repeatable.toString(), isRepeatable, SchemaManager.PROPERTIES.sequence.toString(), sequence);
+        // command.addEdge(SchemaManager.EDGE.has_option.toString(), optionVertex, SchemaManager.PROPERTIES.is_mandatory.toString(), isMandatory, SchemaManager.PROPERTIES.is_repeatable.toString(), isRepeatable, SchemaManager.PROPERTIES.sequence.toString(), sequence);
     }
 }

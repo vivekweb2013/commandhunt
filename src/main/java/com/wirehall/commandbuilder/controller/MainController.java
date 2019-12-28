@@ -20,14 +20,14 @@ public class MainController {
         this.mainService = mainService;
     }
 
-    @GetMapping(value = "/{id}")
-    public Command getCommandById(@PathVariable String id) {
-        return mainService.getCommandById(id);
-    }
-
     @GetMapping(value = "/")
     public List<Command> getAllCommands() {
         return mainService.getAllCommands();
+    }
+
+    @GetMapping(value = "/{id}")
+    public Command getCommandById(@PathVariable String id) {
+        return mainService.getCommandById(id);
     }
 
     @GetMapping(value = "/search")

@@ -17,9 +17,7 @@ public class SchemaManager {
 
     public enum PROPERTIES {name, alias, desc, long_desc, prefix, sequence, type, is_mandatory, is_repeatable, is_groupable}
 
-    public enum TYPE {
-        PATH, FILE_NAME, NUMERIC_PERMISSION, NUMBER, STRING;
-    }
+    public enum TYPE {PATH, FILE_NAME, NUMERIC_PERMISSION, NUMBER, STRING}
 
     public static void createSchema(final JanusGraph graph) {
         final JanusGraphManagement management = graph.openManagement();

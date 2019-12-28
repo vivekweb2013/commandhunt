@@ -11,7 +11,7 @@ public class DataManager {
     public static void fillData(GraphTraversalSource g) {
         try {
             // naive check if the graph was previously created
-            if (g.V().has("name", "technology").hasNext()) {
+            if (g.V().has("name", "command").hasNext()) {
                 g.tx().rollback();
                 return;
             }

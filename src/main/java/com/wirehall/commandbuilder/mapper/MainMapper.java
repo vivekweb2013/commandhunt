@@ -6,7 +6,8 @@ import org.apache.tinkerpop.gremlin.structure.Vertex;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainMapper extends BaseMapper {
+public final class MainMapper extends BaseMapper {
+
     public Command mapToCommand(Vertex command) {
         return new Command();
     }
