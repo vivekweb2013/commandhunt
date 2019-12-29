@@ -1,20 +1,13 @@
 package com.wirehall.commandbuilder.graph.commands;
 
+import com.wirehall.commandbuilder.dto.Command;
 import com.wirehall.commandbuilder.repository.MainRepository;
-import org.apache.tinkerpop.gremlin.structure.Vertex;
+import com.wirehall.commandbuilder.util.NodeBuilder;
 
 public class VI {
-    public static void createData(MainRepository m) {
-        Vertex command = m.addCommand("vi", "Visual Display Editor", null);
-        createFlags(m, command);
-        createOptions(m, command);
-    }
+    public static void createData(MainRepository repo) {
+        Command c = NodeBuilder.buildCommand("vi", "Visual Display Editor", null);
 
-    private static void createFlags(MainRepository m, Vertex command) {
-
-    }
-
-    private static void createOptions(MainRepository m, Vertex command) {
-
+        repo.addCommand(c);
     }
 }

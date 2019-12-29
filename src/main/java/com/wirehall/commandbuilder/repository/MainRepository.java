@@ -2,10 +2,13 @@ package com.wirehall.commandbuilder.repository;
 
 import com.wirehall.commandbuilder.dto.Command;
 import com.wirehall.commandbuilder.dto.Filter;
-import com.wirehall.commandbuilder.graph.SchemaManager;
+import com.wirehall.commandbuilder.dto.Flag;
+import com.wirehall.commandbuilder.dto.Option;
 import com.wirehall.commandbuilder.mapper.MainMapper;
+import com.wirehall.commandbuilder.model.*;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
+import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.janusgraph.core.JanusGraph;
 import org.slf4j.Logger;
@@ -30,65 +33,8 @@ public class MainRepository {
         this.g = g;
     }
 
-    public Vertex addCommand(String name, String desc, String longDesc) {
-        final GraphTraversal<Vertex, Vertex> graphTraversal = g.addV(SchemaManager.VERTEX.command.toString())
-                .property(SchemaManager.PROPERTIES.name.toString(), name)
-                .property(SchemaManager.PROPERTIES.desc.toString(), desc);
-        if (longDesc != null && !longDesc.isEmpty()) {
-            graphTraversal.property(SchemaManager.PROPERTIES.long_desc.toString(), longDesc);
-        }
-        return graphTraversal.next();
-    }
-
-    public void addOption(Vertex command, String name, String alias, String prefix, String desc, String longDesc,
-                          SchemaManager.TYPE type, boolean isMandatory, boolean isRepeatable, int sequence) {
-        final GraphTraversal<Vertex, Vertex> graphTraversal = g.addV(SchemaManager.VERTEX.option.toString())
-                .property(SchemaManager.PROPERTIES.name.toString(), name)
-                .property(SchemaManager.PROPERTIES.desc.toString(), desc)
-                .property(SchemaManager.PROPERTIES.type.toString(), type.toString());
-
-        if (alias != null && !alias.isEmpty()) {
-            graphTraversal.property(SchemaManager.PROPERTIES.alias.toString(), alias);
-        }
-        if (prefix != null && !prefix.isEmpty()) {
-            graphTraversal.property(SchemaManager.PROPERTIES.prefix.toString(), prefix);
-        }
-        if (longDesc != null && !longDesc.isEmpty()) {
-            graphTraversal.property(SchemaManager.PROPERTIES.long_desc.toString(), longDesc);
-        }
-
-        final Vertex optionVertex = graphTraversal.next();
-        g.V(command).as("a").V(optionVertex).addE(SchemaManager.EDGE.has_option.toString())
-                .property(SchemaManager.PROPERTIES.is_mandatory.toString(), isMandatory)
-                .property(SchemaManager.PROPERTIES.is_repeatable.toString(), isRepeatable)
-                .property(SchemaManager.PROPERTIES.sequence.toString(), sequence).from("a").next();
-
-        // command.addEdge(SchemaManager.EDGE.has_option.toString(), optionVertex, SchemaManager.PROPERTIES.is_mandatory.toString(), isMandatory, SchemaManager.PROPERTIES.is_repeatable.toString(), isRepeatable, SchemaManager.PROPERTIES.sequence.toString(), sequence);
-    }
-
-    public void addFlag(Vertex command, String name, String alias, String prefix, String desc, String longDesc, int sequence) {
-        final GraphTraversal<Vertex, Vertex> graphTraversal = g.addV(SchemaManager.VERTEX.flag.toString())
-                .property(SchemaManager.PROPERTIES.name.toString(), name)
-                .property(SchemaManager.PROPERTIES.prefix.toString(), prefix)
-                .property(SchemaManager.PROPERTIES.desc.toString(), desc)
-                .property(SchemaManager.PROPERTIES.long_desc.toString(), longDesc)
-                .property(SchemaManager.PROPERTIES.is_groupable.toString(), true);
-
-        if (alias != null && !alias.isEmpty()) {
-            graphTraversal.property(SchemaManager.PROPERTIES.alias.toString(), alias);
-        }
-        if (longDesc != null && !longDesc.isEmpty()) {
-            graphTraversal.property(SchemaManager.PROPERTIES.long_desc.toString(), longDesc);
-        }
-
-        final Vertex flagVertex = graphTraversal.next();
-
-        g.V(command).as("a").V(flagVertex).addE(SchemaManager.EDGE.has_flag.toString())
-                .property(SchemaManager.PROPERTIES.sequence.toString(), sequence).from("a").next();
-    }
-
     public List<Command> getAllCommands() {
-        List<Vertex> vertices = g.V().hasLabel(SchemaManager.VERTEX.command.toString()).toList();
+        List<Vertex> vertices = g.V().hasLabel(VERTEX.command.toString()).toList();
         return mapper.mapToCommands(vertices);
     }
 
@@ -106,4 +52,57 @@ public class MainRepository {
         List<Command> commands = new ArrayList<>();
         return commands;
     }
+
+    public void addCommand(Command command) {
+        GraphTraversal<Vertex, Vertex> graphTraversal = g.addV(VERTEX.command.toString());
+
+        for (COMMAND_PROPERTY property : COMMAND_PROPERTY.values()) {
+            if (command.getProperty(property) != null) {
+                graphTraversal.property(property.toString(), command.getProperty(property));
+            }
+        }
+        Vertex commandVertex = graphTraversal.next();
+
+        for (Flag flag : command.getFlags()) {
+            addFlag(commandVertex, flag);
+        }
+
+        for (Option option : command.getOptions()) {
+            addOption(commandVertex, option);
+        }
+    }
+
+    private void addFlag(Vertex commandVertex, Flag flag) {
+        Vertex flagVertex = g.addV(VERTEX.flag.toString()).next();
+        GraphTraversal<Vertex, Vertex> vertexGraphTraversal = g.V(flagVertex);
+        GraphTraversal<Vertex, Edge> edgeGraphTraversal = g.V(commandVertex).as("a").V(flagVertex).addE(EDGE.has_flag.toString());
+
+        for (FLAG_PROPERTY property : FLAG_PROPERTY.values()) {
+            if (flag.getProperty(property) != null && property.propertyOf().equals("V")) {
+                vertexGraphTraversal.property(property.toString(), flag.getProperty(property));
+            } else if (flag.getProperty(property) != null && property.propertyOf().equals("E")) {
+                edgeGraphTraversal.property(property.toString(), flag.getProperty(property));
+            }
+        }
+        vertexGraphTraversal.next();
+        edgeGraphTraversal.from("a").next();
+    }
+
+    private void addOption(Vertex commandVertex, Option option) {
+        Vertex optionVertex = g.addV(VERTEX.option.toString()).next();
+        GraphTraversal<Vertex, Vertex> vertexGraphTraversal = g.V(optionVertex);
+        GraphTraversal<Vertex, Edge> edgeGraphTraversal = g.V(commandVertex).as("a").V(optionVertex).addE(EDGE.has_option.toString());
+
+        for (OPTION_PROPERTY property : OPTION_PROPERTY.values()) {
+            if (option.getProperty(property) != null && property.propertyOf().equals("V")) {
+                vertexGraphTraversal.property(property.toString(), option.getProperty(property));
+            } else if (option.getProperty(property) != null && property.propertyOf().equals("E")) {
+                edgeGraphTraversal.property(property.toString(), option.getProperty(property));
+            }
+        }
+        vertexGraphTraversal.next();
+        edgeGraphTraversal.from("a").next();
+    }
+
+
 }

@@ -1,5 +1,6 @@
 package com.wirehall.commandbuilder.graph;
 
+import com.wirehall.commandbuilder.model.*;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.Multiplicity;
@@ -10,14 +11,6 @@ import org.slf4j.LoggerFactory;
 
 public class SchemaManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(SchemaManager.class);
-
-    public enum VERTEX {command, option, flag}
-
-    public enum EDGE {belongs_to, has_option, has_flag, overrides}
-
-    public enum PROPERTIES {name, alias, desc, long_desc, prefix, sequence, type, is_mandatory, is_repeatable, is_groupable}
-
-    public enum TYPE {PATH, FILE_NAME, NUMERIC_PERMISSION, NUMBER, STRING}
 
     public static void createSchema(final JanusGraph graph) {
         final JanusGraphManagement management = graph.openManagement();
@@ -52,17 +45,17 @@ public class SchemaManager {
     }
 
     private static void createProperties(final JanusGraphManagement management) {
-        management.makePropertyKey(PROPERTIES.name.toString()).dataType(String.class).make();
-        management.makePropertyKey(PROPERTIES.desc.toString()).dataType(String.class).make();
-        management.makePropertyKey(PROPERTIES.prefix.toString()).dataType(String.class).make();
-        management.makePropertyKey(PROPERTIES.sequence.toString()).dataType(Byte.class).make();
-        management.makePropertyKey(PROPERTIES.type.toString()).dataType(TYPE.class).make();
-        management.makePropertyKey(PROPERTIES.is_mandatory.toString()).dataType(Boolean.class).make();
-        management.makePropertyKey(PROPERTIES.is_repeatable.toString()).dataType(Boolean.class).make();
-        management.makePropertyKey(PROPERTIES.is_groupable.toString()).dataType(Boolean.class).make();
+        management.makePropertyKey(COMMAND_PROPERTY.name.toString()).dataType(String.class).make();
+        management.makePropertyKey(COMMAND_PROPERTY.desc.toString()).dataType(String.class).make();
+        management.makePropertyKey(FLAG_PROPERTY.prefix.toString()).dataType(String.class).make();
+        management.makePropertyKey(FLAG_PROPERTY.sequence.toString()).dataType(Byte.class).make();
+        management.makePropertyKey(OPTION_PROPERTY.data_type.toString()).dataType(DATA_TYPE.class).make();
+        management.makePropertyKey(OPTION_PROPERTY.is_mandatory.toString()).dataType(Boolean.class).make();
+        management.makePropertyKey(OPTION_PROPERTY.is_repeatable.toString()).dataType(Boolean.class).make();
     }
 
-    public static void createCompositeIndexes(final JanusGraphManagement management) {
-        management.buildIndex("nameIndex", Vertex.class).addKey(management.getPropertyKey(PROPERTIES.name.toString())).buildCompositeIndex();
+    private static void createCompositeIndexes(final JanusGraphManagement management) {
+        management.buildIndex("nameIndex", Vertex.class).addKey(management.getPropertyKey(COMMAND_PROPERTY.name.toString())).buildCompositeIndex();
     }
+
 }

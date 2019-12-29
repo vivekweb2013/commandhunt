@@ -1,36 +1,16 @@
 package com.wirehall.commandbuilder.dto;
 
-import java.util.HashMap;
+import com.wirehall.commandbuilder.model.OPTION_PROPERTY;
+
+import java.util.EnumMap;
 import java.util.Map;
 
-public class Option {
-    private Object id;
-    private Map<String, Object> properties;
-
-    public Object getId() {
-        return id;
-    }
-
-    public void setId(Object id) {
-        this.id = id;
-    }
-
-    public Map<String, Object> getProperties() {
+public class Option extends Node<OPTION_PROPERTY> {
+    @Override
+    public Map<OPTION_PROPERTY, Object> getProperties() {
         if (properties == null) {
-            properties = new HashMap<>();
+            properties = new EnumMap<>(OPTION_PROPERTY.class);
         }
         return properties;
-    }
-
-    public void setProperties(Map<String, Object> properties) {
-        this.properties = properties;
-    }
-
-    @Override
-    public String toString() {
-        return "Option{" +
-                "id=" + id +
-                ", properties=" + properties +
-                '}';
     }
 }

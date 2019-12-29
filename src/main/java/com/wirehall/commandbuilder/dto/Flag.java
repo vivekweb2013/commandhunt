@@ -1,36 +1,17 @@
 package com.wirehall.commandbuilder.dto;
 
-import java.util.HashMap;
+import com.wirehall.commandbuilder.model.FLAG_PROPERTY;
+
+import java.util.EnumMap;
 import java.util.Map;
 
-public class Flag {
-    private Object id;
-    private Map<String, Object> properties;
-
-    public Object getId() {
-        return id;
-    }
-
-    public void setId(Object id) {
-        this.id = id;
-    }
-
-    public Map<String, Object> getProperties() {
-        if (properties == null) {
-            properties = new HashMap<>();
-        }
-        return properties;
-    }
-
-    public void setProperties(Map<String, Object> properties) {
-        this.properties = properties;
-    }
+public class Flag extends Node<FLAG_PROPERTY> {
 
     @Override
-    public String toString() {
-        return "Flag{" +
-                "id=" + id +
-                ", properties=" + properties +
-                '}';
+    public Map<FLAG_PROPERTY, Object> getProperties() {
+        if (properties == null) {
+            properties = new EnumMap<>(FLAG_PROPERTY.class);
+        }
+        return properties;
     }
 }

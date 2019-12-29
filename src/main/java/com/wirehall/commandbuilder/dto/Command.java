@@ -1,40 +1,33 @@
 package com.wirehall.commandbuilder.dto;
 
-import java.util.HashMap;
+import com.wirehall.commandbuilder.model.COMMAND_PROPERTY;
+
+import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-public class Command {
-    private Object id;
-    private Map<String, Object> properties;
+public class Command extends Node<COMMAND_PROPERTY> {
     private List<Flag> flags;
     private List<Option> options;
 
-    public Object getId() {
-        return id;
-    }
-
-    public void setId(Object id) {
-        this.id = id;
-    }
-
-    public Map<String, Object> getProperties() {
+    @Override
+    public Map<COMMAND_PROPERTY, Object> getProperties() {
         if (properties == null) {
-            properties = new HashMap<>();
+            properties = new EnumMap<>(COMMAND_PROPERTY.class);
         }
         return properties;
     }
 
-    public void setProperties(Map<String, Object> properties) {
-        this.properties = properties;
-    }
-
-    public void addProperty(String key, Object value) {
-        getProperties().put(key, value);
-    }
-
     public List<Flag> getFlags() {
+        if (flags == null) {
+            flags = new ArrayList<>();
+        }
         return flags;
+    }
+
+    public void addFlag(Flag flag) {
+        getFlags().add(flag);
     }
 
     public void setFlags(List<Flag> flags) {
@@ -42,7 +35,14 @@ public class Command {
     }
 
     public List<Option> getOptions() {
+        if (options == null) {
+            options = new ArrayList<>();
+        }
         return options;
+    }
+
+    public void addOption(Option option) {
+        getOptions().add(option);
     }
 
     public void setOptions(List<Option> options) {
@@ -52,10 +52,9 @@ public class Command {
     @Override
     public String toString() {
         return "Command{" +
-                "id=" + id +
-                ", properties=" + properties +
-                ", flags=" + flags +
+                "flags=" + flags +
                 ", options=" + options +
                 '}';
     }
+
 }
