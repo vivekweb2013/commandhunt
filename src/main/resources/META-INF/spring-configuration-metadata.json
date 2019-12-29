@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "app.graph.config",
+      "type": "java.lang.String"
+    }
+  ]
+}

@@ -11,12 +11,12 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class GraphConfiguration {
-    @Value("${graph.config.file}")
-    private String graphConfigFile;
+    @Value("${app.graph.config}")
+    private String appGraphConfigPath;
 
     @Bean
     JanusGraph janusGraph() throws ConfigurationException {
-        JanusGraph graph = (JanusGraph) GraphFactory.open(new PropertiesConfiguration(graphConfigFile));
+        JanusGraph graph = (JanusGraph) GraphFactory.open(new PropertiesConfiguration(appGraphConfigPath));
         return graph;
     }
 
