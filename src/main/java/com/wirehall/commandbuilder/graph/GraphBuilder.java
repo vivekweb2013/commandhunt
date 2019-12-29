@@ -1,5 +1,7 @@
 package com.wirehall.commandbuilder.graph;
 
+import com.wirehall.commandbuilder.graph.commands.*;
+import com.wirehall.commandbuilder.repository.MainRepository;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.JanusGraphFactory;
@@ -18,21 +20,49 @@ public class GraphBuilder {
 
     private JanusGraph graph;
     private GraphTraversalSource g;
+    private MainRepository mainRepository;
 
     @Autowired
-    public GraphBuilder(JanusGraph graph, GraphTraversalSource g) {
+    public GraphBuilder(JanusGraph graph, GraphTraversalSource g, MainRepository mainRepository) {
         this.graph = graph;
         this.g = g;
+        this.mainRepository = mainRepository;
     }
 
     public void initialize() {
         try {
             SchemaManager.createSchema(graph);
-            DataManager.fillData(g);
+            fillData(mainRepository);
             readElements();
             closeGraph();
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
+        }
+    }
+
+    public void fillData(MainRepository mainRepository) {
+        try {
+            // naive check if the graph was previously created
+            if (g.V().has("name", "command").hasNext()) {
+                LOGGER.info("Skip Data Creation. Data Already Exist!!!");
+                g.tx().rollback();
+                return;
+            }
+            LOGGER.info("Creating Data");
+
+            CP.createData(mainRepository);
+            LS.createData(mainRepository);
+            MV.createData(mainRepository);
+            PS.createData(mainRepository);
+            RM.createData(mainRepository);
+            VI.createData(mainRepository);
+            WC.createData(mainRepository);
+
+            g.tx().commit();
+
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            g.tx().rollback();
         }
     }
 
