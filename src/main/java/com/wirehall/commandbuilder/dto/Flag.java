@@ -4,24 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Flag {
-    private String id;
-    private String label;
+    private Object id;
     private Map<String, Object> properties;
 
-    public String getId() {
+    public Object getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Object id) {
         this.id = id;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
     }
 
     public Map<String, Object> getProperties() {
@@ -38,8 +29,7 @@ public class Flag {
     @Override
     public String toString() {
         return "Flag{" +
-                "id='" + id + '\'' +
-                ", label='" + label + '\'' +
+                "id=" + id +
                 ", properties=" + properties +
                 '}';
     }

@@ -88,8 +88,8 @@ public class MainRepository {
     }
 
     public List<Command> getAllCommands() {
-        List<Command> commands = new ArrayList<>();
-        return commands;
+        List<Vertex> vertices = g.V().hasLabel(SchemaManager.VERTEX.command.toString()).toList();
+        return mapper.mapToCommands(vertices);
     }
 
     public Command getCommandById(String id) {

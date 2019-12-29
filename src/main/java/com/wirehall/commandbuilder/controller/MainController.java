@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "command", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "command", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MainController {
 
     private final MainService mainService;
@@ -20,7 +20,7 @@ public class MainController {
         this.mainService = mainService;
     }
 
-    @GetMapping(value = "/")
+    @GetMapping(value = "")
     public List<Command> getAllCommands() {
         return mainService.getAllCommands();
     }
@@ -35,7 +35,7 @@ public class MainController {
         return mainService.getCommandByName(name);
     }
 
-    @PostMapping(value = "/search")
+    @PostMapping(value = "/search", consumes = MediaType.APPLICATION_JSON_VALUE)
     public List<Command> getCommandsByFilter(@RequestBody Filter filter) {
         return mainService.getCommandsByFilter(filter);
     }

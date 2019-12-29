@@ -34,7 +34,6 @@ public class GraphBuilder {
             SchemaManager.createSchema(graph);
             fillData(mainRepository);
             readElements();
-            closeGraph();
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }

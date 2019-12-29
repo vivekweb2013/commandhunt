@@ -1,27 +1,21 @@
 package com.wirehall.commandbuilder.dto;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Command {
-    private String id;
-    private String label;
+    private Object id;
     private Map<String, Object> properties;
+    private List<Flag> flags;
+    private List<Option> options;
 
-    public String getId() {
+    public Object getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Object id) {
         this.id = id;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
     }
 
     public Map<String, Object> getProperties() {
@@ -35,12 +29,33 @@ public class Command {
         this.properties = properties;
     }
 
+    public void addProperty(String key, Object value) {
+        getProperties().put(key, value);
+    }
+
+    public List<Flag> getFlags() {
+        return flags;
+    }
+
+    public void setFlags(List<Flag> flags) {
+        this.flags = flags;
+    }
+
+    public List<Option> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<Option> options) {
+        this.options = options;
+    }
+
     @Override
     public String toString() {
         return "Command{" +
-                "id='" + id + '\'' +
-                ", label='" + label + '\'' +
+                "id=" + id +
                 ", properties=" + properties +
+                ", flags=" + flags +
+                ", options=" + options +
                 '}';
     }
 }
