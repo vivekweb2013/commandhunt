@@ -2,6 +2,7 @@ package com.wirehall.commandbuilder.repository;
 
 import com.wirehall.commandbuilder.dto.Command;
 import com.wirehall.commandbuilder.dto.Filter;
+import com.wirehall.commandbuilder.mapper.MainMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -9,7 +10,10 @@ import java.util.List;
 
 @Repository
 public class MainRepository {
+    private MainMapper mapper = new MainMapper();
+
     public List<Command> getAllCommands() {
+
         List<Command> commands = new ArrayList<>();
         return commands;
     }

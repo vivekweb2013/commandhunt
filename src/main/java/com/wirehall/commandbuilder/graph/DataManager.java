@@ -12,10 +12,11 @@ public class DataManager {
         try {
             // naive check if the graph was previously created
             if (g.V().has("name", "command").hasNext()) {
+                LOGGER.info("Skip Data Creation. Data Already Exist!!!");
                 g.tx().rollback();
                 return;
             }
-            LOGGER.info("creating elements");
+            LOGGER.info("Creating Data");
 
             CP.createData(g);
             LS.createData(g);

@@ -1,34 +1,32 @@
 package com.wirehall.commandbuilder.graph;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
-import org.apache.tinkerpop.gremlin.structure.util.GraphFactory;
 import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.JanusGraphFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Component
 public class GraphBuilder {
     private static final Logger LOGGER = LoggerFactory.getLogger(GraphBuilder.class);
 
-    private Configuration conf;
     private JanusGraph graph;
     private GraphTraversalSource g;
 
-    public GraphBuilder(final String propertyFilePath) throws ConfigurationException {
-        conf = new PropertiesConfiguration(propertyFilePath);
-        initialize();
+    @Autowired
+    public GraphBuilder(JanusGraph graph, GraphTraversalSource g) {
+        this.graph = graph;
+        this.g = g;
     }
 
-    private void initialize() {
+    public void initialize() {
         try {
-            openGraph();
             SchemaManager.createSchema(graph);
             DataManager.fillData(g);
             readElements();
@@ -37,14 +35,6 @@ public class GraphBuilder {
             LOGGER.error(e.getMessage(), e);
         }
     }
-
-    private GraphTraversalSource openGraph() {
-        LOGGER.info("opening graph");
-        graph = (JanusGraph) GraphFactory.open(conf);
-        g = graph.traversal();
-        return g;
-    }
-
 
     private void readElements() {
         try {
