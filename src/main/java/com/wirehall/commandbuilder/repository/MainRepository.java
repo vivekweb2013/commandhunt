@@ -52,6 +52,15 @@ public class MainRepository {
 
     public Command getCommandById(String id) {
         Vertex commandVertex = g.V(id).next();
+        return getCommand(commandVertex);
+    }
+
+    public Command getCommandByName(String name) {
+        Vertex commandVertex = g.V().hasLabel(VERTEX.command.toString()).has("name", name).next();
+        return getCommand(commandVertex);
+    }
+
+    private Command getCommand(Vertex commandVertex) {
         Command command = mapper.mapToCommand(commandVertex);
 
         List<Map<String, Object>> flagList = g.V(commandVertex).outE().hasLabel("has_flag").as("E")
@@ -73,12 +82,6 @@ public class MainRepository {
             Option option = mapper.mapToOption(optionVertexProps, optionEdgeProps);
             command.addOption(option);
         }
-
-        return command;
-    }
-
-    public Command getCommandByName(String name) {
-        Command command = new Command();
         return command;
     }
 
