@@ -3,10 +3,10 @@ package com.wirehall.commandbuilder.util;
 import com.wirehall.commandbuilder.dto.Command;
 import com.wirehall.commandbuilder.dto.Flag;
 import com.wirehall.commandbuilder.dto.Option;
-import com.wirehall.commandbuilder.model.COMMAND_PROPERTY;
+import com.wirehall.commandbuilder.model.props.COMMAND_PROPERTY;
 import com.wirehall.commandbuilder.model.DATA_TYPE;
-import com.wirehall.commandbuilder.model.FLAG_PROPERTY;
-import com.wirehall.commandbuilder.model.OPTION_PROPERTY;
+import com.wirehall.commandbuilder.model.props.FLAG_PROPERTY;
+import com.wirehall.commandbuilder.model.props.OPTION_PROPERTY;
 
 import java.util.Map;
 

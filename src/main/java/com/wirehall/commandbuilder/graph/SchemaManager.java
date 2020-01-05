@@ -1,6 +1,9 @@
 package com.wirehall.commandbuilder.graph;
 
 import com.wirehall.commandbuilder.model.*;
+import com.wirehall.commandbuilder.model.props.COMMAND_PROPERTY;
+import com.wirehall.commandbuilder.model.props.FLAG_PROPERTY;
+import com.wirehall.commandbuilder.model.props.OPTION_PROPERTY;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.Multiplicity;

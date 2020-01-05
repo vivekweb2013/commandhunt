@@ -1,6 +1,6 @@
 package com.wirehall.commandbuilder.dto;
 
-import com.wirehall.commandbuilder.model.OPTION_PROPERTY;
+import com.wirehall.commandbuilder.model.props.OPTION_PROPERTY;
 
 import java.util.EnumMap;
 import java.util.Map;

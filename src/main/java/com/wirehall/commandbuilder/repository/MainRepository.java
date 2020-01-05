@@ -5,9 +5,15 @@ import com.wirehall.commandbuilder.dto.Filter;
 import com.wirehall.commandbuilder.dto.Flag;
 import com.wirehall.commandbuilder.dto.Option;
 import com.wirehall.commandbuilder.mapper.MainMapper;
-import com.wirehall.commandbuilder.model.*;
+import com.wirehall.commandbuilder.model.EDGE;
+import com.wirehall.commandbuilder.model.VERTEX;
+import com.wirehall.commandbuilder.model.props.COMMAND_PROPERTY;
+import com.wirehall.commandbuilder.model.props.FLAG_PROPERTY;
+import com.wirehall.commandbuilder.model.props.OPTION_PROPERTY;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
+import org.apache.tinkerpop.gremlin.process.traversal.step.util.WithOptions;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.janusgraph.core.JanusGraph;
@@ -18,6 +24,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class MainRepository {
@@ -35,11 +42,38 @@ public class MainRepository {
 
     public List<Command> getAllCommands() {
         List<Vertex> vertices = g.V().hasLabel(VERTEX.command.toString()).toList();
-        return mapper.mapToCommands(vertices);
+        List<Command> commands = new ArrayList<>();
+        for (Vertex commandVertex : vertices) {
+            Command command = mapper.mapToCommand(commandVertex);
+            commands.add(command);
+        }
+        return commands;
     }
 
     public Command getCommandById(String id) {
-        Command command = new Command();
+        Vertex commandVertex = g.V(id).next();
+        Command command = mapper.mapToCommand(commandVertex);
+
+        List<Map<String, Object>> flagList = g.V(commandVertex).outE().hasLabel("has_flag").as("E")
+                .inV().as("V").select("E", "V").by(__.valueMap().with(WithOptions.tokens)).toList();
+
+        for (Map<String, Object> flagProps : flagList) {
+            Map<Object, Object> flagVertexProps = (Map<Object, Object>) flagProps.get("V");
+            Map<Object, Object> flagEdgeProps = (Map<Object, Object>) flagProps.get("E");
+            Flag flag = mapper.mapToFlag(flagVertexProps, flagEdgeProps);
+            command.addFlag(flag);
+        }
+
+        List<Map<String, Object>> optionList = g.V(commandVertex).outE().hasLabel("has_option").as("E")
+                .inV().as("V").select("E", "V").by(__.valueMap().with(WithOptions.tokens)).toList();
+
+        for (Map<String, Object> optionProps : optionList) {
+            Map<Object, Object> optionVertexProps = (Map<Object, Object>) optionProps.get("V");
+            Map<Object, Object> optionEdgeProps = (Map<Object, Object>) optionProps.get("E");
+            Option option = mapper.mapToOption(optionVertexProps, optionEdgeProps);
+            command.addOption(option);
+        }
+
         return command;
     }
 
@@ -103,6 +137,4 @@ public class MainRepository {
         vertexGraphTraversal.next();
         edgeGraphTraversal.from("a").next();
     }
-
-
 }

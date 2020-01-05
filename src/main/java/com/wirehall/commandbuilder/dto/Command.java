@@ -1,6 +1,6 @@
 package com.wirehall.commandbuilder.dto;
 
-import com.wirehall.commandbuilder.model.COMMAND_PROPERTY;
+import com.wirehall.commandbuilder.model.props.COMMAND_PROPERTY;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -54,7 +54,7 @@ public class Command extends Node<COMMAND_PROPERTY> {
         return "Command{" +
                 "flags=" + flags +
                 ", options=" + options +
+                ", properties=" + properties +
                 '}';
     }
-
 }

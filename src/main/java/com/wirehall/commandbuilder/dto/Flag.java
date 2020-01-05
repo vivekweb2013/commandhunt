@@ -1,6 +1,6 @@
 package com.wirehall.commandbuilder.dto;
 
-import com.wirehall.commandbuilder.model.FLAG_PROPERTY;
+import com.wirehall.commandbuilder.model.props.FLAG_PROPERTY;
 
 import java.util.EnumMap;
 import java.util.Map;
