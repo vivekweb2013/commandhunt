@@ -14,6 +14,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
 import org.apache.tinkerpop.gremlin.process.traversal.step.util.WithOptions;
+import org.apache.tinkerpop.gremlin.structure.Column;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.janusgraph.core.JanusGraph;
@@ -63,8 +64,9 @@ public class MainRepository {
     private Command getCommand(Vertex commandVertex) {
         Command command = mapper.mapToCommand(commandVertex);
 
-        List<Map<String, Object>> flagList = g.V(commandVertex).outE().hasLabel("has_flag").as("E")
-                .inV().as("V").select("E", "V").by(__.valueMap().with(WithOptions.tokens)).toList();
+        List<Map<String, Object>> flagList = g.V(commandVertex).outE().hasLabel("has_flag").as("E").inV().as("V")
+                .select("E", "V").by(__.valueMap().with(WithOptions.tokens).unfold().group()
+                        .by(Column.keys).by(__.select(Column.values).unfold())).toList();
 
         for (Map<String, Object> flagProps : flagList) {
             Map<Object, Object> flagVertexProps = (Map<Object, Object>) flagProps.get("V");
@@ -73,8 +75,9 @@ public class MainRepository {
             command.addFlag(flag);
         }
 
-        List<Map<String, Object>> optionList = g.V(commandVertex).outE().hasLabel("has_option").as("E")
-                .inV().as("V").select("E", "V").by(__.valueMap().with(WithOptions.tokens)).toList();
+        List<Map<String, Object>> optionList = g.V(commandVertex).outE().hasLabel("has_option").as("E").inV().as("V")
+                .select("E", "V").by(__.valueMap().with(WithOptions.tokens).unfold().group()
+                        .by(Column.keys).by(__.select(Column.values).unfold())).toList();
 
         for (Map<String, Object> optionProps : optionList) {
             Map<Object, Object> optionVertexProps = (Map<Object, Object>) optionProps.get("V");
