@@ -1,0 +1,10 @@
+@import "../styles/shared";
+
+div.content {
+  background-color: $color-tertiary;
+  border: 0;
+  clear: both;
+  flex-grow: 1;
+  padding: 24px;
+  width: 100%;
+}

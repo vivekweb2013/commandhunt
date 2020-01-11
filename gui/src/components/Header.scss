@@ -1,0 +1,72 @@
+@import "../styles/shared";
+
+header {
+  background-color: $color-primary;
+  height: 50px;
+  left: 0;
+  min-width: auto;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 5050;
+
+  .logo > a {
+    border-radius: 4px;
+    color: $color-primary-contrast;
+    float: left;
+    font-size: 1.6rem;
+    font-weight: bold;
+    height: inherit;
+    line-height: 25px;
+    padding: 12px;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .dropdown {
+    font-size: 1rem;
+    position: relative;
+    float: right;
+    height: 100%;
+    &:hover {
+      .dropdown-btn {
+        background-color: $color-primary-lighter;
+      }
+      .dropdown-content {
+        display: block;
+        width: 100%;
+      }
+    }
+
+    .dropdown-btn {
+      background-color: $color-primary-light;
+      border: none;
+      color: $color-primary-contrast;
+      font-size: 1rem;
+      height: inherit;
+      padding: 16px;
+    }
+
+    .dropdown-content {
+      background-color: #f1f1f1;
+      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+      display: none;
+      left: 50%;
+      min-width: fit-content;
+      position: absolute;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      z-index: 1;
+      a {
+        color: black;
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+
+        &:hover {
+          background-color: #ddd;
+        }
+      }
+    }
+  }
+}

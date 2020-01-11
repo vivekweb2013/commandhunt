@@ -1,0 +1,53 @@
+@import "../styles/shared";
+
+.left-sidebar {
+  background-color: $color-secondary;
+  border: 0;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  width: $sidebar-width;
+  z-index: 1000;
+
+  .sticky-sidebar {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    position: sticky;
+    top: $header-height;
+    width: auto;
+
+    a {
+      color: $color-secondary-lighter;
+      display: block;
+      padding: 16px;
+      text-decoration: none;
+
+      &.active {
+        background-color: $color-secondary-light;
+        color: $color-secondary-lightest;
+      }
+
+      &:hover:not(.active) {
+        background-color: $color-secondary-contrast;
+        color: $color-secondary-lighter;
+      }
+
+      @media screen and (max-width: 400px) {
+        float: none;
+        text-align: center;
+      }
+    }
+  }
+  @media screen and (max-width: 700px) {
+    align-self: flex-start;
+    height: auto;
+    width: 100%;
+    a {
+      float: left;
+    }
+  }
+}

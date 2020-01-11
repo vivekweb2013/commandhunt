@@ -1,0 +1,38 @@
+@import "styles/shared";
+
+html {
+  height: 100%;
+  font-size: medium;
+}
+
+body {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  border: 0;
+  box-sizing: border-box; // because everyone is moving to `box-sizing: border-box` https://stackoverflow.com/questions/18854259/why-did-bootstrap-3-switch-to-box-sizing-border-box
+  display: flex;
+  font-family: $font-family-primary;
+  margin: 0;
+  min-height: 100%;
+  min-width: auto;
+  padding: $header-height 0 0 0;
+
+  & > #root {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+    height: inherit;
+    min-height: 100%;
+    width: 100%;
+  }
+}
+
+body *,
+body *:before,
+body *:after {
+  box-sizing: inherit;
+}
+
+code {
+  font-family: $font-family-code;
+}
