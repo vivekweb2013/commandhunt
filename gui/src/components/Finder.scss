@@ -1,13 +1,18 @@
+@import "../styles/shared";
+
 $cornflower-blue: #6078ea;
 $cubic-bezier: cubic-bezier(0.694, 0.048, 0.335, 1);
-$search-box-container-height: 70px;
+$search-box-container-height: 50px;
 $search-field-font-size: ($search-box-container-height/30px * 1rem);
 
 .finder {
+  text-align: center;
+
   .search-box-container {
     border: 0;
     height: $search-box-container-height;
     margin: 0 auto;
+    margin-bottom: 75px;
     padding: 0;
     position: relative;
     width: 60%;
@@ -92,6 +97,41 @@ $search-field-font-size: ($search-box-container-height/30px * 1rem);
           transform: rotate(-45deg);
           width: 4px;
         }
+      }
+    }
+  }
+
+  table {
+    border-collapse: collapse;
+    background: white;
+    border-radius: 6px;
+    overflow: hidden;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+
+    td,
+    th {
+      text-align: left;
+      padding-left: 8px;
+    }
+
+    thead tr {
+      height: 60px;
+      background: $color-primary-light;
+      color: $color-primary-contrast;
+      font-size: 1.2rem;
+    }
+
+    tbody tr {
+      height: 48px;
+      border-bottom: 1px solid $color-primary-contrast;
+      font-size: 1.1rem;
+      td:first-child {
+        font-weight: 500;
+      }
+      &:last-child {
+        border: 0;
       }
     }
   }
