@@ -15,7 +15,6 @@ function App() {
     <React.Fragment>
       <Header />
       <div className="main-container">
-        <Sidebar />
         <Content />
       </div>
       <Footer />
