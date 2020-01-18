@@ -1,10 +1,18 @@
 package com.wirehall.commandbuilder.dto;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+
 import java.util.Map;
 
 public abstract class Node<E extends Enum<E>> {
+    protected final Class<E> enumClass;
+
     private Object id;
     protected Map<E, Object> properties;
+
+    public Node(Class<E> enumClass) {
+        this.enumClass = enumClass;
+    }
 
     public Object getId() {
         return id;
@@ -26,6 +34,13 @@ public abstract class Node<E extends Enum<E>> {
 
     public void addProperty(E key, Object value) {
         getProperties().put(key, value);
+    }
+
+    // The sole purpose of this overloaded private method is to be used for deserialization
+    // Since @JsonAnySetter does not work with Enum key parameter
+    @JsonAnySetter
+    private void addProperty(String key, Object value) {
+        addProperty(Enum.valueOf(enumClass, key), value);
     }
 
     @Override

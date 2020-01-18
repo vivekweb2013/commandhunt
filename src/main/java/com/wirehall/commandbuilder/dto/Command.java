@@ -11,6 +11,10 @@ public class Command extends Node<COMMAND_PROPERTY> {
     private List<Flag> flags;
     private List<Option> options;
 
+    public Command() {
+        super(COMMAND_PROPERTY.class);
+    }
+
     @Override
     public Map<COMMAND_PROPERTY, Object> getProperties() {
         if (properties == null) {

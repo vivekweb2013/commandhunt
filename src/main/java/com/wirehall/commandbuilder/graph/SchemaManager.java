@@ -1,6 +1,7 @@
 package com.wirehall.commandbuilder.graph;
 
-import com.wirehall.commandbuilder.model.*;
+import com.wirehall.commandbuilder.model.EDGE;
+import com.wirehall.commandbuilder.model.VERTEX;
 import com.wirehall.commandbuilder.model.props.COMMAND_PROPERTY;
 import com.wirehall.commandbuilder.model.props.FLAG_PROPERTY;
 import com.wirehall.commandbuilder.model.props.OPTION_PROPERTY;
@@ -32,6 +33,7 @@ public class SchemaManager {
             LOGGER.info("########################### finished creating schema ############################");
         } catch (Exception e) {
             management.rollback();
+            throw e;
         }
     }
 
@@ -50,11 +52,18 @@ public class SchemaManager {
     private static void createProperties(final JanusGraphManagement management) {
         management.makePropertyKey(COMMAND_PROPERTY.name.toString()).dataType(String.class).make();
         management.makePropertyKey(COMMAND_PROPERTY.desc.toString()).dataType(String.class).make();
+        management.makePropertyKey(COMMAND_PROPERTY.long_desc.toString()).dataType(String.class).make();
+        management.makePropertyKey(COMMAND_PROPERTY.syntax.toString()).dataType(String.class).make();
+        management.makePropertyKey(COMMAND_PROPERTY.man_page_url.toString()).dataType(String.class).make();
+
         management.makePropertyKey(FLAG_PROPERTY.prefix.toString()).dataType(String.class).make();
+        management.makePropertyKey(FLAG_PROPERTY.alias.toString()).dataType(String.class).make();
+        management.makePropertyKey(FLAG_PROPERTY.is_grouping_allowed.toString()).dataType(String.class).make();
         management.makePropertyKey(FLAG_PROPERTY.sequence.toString()).dataType(Byte.class).make();
-        management.makePropertyKey(OPTION_PROPERTY.data_type.toString()).dataType(DATA_TYPE.class).make();
-        management.makePropertyKey(OPTION_PROPERTY.is_mandatory.toString()).dataType(Boolean.class).make();
-        management.makePropertyKey(OPTION_PROPERTY.is_repeatable.toString()).dataType(Boolean.class).make();
+
+        management.makePropertyKey(OPTION_PROPERTY.data_type.toString()).dataType(String.class).make();
+        management.makePropertyKey(OPTION_PROPERTY.is_repeatable.toString()).dataType(String.class).make();
+        management.makePropertyKey(OPTION_PROPERTY.is_mandatory.toString()).dataType(String.class).make();
     }
 
     private static void createCompositeIndexes(final JanusGraphManagement management) {

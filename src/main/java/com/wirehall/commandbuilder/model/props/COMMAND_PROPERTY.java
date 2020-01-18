@@ -1,7 +1,8 @@
 package com.wirehall.commandbuilder.model.props;
 
 public enum COMMAND_PROPERTY {
-    name("V", true), desc("V", true), long_desc("V", false);
+    name("V", true), syntax("V", true), desc("V", true),
+    long_desc("V", false), man_page_url("V", false);
 
     private final String propertyOf;
     private final boolean isMandatory;

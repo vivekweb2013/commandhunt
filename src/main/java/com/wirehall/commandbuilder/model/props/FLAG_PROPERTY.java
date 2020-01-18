@@ -3,7 +3,8 @@ package com.wirehall.commandbuilder.model.props;
 public enum FLAG_PROPERTY {
     name("V", true), alias("V", false),
     prefix("V", true), desc("V", true),
-    long_desc("V", false), sequence("E", true);
+    long_desc("V", false), sequence("E", true),
+    is_grouping_allowed("V", false);
 
     private final String propertyOf;
     private final boolean isMandatory;

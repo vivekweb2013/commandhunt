@@ -6,6 +6,11 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public class Option extends Node<OPTION_PROPERTY> {
+
+    public Option() {
+        super(OPTION_PROPERTY.class);
+    }
+
     @Override
     public Map<OPTION_PROPERTY, Object> getProperties() {
         if (properties == null) {

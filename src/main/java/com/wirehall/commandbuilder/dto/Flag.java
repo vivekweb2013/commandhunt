@@ -7,6 +7,10 @@ import java.util.Map;
 
 public class Flag extends Node<FLAG_PROPERTY> {
 
+    public Flag() {
+        super(FLAG_PROPERTY.class);
+    }
+
     @Override
     public Map<FLAG_PROPERTY, Object> getProperties() {
         if (properties == null) {

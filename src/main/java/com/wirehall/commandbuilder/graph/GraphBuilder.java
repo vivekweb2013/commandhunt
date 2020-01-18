@@ -1,13 +1,17 @@
 package com.wirehall.commandbuilder.graph;
 
-import com.wirehall.commandbuilder.graph.commands.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wirehall.commandbuilder.dto.Command;
 import com.wirehall.commandbuilder.repository.MainRepository;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
+import org.apache.tinkerpop.gremlin.process.traversal.step.util.WithOptions;
 import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.JanusGraphFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,6 +21,9 @@ import java.util.Optional;
 @Component
 public class GraphBuilder {
     private static final Logger LOGGER = LoggerFactory.getLogger(GraphBuilder.class);
+
+    @Value("classpath*:/data/**/*.json")
+    private Resource[] jsonDataResources;
 
     private JanusGraph graph;
     private GraphTraversalSource g;
@@ -39,7 +46,7 @@ public class GraphBuilder {
         }
     }
 
-    public void fillData(MainRepository mainRepository) {
+    private void fillData(MainRepository mainRepository) {
         try {
             // naive check if the graph was previously created
             if (g.V().has("name", "command").hasNext()) {
@@ -49,13 +56,11 @@ public class GraphBuilder {
             }
             LOGGER.info("Creating Data");
 
-            CP.createData(mainRepository);
-            LS.createData(mainRepository);
-            MV.createData(mainRepository);
-            PS.createData(mainRepository);
-            RM.createData(mainRepository);
-            VI.createData(mainRepository);
-            WC.createData(mainRepository);
+            for (Resource resource : jsonDataResources) {
+                ObjectMapper mapper = new ObjectMapper();
+                Command command = mapper.readValue(resource.getFile(), Command.class);
+                mainRepository.addCommand(command);
+            }
 
             g.tx().commit();
 
@@ -74,7 +79,7 @@ public class GraphBuilder {
             LOGGER.info("reading elements");
 
             // look up vertex by name
-            final Optional<Map<Object, Object>> v = g.V().has("name", "cp").valueMap(true).tryNext();
+            final Optional<Map<Object, Object>> v = g.V().has("name", "cp").valueMap().with(WithOptions.tokens).tryNext();
             if (v.isPresent()) {
                 LOGGER.info(v.get().toString());
             } else {
@@ -83,7 +88,7 @@ public class GraphBuilder {
 
             // look up an incident edge
             final Optional<Map<Object, Object>> edge = g.V().has("name", "cp").outE("has_flag").as("e").inV()
-                    .has("name", "r").select("e").valueMap(true).tryNext();
+                    .has("name", "r").select("e").valueMap().with(WithOptions.tokens).tryNext();
             if (edge.isPresent()) {
                 LOGGER.info(edge.get().toString());
             } else {
