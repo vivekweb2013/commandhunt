@@ -1,4 +1,4 @@
-const api = "http://localhost:8080" || `${process.env.REACT_APP_BACKEND}`;
+const api = process.env.REACT_APP_API_URL || "http://localhost:8080/api";
 
 localStorage.token = localStorage.token || Math.random().toString(36).substring(2);
 
