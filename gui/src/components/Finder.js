@@ -30,18 +30,23 @@ class Finder extends Component {
                     <table>
                         <thead>
                             <tr>
-                                <th>COMMAND</th>
-                                <th>DESCRIPTION</th>
+                                <th className="name-column">COMMAND</th>
+                                <th className="syntax-column">SYNTAX</th>
+                                <th className="desc-column">DESCRIPTION</th>
                             </tr>
                         </thead>
                         <tbody>
                             {commands.map(command => <tr key={command.id}>
-                                <td>{command.properties.name}</td>
-                                <td>{command.properties.desc}</td>
+                                <td className="name">{command.properties.name} </td>
+                                <td className="syntax"><code>{command.properties.syntax.replace(/\.\.\./g, '···') /* replacing dots to avoid confusion with ellipsis */}</code></td>
+                                <td className="desc">
+                                    <span>{command.properties.desc}</span><br />
+                                    {command.properties.desc && <small>{command.properties.long_desc}</small>}
+                                </td>
                             </tr>)}
                         </tbody>
                     </table>
-                    : <span>No Commands Found!</span>
+                    : <div className="no-data-msg">No Commands Found!</div>
                 }
             </div>
         )
