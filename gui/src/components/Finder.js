@@ -5,7 +5,6 @@ import { withRouter } from "react-router";
 import * as API from "../api/API";
 import { getAllCommands, getMatchingCommands } from "../actions";
 
-
 class Finder extends Component {
     state = {
         query: ''
@@ -26,7 +25,7 @@ class Finder extends Component {
     }
 
     render() {
-        const { commands } = this.props;
+        const { commands, history } = this.props;
         return (
             <div className="finder">
                 <fieldset className="search-box-container">
@@ -47,7 +46,7 @@ class Finder extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {commands.map(command => <tr key={command.id}>
+                            {commands.map(command => <tr key={command.id} onClick={e => { e.preventDefault(); history.push(`/build/${command.properties.name}`) }}>
                                 <td className="name">{command.properties.name} </td>
                                 <td className="syntax"><code>{command.properties.syntax.replace(/\.\.\./g, '···') /* replacing dots to avoid confusion with ellipsis */}</code></td>
                                 <td className="desc">

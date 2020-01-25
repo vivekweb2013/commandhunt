@@ -10,9 +10,12 @@ const headers = {
 
 export const getAllCommands = () => fetch(`${api}/command`, { headers }).then(res => res.json());
 
-export const getMatchingCommands = queryText => {
-    const query = encodeURIComponent(queryText);
+export const getMatchingCommands = query => {
+    query = encodeURIComponent(query);
     return fetch(`${api}/command/search?query=${query}`, { headers }).then(res => res.json());
 };
 
-export const getCommand = commandId => fetch(`${api}/command/${commandId}`, { headers }).then(res => res.json());
+export const getCommand = commandName => {
+    commandName = encodeURIComponent(commandName);
+    return fetch(`${api}/command/search?name=${commandName}`, { headers }).then(res => res.json())
+};
