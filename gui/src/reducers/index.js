@@ -1,10 +1,15 @@
 import { combineReducers } from "redux";
-import { GET_ALL_COMMANDS, GET_COMMAND } from "../actions";
+import { GET_ALL_COMMANDS, GET_MATCHING_COMMANDS, GET_COMMAND } from "../actions";
 
 const commandReducer = (state = {}, action) => {
     const { commands, command } = action;
     switch (action.type) {
         case GET_ALL_COMMANDS:
+            return {
+                ...state,
+                commands
+            };
+        case GET_MATCHING_COMMANDS:
             return {
                 ...state,
                 commands
@@ -19,5 +24,4 @@ const commandReducer = (state = {}, action) => {
     }
 };
 
-
-export default combineReducers({commandReducer});
+export default combineReducers({ commandReducer });

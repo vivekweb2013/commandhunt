@@ -21,19 +21,19 @@
     width: auto;
 
     a {
-      color: $color-secondary-lighter;
+      color: lighten($color-secondary, 45%);
       display: block;
       padding: 16px;
       text-decoration: none;
 
       &.active {
-        background-color: $color-secondary-light;
-        color: $color-secondary-lightest;
+        background-color: lighten($color-secondary, 10%);
+        color: lighten($color-secondary, 60%);
       }
 
-      &:hover:not(.active) {
-        background-color: $color-secondary-contrast;
-        color: $color-secondary-lighter;
+      &:hover {
+        background-color: darken($color-secondary, 10%);
+        color: lighten($color-secondary, 45%);
       }
 
       @media screen and (max-width: 400px) {

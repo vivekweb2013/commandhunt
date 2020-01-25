@@ -35,8 +35,13 @@ public class MainController {
         return mainService.getCommandByName(name);
     }
 
+    @GetMapping(value = "/command/search", params = {"query"})
+    public List<Command> getMatchingCommands(@RequestParam(name = "query") String query) {
+        return mainService.getMatchingCommands(query);
+    }
+
     @PostMapping(value = "/command/search", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public List<Command> getCommandsByFilter(@RequestBody Filter filter) {
-        return mainService.getCommandsByFilter(filter);
+    public List<Command> getMatchingCommands(@RequestBody Filter filter) {
+        return mainService.getMatchingCommands(filter);
     }
 }

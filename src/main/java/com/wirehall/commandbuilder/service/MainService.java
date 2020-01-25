@@ -30,7 +30,11 @@ public class MainService {
         return mainRepository.getCommandByName(name);
     }
 
-    public List<Command> getCommandsByFilter(Filter filter) {
-        return mainRepository.getCommandsByFilter(filter);
+    public List<Command> getMatchingCommands(Filter filter) {
+        return mainRepository.getMatchingCommands(filter);
+    }
+
+    public List<Command> getMatchingCommands(String query) {
+        return mainRepository.getMatchingCommands(query);
     }
 }

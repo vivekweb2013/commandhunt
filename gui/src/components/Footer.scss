@@ -3,7 +3,7 @@
 .site-footer {
   background-color: $color-primary;
   border: 0;
-  color: $color-primary-lighter;
+  color: lighten($color-primary, 25%);
   display: block;
   margin: 0;
   padding: 0;

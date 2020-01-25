@@ -12,7 +12,7 @@ header {
 
   .logo > a {
     border-radius: 4px;
-    color: $color-primary-contrast;
+    color: lighten($color-primary, 60%);
     float: left;
     font-size: 1.6rem;
     font-weight: bold;
@@ -30,7 +30,7 @@ header {
     height: 100%;
     &:hover {
       .dropdown-btn {
-        background-color: $color-primary-lighter;
+        background-color: lighten($color-primary, 25%);
       }
       .dropdown-content {
         display: block;
@@ -39,9 +39,9 @@ header {
     }
 
     .dropdown-btn {
-      background-color: $color-primary-light;
+      background-color: lighten($color-primary, 15%);
       border: none;
-      color: $color-primary-contrast;
+      color: lighten($color-primary, 60%);
       font-size: 1rem;
       height: inherit;
       padding: 16px;

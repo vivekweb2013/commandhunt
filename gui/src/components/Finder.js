@@ -3,15 +3,26 @@ import './Finder.scss';
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import * as API from "../api/API";
-import { getAllCommands } from "../actions";
-
+import { getAllCommands, getMatchingCommands } from "../actions";
 
 
 class Finder extends Component {
-    state = {}
+    state = {
+        query: ''
+    }
 
     componentDidMount() {
         this.props.getAllCommands();
+    }
+
+    handleQueryUpdate = (textValue) => {
+        this.setState({ query: textValue });
+        textValue ? this.props.getMatchingCommands(textValue) : this.props.getAllCommands();
+    }
+
+    handleInputReset = () => {
+        this.setState({ query: '' });
+        this.handleQueryUpdate('');
     }
 
     render() {
@@ -19,10 +30,10 @@ class Finder extends Component {
         return (
             <div className="finder">
                 <fieldset className="search-box-container">
-                    <input type="text" placeholder="Search..." className="field" />
-                    <div className="icons-container">
+                    <input type="text" onChange={event => this.handleQueryUpdate(event.target.value)} placeholder="Search..." value={this.state.query} ref={el => this.searchInput = el} className="field" />
+                    <div className={'icons-container ' + (this.state.query ? 'icons-container-flip' : '')}>
                         <div className="icon-search"></div>
-                        <div className="icon-close"> </div>
+                        <div className="icon-close" onClick={event => this.handleInputReset()}> </div>
                     </div>
                 </fieldset>
 
@@ -64,6 +75,11 @@ const mapDispatchToProps = dispatch => {
         getAllCommands: () => {
             API.getAllCommands().then(commands => {
                 dispatch(getAllCommands(commands));
+            });
+        },
+        getMatchingCommands: (query) => {
+            API.getMatchingCommands(query).then(commands => {
+                dispatch(getMatchingCommands(commands));
             });
         }
     }

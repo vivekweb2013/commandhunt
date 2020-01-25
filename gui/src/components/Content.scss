@@ -1,7 +1,7 @@
 @import "../styles/shared";
 
 div.content {
-  background-color: $color-tertiary;
+  background-color: lighten($color-primary, 50%);
   border: 0;
   clear: both;
   flex-grow: 1;

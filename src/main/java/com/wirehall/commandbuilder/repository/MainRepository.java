@@ -18,6 +18,7 @@ import org.apache.tinkerpop.gremlin.structure.Column;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.janusgraph.core.JanusGraph;
+import org.janusgraph.core.attribute.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,8 +89,22 @@ public class MainRepository {
         return command;
     }
 
-    public List<Command> getCommandsByFilter(Filter filter) {
+    public List<Command> getMatchingCommands(Filter filter) {
         List<Command> commands = new ArrayList<>();
+        return commands;
+    }
+
+    public List<Command> getMatchingCommands(String query) {
+        List<Vertex> vertices = g.V().hasLabel(VERTEX.command.toString()).or(__.has(COMMAND_PROPERTY.name.toString(), Text.textContainsFuzzy(query)),
+                __.has(COMMAND_PROPERTY.desc.toString(), Text.textContainsFuzzy(query)),
+                __.has(COMMAND_PROPERTY.long_desc.toString(), Text.textContainsFuzzy(query))).toList();
+
+        List<Command> commands = new ArrayList<>();
+        for (Vertex commandVertex : vertices) {
+            Command command = mapper.mapToCommand(commandVertex);
+            commands.add(command);
+        }
+
         return commands;
     }
 

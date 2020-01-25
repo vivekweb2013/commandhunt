@@ -1,14 +1,4 @@
 // https://colorhunt.co/palette/2763
+
 $color-primary: #474052;
-$color-primary-light: lighten($color-primary, 15%);
-$color-primary-lighter: lighten($color-primary, 25%);
-$color-primary-contrast: lighten($color-primary, 60%);
-
-$color-secondary: #5b5777;
-$color-secondary-light: lighten($color-secondary, 10%);
-$color-secondary-lighter: lighten($color-secondary, 45%);
-$color-secondary-lightest: lighten($color-secondary, 60%);
-$color-secondary-contrast: darken($color-secondary, 10%);
-
-$color-tertiary: #ccccdd;
-$color-quaternary: #e7e3dc;
+$color-secondary: lightslategray;
