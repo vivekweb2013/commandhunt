@@ -58,7 +58,7 @@ public class GraphBuilder {
 
             for (Resource resource : jsonDataResources) {
                 ObjectMapper mapper = new ObjectMapper();
-                Command command = mapper.readValue(resource.getFile(), Command.class);
+                Command command = mapper.readValue(resource.getInputStream(), Command.class);
                 mainRepository.addCommand(command);
             }
 
