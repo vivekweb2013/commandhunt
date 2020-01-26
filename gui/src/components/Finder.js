@@ -62,7 +62,7 @@ class Finder extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {commands.map(command => <tr key={command.id} onClick={e => { e.preventDefault(); history.push(`/build/${command.properties.name}`) }}>
+                            {commands.map(command => <tr key={command.id} onClick={e => { e.preventDefault(); history.push(`/command/build/${command.properties.name}`) }}>
                                 <td className="name">{command.properties.name} </td>
                                 <td className="syntax">
                                     <code>{command.properties.syntax.replace(/\.\.\./g, '···') /* replacing dots to avoid confusion with ellipsis */}</code>

@@ -10,7 +10,7 @@ class Content extends Component {
             <div className="content">
                 <Switch>
                     <Route exact path="/" component={Finder} />
-                    <Route path="/build/:commandName" component={Builder} />
+                    <Route path="/command/build/:commandName" component={Builder} />
                 </Switch>
             </div>
         )
