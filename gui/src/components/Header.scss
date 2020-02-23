@@ -1,8 +1,8 @@
 @import "../styles/shared";
 
-header {
+.site-header {
   background-color: $color-primary;
-  height: 50px;
+  height: $header-height;
   left: 0;
   min-width: auto;
   position: fixed;
@@ -68,5 +68,10 @@ header {
         }
       }
     }
+  }
+}
+@media print {
+  .site-header {
+    display: none;
   }
 }

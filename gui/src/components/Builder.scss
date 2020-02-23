@@ -1,6 +1,7 @@
 @import "../styles/shared";
 
-$header-padding-top-bottom: 5px;
+$builder-header-min-height: 50px;
+$header-padding-vertical: 5px;
 $checkbox-size: 30px;
 
 .builder {
@@ -13,7 +14,7 @@ $checkbox-size: 30px;
     left: 0;
     min-height: $builder-header-min-height;
     min-width: auto;
-    padding: $header-padding-top-bottom 10px;
+    padding: $header-padding-vertical 10px;
     position: fixed;
     text-align: center;
     width: 100%;
@@ -22,11 +23,8 @@ $checkbox-size: 30px;
       width: 100%;
     }
   }
-  > .spacer {
-    padding: $header-padding-top-bottom 0;
-  }
   > .content {
-    padding: 20px;
+    padding: ($builder-header-min-height + (2 * $header-padding-vertical) +20px) 20px;
 
     .title {
       text-align: center;
@@ -42,6 +40,7 @@ $checkbox-size: 30px;
       > span {
         background: darken($color-secondary, 15%);
         border-radius: 4px;
+        display: inline-block;
         padding: 4px 8px;
         color: white;
       }
@@ -196,6 +195,15 @@ $checkbox-size: 30px;
           margin: 10px 0 0 0;
         }
       }
+    }
+  }
+
+  @media print {
+    > .header {
+      position: relative;
+    }
+    > .content {
+      padding: 20px;
     }
   }
 }

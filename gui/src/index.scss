@@ -36,3 +36,9 @@ body *:after {
 code {
   font-family: $font-family-code;
 }
+
+@media print {
+  body {
+    padding: 0;
+  }
+}

@@ -6,7 +6,7 @@ import './Header.scss';
 class Header extends Component {
     render() {
         return (
-            <header className="header">
+            <header className="site-header">
                 <div className="logo">
                     <a href="/"><FontAwesomeIcon icon="home" />&nbsp;Command Builder</a>
                 </div>
