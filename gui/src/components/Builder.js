@@ -6,19 +6,40 @@ import { getCommand } from "../actions";
 import './Builder.scss';
 
 class Builder extends Component {
+    state = {
+        flags: {},
+        options: {}
+    }
+
     componentDidMount() {
         window.scrollTo(0, 0);
         const { match } = this.props;
         this.props.getCommand(match.params.commandName);
     }
 
-    handleInputChange(event) {
+    handleOptionChange(event) {
         const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const value = target.value;
         const name = target.name;
 
         this.setState({
-            [name]: value
+            options: {
+                ...this.state.options,
+                [name]: value
+            }
+        });
+    }
+
+    handleFlagChange(event) {
+        const target = event.target;
+        const value = target.checked; // since all flag inputs are checkboxes
+        const name = target.name;
+
+        this.setState({
+            flags: {
+                ...this.state.flags,
+                [name]: value
+            }
         });
     }
 
@@ -26,28 +47,73 @@ class Builder extends Component {
         event.preventDefault();
     }
 
+    getGeneratedFlags(command) {
+        let flagsStr = '';
+        let hyphenPrefixedFlags = '';
+        let otherFlags = '';
+        command.flags.filter(f => this.state.flags[f.properties.name]).forEach(f => {
+            if (f.properties.prefix === '-') {
+                // normally only single hyphen prefixed flags are allowed to group
+                hyphenPrefixedFlags += f.properties.name;
+            } else {
+                // double hyphen prefixed flags or non-prefixed flags are generally not grouped
+                otherFlags += ` ${f.properties.prefix}${f.properties.name}`;
+            }
+        });
+
+        hyphenPrefixedFlags = hyphenPrefixedFlags ? `-${hyphenPrefixedFlags.trim()}` : hyphenPrefixedFlags;
+        otherFlags = otherFlags.trim();
+
+        if (hyphenPrefixedFlags !== '' || otherFlags !== '') {
+            flagsStr = `${hyphenPrefixedFlags} ${otherFlags}`;
+        }
+        return flagsStr;
+    }
+
+    getGeneratedOptions(command) {
+        let optionsStr = '';
+        command.options.filter(o => this.state.options[o.properties.name]).forEach(o => {
+            const prefix = !o.properties.prefix.endsWith('=') ? `${o.properties.prefix} ` : o.properties.prefix;
+            optionsStr += ` ${prefix}${this.state.options[o.properties.name]}`;
+        });
+
+        return optionsStr.trim();
+    }
+
+    getGeneratedCommand(command) {
+        if (!command) return null;
+        let commandStr = '';
+        const flagsStr = this.getGeneratedFlags(command);
+        const optionsStr = this.getGeneratedOptions(command);
+
+        commandStr = `${command.properties.name} ${flagsStr} ${optionsStr}`;
+        return commandStr;
+    }
+
     render() {
         const { command } = this.props;
         const newlineRegex = /(?:\r\n|\r|\n)/g;
+
+        const generatedCommand = this.getGeneratedCommand(command);
 
         return command ? (
             <div className="builder">
                 <div className="header">
                     <div className="text">
                         <code>
-                            {
-                                command.properties.syntax.split(newlineRegex)
-                                    .map((item, index) => (
-                                        <span key={index}>{item.replace(/\.\.\./g, '···') /* replacing dots to avoid confusion with ellipsis */}<br /></span>
-                                    ))
-                            }
+                            {generatedCommand != null && (<span>{generatedCommand}</span>)}
                         </code>
                     </div>
                 </div>
-                {/* spacer div is add to take up the same space as header so that header don't overlap with content area */}
-                <div className="spacer"><br /><br />{command.properties.syntax.split(newlineRegex).map((e, i) => (i > 1 ? <br key={i} /> : ''))}</div>
+
                 <div className="content">
                     <div className="title"><span>Build <span className="command-name">{command.properties.name}</span> Command</span></div>
+                    <div className="category"><span>SYNTAX</span></div>
+                    <div className="syntax"><code>
+                        {command.properties.syntax.split(newlineRegex).map((item, index) => (
+                            <span key={index}>{item.replace(/\.\.\./g, '···') /* replacing dots to avoid confusion with ellipsis */}<br /></span>
+                        ))}
+                    </code><br /></div>
                     <form onSubmit={this.handleSubmit}>
                         <div className="section">
                             {command.options.length > 0 && (
@@ -60,7 +126,8 @@ class Builder extends Component {
                                                     <label htmlFor={option.id}>{option.properties.desc}</label>
                                                 </div>
                                                 <div className="input-col">
-                                                    <input id={option.id} type="text" name={option.properties.name}></input>
+                                                    <input id={option.id} type="text" name={option.properties.name}
+                                                        onChange={(e) => this.handleOptionChange(e)} />
                                                 </div>
                                             </div>
                                         ))}
@@ -78,11 +145,10 @@ class Builder extends Component {
                                                     <label htmlFor={flag.id}>{flag.properties.desc}</label>
                                                 </div>
                                                 <div className="input-col">
-                                                    <input id={flag.id} type="checkbox" name={flag.properties.name}></input>
+                                                    <input id={flag.id} type="checkbox" name={flag.properties.name} checked={this.state.flags[flag.properties.name] || false}
+                                                        onChange={(e) => this.handleFlagChange(e)} />
                                                     <label htmlFor={flag.id}>
-                                                        <svg viewBox="0,0,50,50">
-                                                            <path d="M5 30 L 20 45 L 45 5"></path>
-                                                        </svg>
+                                                        <svg viewBox="0,0,50,50"><path d="M5 30 L 20 45 L 45 5"></path></svg>
                                                     </label>
                                                 </div>
                                             </div>
