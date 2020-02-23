@@ -1,1 +1,201 @@
 @import "../styles/shared";
+
+$header-padding-top-bottom: 5px;
+$checkbox-size: 30px;
+
+.builder {
+  > .header {
+    align-items: center;
+    background-color: darken($color-secondary, 25%);
+    border-top: 1px solid lighten($color-primary, 40%);
+    color: white;
+    display: flex;
+    left: 0;
+    min-height: $builder-header-min-height;
+    min-width: auto;
+    padding: $header-padding-top-bottom 10px;
+    position: fixed;
+    text-align: center;
+    width: 100%;
+    z-index: 100;
+    .text {
+      width: 100%;
+    }
+  }
+  > .spacer {
+    padding: $header-padding-top-bottom 0;
+  }
+  > .content {
+    padding: 20px;
+
+    .title {
+      text-align: center;
+      font-weight: bolder;
+      font-size: larger;
+      .command-name {
+        font-style: italic;
+      }
+    }
+
+    .category {
+      font-weight: 600;
+      > span {
+        background: darken($color-secondary, 15%);
+        border-radius: 4px;
+        padding: 4px 8px;
+        color: white;
+      }
+    }
+
+    form {
+      .fields {
+        column-width: 25em;
+        column-rule: 1px dotted #ddd;
+        column-gap: 4em;
+
+        .row {
+          padding: 10px 20px;
+          display: flex;
+          align-items: center;
+          break-inside: avoid-column; /* avoid column break for this element */
+
+          input[type="text"],
+          select,
+          textarea {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            resize: vertical;
+            font-size: 1.4rem;
+            height: 100%;
+            background-color: lighten($color-primary, 66%);
+          }
+
+          input[type="checkbox"] {
+            position: absolute;
+            display: none;
+
+            &:checked + label svg path {
+              stroke-dashoffset: 0;
+            }
+
+            &:focus + label {
+              transform: scale(1.03);
+            }
+
+            + label {
+              display: inline-block;
+              border: ($checkbox-size/10) solid #333;
+              width: $checkbox-size;
+              height: $checkbox-size;
+              border-radius: ($checkbox-size/8);
+              cursor: pointer;
+              transition: all 0.2s ease;
+
+              &:active {
+                transform: scale(1.05);
+                border-radius: ($checkbox-size/10);
+              }
+
+              svg {
+                pointer-events: none;
+                path {
+                  fill: none;
+                  stroke: #333;
+                  stroke-width: 4px;
+                  stroke-linecap: round;
+                  stroke-linejoin: round;
+                  stroke-dasharray: 100;
+                  stroke-dashoffset: 101;
+                  transition: all 150ms cubic-bezier(1, 0, 0.37, 0.91);
+                }
+              }
+            }
+          }
+
+          .label-col {
+            float: left;
+            width: 100%;
+            label {
+              padding: 12px 24px 12px 0;
+              display: inline-block;
+              width: 100%;
+              user-select: none;
+            }
+          }
+
+          .input-col {
+            float: left;
+          }
+
+          /* Clear floats after the columns */
+          .row:after {
+            content: "";
+            display: table;
+            clear: both;
+          }
+        }
+      }
+      .options .fields {
+        column-width: 40em;
+
+        .label-col {
+          width: 60%;
+        }
+
+        .input-col {
+          width: 40%;
+        }
+      }
+      .form-buttons {
+        border-top: 1px solid #ddd;
+        margin: 20px 0;
+        text-align: center;
+
+        /* Ripple effect */
+        .ripple {
+          background-position: center;
+          transition: background 0.4s;
+          &:hover {
+            background: lighten($color-primary, 10%)
+              radial-gradient(circle, transparent 1%, darken($color-primary, 10%) 1%) center/15000%;
+          }
+          &:active {
+            background-color: lighten($color-primary, 10%);
+            background-size: 100%;
+            transition: background 0s;
+          }
+        }
+
+        /* Button style */
+        button,
+        input[type="submit"] {
+          border: none;
+          border-radius: 4px;
+          padding: 12px 18px;
+          font-size: 16px;
+          text-transform: uppercase;
+          cursor: pointer;
+          color: white;
+          background-color: $color-primary;
+          box-shadow: 0 0 4px #999;
+          outline: none;
+          margin: 20px;
+        }
+      }
+
+      /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+      @media screen and (max-width: 600px) {
+        .label-col {
+          width: 100%;
+        }
+        .form-buttons input[type="submit"],
+        .form-buttons button {
+          width: 100%;
+          margin: 10px 0 0 0;
+        }
+      }
+    }
+  }
+}

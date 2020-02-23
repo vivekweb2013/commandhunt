@@ -1,10 +1,9 @@
 @import "../styles/shared";
 
-div.content {
+div.main-content {
   background-color: lighten($color-primary, 50%);
   border: 0;
   clear: both;
   flex-grow: 1;
-  padding: 24px;
   width: 100%;
 }

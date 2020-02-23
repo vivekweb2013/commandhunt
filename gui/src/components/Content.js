@@ -7,7 +7,7 @@ import Builder from './Builder';
 class Content extends Component {
     render() {
         return (
-            <div className="content">
+            <div className="main-content">
                 <Switch>
                     <Route exact path="/" component={Finder} />
                     <Route path="/command/build/:commandName" component={Builder} />

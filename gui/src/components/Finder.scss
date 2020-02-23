@@ -8,6 +8,7 @@ $table-bg-color: white;
 $table-row-hover-bg-color: lighten($color-primary, 60%);
 
 .finder {
+  padding: 24px;
   .search-box-container {
     border: 0;
     height: $search-box-container-height;
