@@ -91,7 +91,7 @@ class Builder extends Component {
     }
 
     render() {
-        const { command } = this.props;
+        const { command, user } = this.props;
         const newlineRegex = /(?:\r\n|\r|\n)/g;
 
         const generatedCommand = this.getGeneratedCommand(command);
@@ -157,7 +157,7 @@ class Builder extends Component {
                                 </div>
                             )}
                         </div>
-                        <div className="form-buttons"><button className="ripple">PRINT</button><input className="ripple" type="submit" value="SAVE" /></div>
+                        <div className="form-buttons"><button className="ripple">PRINT</button><input className="ripple" type="submit" value="SAVE" disabled={!user} /></div>
                     </form>
                 </div>
             </div>
@@ -167,7 +167,8 @@ class Builder extends Component {
 
 const mapStateToProps = (state, props) => {
     return {
-        command: state.commandReducer.command
+        command: state.commandReducer.command,
+        user: state.authReducer.user
     }
 }
 

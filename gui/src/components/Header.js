@@ -1,10 +1,27 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
+import firebase from 'firebase';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Header.scss';
 
 class Header extends Component {
+    handleLogin(event) {
+        event.preventDefault();
+        if (!this.props.user) {
+            this.props.history.push('/login');
+        }
+    }
+
+    handleLogout(event) {
+        event.preventDefault();
+        firebase.auth().signOut();
+    }
+
     render() {
+        const { user } = this.props;
+
         return (
             <header className="site-header">
                 <div className="logo">
@@ -12,9 +29,14 @@ class Header extends Component {
                 </div>
 
                 <div className="dropdown">
-                    <button className="dropdown-btn"><FontAwesomeIcon icon="sign-in-alt" />&nbsp;Sign In</button>
+                    <button onClick={(e) => this.handleLogin(e)} className="dropdown-btn">
+                        {user ?
+                            <><span alt="avatar" style={{ backgroundImage: `url(${user.photoURL})` }} className="avatar" /><span>&nbsp;{user.displayName}</span></>
+                            : <><FontAwesomeIcon icon="sign-in-alt" />&nbsp;Login</>
+                        }
+                    </button>
                     <div className="dropdown-content">
-                        <Link to="/" key="Sign Out"><FontAwesomeIcon icon="sign-out-alt" />&nbsp;Sign Out</Link>
+                        <button style={{ display: user ? 'block' : 'none' }} key="Logout" onClick={this.handleLogout}><FontAwesomeIcon icon="sign-out-alt" />&nbsp;Logout</button>
                         <Link to="/" key="Profile"><FontAwesomeIcon icon="user-cog" />&nbsp;Profile</Link>
                         <Link to="/" key="Settings"><FontAwesomeIcon icon="cog" />&nbsp;Settings</Link>
                     </div>
@@ -24,4 +46,10 @@ class Header extends Component {
     }
 }
 
-export default Header;
+const mapStateToProps = (state, props) => {
+    return {
+        user: state.authReducer.user
+    }
+}
+
+export default withRouter(connect(mapStateToProps, null)(Header));

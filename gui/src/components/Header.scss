@@ -44,12 +44,21 @@
       color: lighten($color-primary, 60%);
       font-size: 1rem;
       height: inherit;
-      padding: 16px;
+      padding: 0 16px;
+
+      .avatar {
+        background-size: cover;
+        border-radius: 50%;
+        display: inline-block;
+        height: 48px;
+        vertical-align: middle;
+        width: 48px;
+      }
     }
 
     .dropdown-content {
       background-color: #f1f1f1;
-      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+      box-shadow: 0px 8px 16px 0px rgba(240, 208, 208, 0.2);
       display: none;
       left: 50%;
       min-width: fit-content;
@@ -57,10 +66,21 @@
       transform: translateX(-50%);
       white-space: nowrap;
       z-index: 1;
-      a {
+      button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        font: inherit;
+        margin: 0;
+        padding: 0;
+        width: inherit;
+      }
+      a,
+      button {
         color: black;
         display: block;
         padding: 10px;
+        text-align: left;
         text-decoration: none;
 
         &:hover {
