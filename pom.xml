@@ -17,9 +17,11 @@
     <properties>
         <java.version>1.8</java.version>
         <janusgraph.version>0.4.0</janusgraph.version>
-        <frontend-src-dir>${project.basedir}/gui</frontend-src-dir>
+        <frontend.src.dir>${project.basedir}/gui</frontend.src.dir>
         <node.version>v12.14.0</node.version>
-        <frontend-maven-plugin.version>1.9.1</frontend-maven-plugin.version>
+        <frontend.maven.plugin.version>1.9.1</frontend.maven.plugin.version>
+        <heroku.maven.plugin.version>2.0.16</heroku.maven.plugin.version>
+        <heroku.app.name>${project.artifactId}</heroku.app.name>
     </properties>
 
     <dependencies>
@@ -70,14 +72,14 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
             <plugin>
-                <!-- https://github.com/eirslett/frontend-maven-plugin-->
+                <!-- https://github.com/eirslett/frontend-maven-plugin -->
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
-                <version>${frontend-maven-plugin.version}</version>
+                <version>${frontend.maven.plugin.version}</version>
 
                 <configuration>
                     <nodeVersion>${node.version}</nodeVersion>
-                    <workingDirectory>${frontend-src-dir}</workingDirectory>
+                    <workingDirectory>${frontend.src.dir}</workingDirectory>
                     <installDirectory>${project.build.directory}</installDirectory>
                 </configuration>
 
@@ -134,13 +136,29 @@
                             <outputDirectory>${project.build.outputDirectory}/static</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${frontend-src-dir}/build</directory>
+                                    <directory>${frontend.src.dir}/build</directory>
                                     <filtering>false</filtering>
                                 </resource>
                             </resources>
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <!-- https://github.com/heroku/heroku-maven-plugin -->
+                <groupId>com.heroku.sdk</groupId>
+                <artifactId>heroku-maven-plugin</artifactId>
+                <version>${heroku.maven.plugin.version}</version>
+                <configuration>
+                    <appName>${heroku.app.name}</appName>
+                    <includeTarget>false</includeTarget>
+                    <includes>
+                        <include>target/${project.artifactId}-${project.version}.jar</include>
+                    </includes>
+                    <processTypes>
+                        <web>java -jar target/${project.artifactId}-${project.version}.jar --server.port=$PORT</web>
+                    </processTypes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
