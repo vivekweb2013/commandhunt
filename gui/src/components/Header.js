@@ -32,14 +32,14 @@ class Header extends Component {
                     <button onClick={(e) => this.handleLogin(e)} className="dropdown-btn">
                         {user ?
                             <><span alt="avatar" style={{ backgroundImage: `url(${user.photoURL})` }} className="avatar" /><span>&nbsp;{user.displayName}</span></>
-                            : <><FontAwesomeIcon icon="sign-in-alt" />&nbsp;Login</>
+                            : <>&nbsp;<FontAwesomeIcon icon="sign-in-alt" />&nbsp;&nbsp;Login</>
                         }
                     </button>
-                    <div className="dropdown-content">
-                        <button style={{ display: user ? 'block' : 'none' }} key="Logout" onClick={this.handleLogout}><FontAwesomeIcon icon="sign-out-alt" />&nbsp;Logout</button>
+                    {user && <div className="dropdown-content">
+                        <button key="Logout" onClick={this.handleLogout}><FontAwesomeIcon icon="sign-out-alt" />&nbsp;Logout</button>
                         <Link to="/" key="Profile"><FontAwesomeIcon icon="user-cog" />&nbsp;Profile</Link>
                         <Link to="/" key="Settings"><FontAwesomeIcon icon="cog" />&nbsp;Settings</Link>
-                    </div>
+                    </div>}
                 </div>
             </header>
         )
