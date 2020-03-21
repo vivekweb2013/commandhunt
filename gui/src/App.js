@@ -28,10 +28,18 @@ firebase.initializeApp(firebaseConfig);
 library.add(faHome, faSignInAlt, faSignOutAlt, faUserCog, faCog);
 
 class App extends Component {
+  state = {
+    loading: true
+  }
+
   // Listen to the Firebase Auth state and set the local state.
   componentDidMount() {
     this.unregisterAuthObserver = firebase.auth().onAuthStateChanged((user) => {
       user ? this.props.userLogin(user) : this.props.userLogout(user)
+      this.setState({ loading: false });
+    }, (error) => {
+      this.setState({ loading: false });
+      console.error(error);
     });
   }
 
@@ -41,14 +49,17 @@ class App extends Component {
   }
 
   render() {
+
+
     return (
-      <React.Fragment>
-        <Header />
-        <div className="main-container">
-          <Content />
-        </div>
-        <Footer />
-      </React.Fragment>
+      this.state.loading ? 'Loading ...' : // TODO: STYLE THIS LOADING ELEMENT
+        <React.Fragment>
+          <Header />
+          <div className="main-container">
+            <Content />
+          </div>
+          <Footer />
+        </React.Fragment>
     );
   }
 }
