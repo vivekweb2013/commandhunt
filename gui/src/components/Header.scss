@@ -45,7 +45,9 @@ $avatar-size: 40px;
       color: lighten($color-primary, 60%);
       font-size: 1rem;
       height: inherit;
+      outline: none;
       padding: 0 6px;
+      width: 100%;
 
       .avatar {
         background-size: cover;

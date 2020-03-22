@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Header from './components/Header';
 import Content from './components/Content';
 import Footer from './components/Footer';
+import Spinner from './components/common/Spinner';
 import './App.scss';
 import firebase from 'firebase';
 import { connect } from "react-redux";
@@ -52,7 +53,7 @@ class App extends Component {
 
 
     return (
-      this.state.loading ? 'Loading ...' : // TODO: STYLE THIS LOADING ELEMENT
+      this.state.loading ? <div className="app loading" ><Spinner size="50" /> <br />LOADING</div> :
         <React.Fragment>
           <Header />
           <div className="main-container">

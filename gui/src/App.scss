@@ -1,5 +1,14 @@
 @import "styles/shared";
 
+.app.loading {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  top: 30%;
+}
+
 .main-container {
   background: none;
   border: 0;
