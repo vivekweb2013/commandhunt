@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import './Finder.scss';
-import { connect } from "react-redux";
-import { withRouter } from "react-router";
-import * as API from "../api/API";
-import { getAllCommands, getMatchingCommands } from "../actions";
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+import * as API from '../api/API';
+import { getAllCommands, getMatchingCommands } from '../actions';
 
 class Finder extends Component {
     constructor(props) {

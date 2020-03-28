@@ -111,6 +111,7 @@ $table-row-hover-bg-color: lighten($color-primary, 60%);
     overflow: hidden;
     position: relative;
     table-layout: fixed;
+    user-select: none;
     width: 100%;
     td,
     th {

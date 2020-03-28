@@ -25,6 +25,7 @@ $checkbox-size: 30px;
   }
   > .content {
     padding: ($builder-header-min-height + (2 * $header-padding-vertical) +20px) 20px;
+    user-select: none;
 
     .title {
       text-align: center;
@@ -157,7 +158,7 @@ $checkbox-size: 30px;
         text-align: center;
 
         /* Ripple effect */
-        .ripple {
+        .ripple:not([disabled]) {
           background-position: center;
           transition: background 0.4s;
           &:hover {
@@ -185,10 +186,15 @@ $checkbox-size: 30px;
           box-shadow: 0 0 4px #999;
           outline: none;
           margin: 20px;
+
+          &:disabled {
+            background-color: $color-disabled;
+          }
         }
       }
 
-      /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+      /* Responsive layout - when the screen is less than 600px wide, 
+      make the two columns stack on top of each other instead of next to each other */
       @media screen and (max-width: 600px) {
         .label-col {
           width: 100%;

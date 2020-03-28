@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { connect } from "react-redux";
-import { withRouter } from "react-router";
-import * as API from "../api/API";
-import { getCommand } from "../actions";
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+import * as API from '../api/API';
+import { getCommand } from '../actions';
 import './Builder.scss';
 
 class Builder extends Component {
@@ -41,10 +41,6 @@ class Builder extends Component {
                 [name]: value
             }
         });
-    }
-
-    handleSubmit(event) {
-        event.preventDefault();
     }
 
     getGeneratedFlags(command) {
@@ -112,9 +108,9 @@ class Builder extends Component {
                     <div className="syntax"><code>
                         {command.properties.syntax.split(newlineRegex).map((item, index) => (
                             <span key={index}>{item.replace(/\.\.\./g, '···') /* replacing dots to avoid confusion with ellipsis */}<br /></span>
-                        ))}
-                    </code><br /></div>
-                    <form onSubmit={this.handleSubmit}>
+                        ))}</code><br />
+                    </div>
+                    <form onSubmit={(e) => e.preventDefault()}>
                         <div className="section">
                             {command.options.length > 0 && (
                                 <div className="options">
@@ -157,7 +153,10 @@ class Builder extends Component {
                                 </div>
                             )}
                         </div>
-                        <div className="form-buttons"><button className="ripple">PRINT</button><input className="ripple" type="submit" value="SAVE" disabled={!user} /></div>
+                        <div className="form-buttons">
+                            <button className="ripple" type="button">PRINT</button>
+                            <button className="ripple tooltip tooltip-t" data-tooltip="Login to Save" type="button" disabled={!user}>SAVE</button>
+                        </div>
                     </form>
                 </div>
             </div>

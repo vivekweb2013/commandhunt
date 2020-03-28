@@ -1,5 +1,5 @@
-import { combineReducers } from "redux";
-import { GET_ALL_COMMANDS, GET_MATCHING_COMMANDS, GET_COMMAND, USER_LOGIN, USER_LOGOUT } from "../actions";
+import { combineReducers } from 'redux';
+import { GET_ALL_COMMANDS, GET_MATCHING_COMMANDS, GET_COMMAND, USER_LOGIN, USER_LOGOUT } from '../actions';
 
 const commandReducer = (state = {}, action) => {
     const { commands, command } = action;

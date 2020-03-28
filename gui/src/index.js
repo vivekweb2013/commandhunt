@@ -4,10 +4,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom'
 
-import { createStore, applyMiddleware, compose } from "redux";
-import { Provider } from "react-redux";
-import thunk from "redux-thunk";
-import reducer from "./reducers/index";
+import { createStore, applyMiddleware, compose } from 'redux';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import reducer from './reducers/index';
 
 import './index.scss';
 import App from './App';
