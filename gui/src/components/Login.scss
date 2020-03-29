@@ -1,0 +1,51 @@
+.login {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  user-select: none;
+  .icon-social-login {
+    background: url(../styles/icons/social-media.svg) no-repeat center left;
+    height: 100px;
+    margin: 10px;
+    width: 100px;
+  }
+  .social-login-text {
+    border-bottom: 2px solid #aaa;
+    font-size: 1.5rem;
+    color: #444444;
+  }
+  .social-buttons {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 50px;
+    button {
+      border-radius: 4px;
+      font-size: medium;
+      margin: 5px;
+      outline: none;
+      padding: 10px;
+      text-align: left;
+      span {
+        background-size: contain;
+        display: inline-block;
+        height: 25px;
+        margin-right: 10px;
+        vertical-align: middle;
+        width: 25px;
+        &.icon-google {
+          background: url(../styles/icons/google.svg) no-repeat center left;
+        }
+        &.icon-facebook {
+          background: url(../styles/icons/facebook.svg) no-repeat center left;
+        }
+        &.icon-twitter {
+          background: url(../styles/icons/twitter.svg) no-repeat center left;
+        }
+        &.icon-github {
+          background: url(../styles/icons/github.svg) no-repeat center left;
+        }
+      }
+    }
+  }
+}
