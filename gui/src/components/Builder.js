@@ -86,8 +86,16 @@ class Builder extends Component {
         return commandStr;
     }
 
+    handleSave(e) {
+        e.preventDefault();
+        const commandToSave = { name: this.props.command.properties.name, ...this.state, userId: this.props.user.localId };
+        this.props.saveCommand(commandToSave);
+        this.props.history.goBack();
+    }
+
     render() {
         const { command, user } = this.props;
+        const savedCommand = this.props.savedCommand || { flags: {}, options: {} };
         const newlineRegex = /(?:\r\n|\r|\n)/g;
 
         const generatedCommand = this.getGeneratedCommand(command);
@@ -110,7 +118,7 @@ class Builder extends Component {
                             <span key={index}>{item.replace(/\.\.\./g, '···') /* replacing dots to avoid confusion with ellipsis */}<br /></span>
                         ))}</code><br />
                     </div>
-                    <form onSubmit={(e) => e.preventDefault()}>
+                    <form onSubmit={(e) => this.handleSave(e)}>
                         <div className="section">
                             {command.options.length > 0 && (
                                 <div className="options">
@@ -123,7 +131,8 @@ class Builder extends Component {
                                                 </div>
                                                 <div className="input-col">
                                                     <input id={option.id} type="text" name={option.properties.name}
-                                                        onChange={(e) => this.handleOptionChange(e)} />
+                                                        onChange={(e) => this.handleOptionChange(e)}
+                                                        defaultValue={savedCommand.options[option.properties.name]} />
                                                 </div>
                                             </div>
                                         ))}
@@ -141,8 +150,9 @@ class Builder extends Component {
                                                     <label htmlFor={flag.id}>{flag.properties.desc}</label>
                                                 </div>
                                                 <div className="input-col">
-                                                    <input id={flag.id} type="checkbox" name={flag.properties.name} checked={this.state.flags[flag.properties.name] || false}
-                                                        onChange={(e) => this.handleFlagChange(e)} />
+                                                    <input id={flag.id} type="checkbox" name={flag.properties.name}
+                                                        onChange={(e) => this.handleFlagChange(e)}
+                                                        defaultChecked={savedCommand.flags[flag.properties.name]} />
                                                     <label htmlFor={flag.id}>
                                                         <svg viewBox="0,0,50,50"><path d="M5 30 L 20 45 L 45 5"></path></svg>
                                                     </label>
@@ -155,7 +165,7 @@ class Builder extends Component {
                         </div>
                         <div className="form-buttons">
                             <button className="ripple" type="button">PRINT</button>
-                            <button className="ripple tooltip tooltip-t" data-tooltip="Login to Save" type="button" disabled={!user}>SAVE</button>
+                            <button className="ripple tooltip tooltip-t" data-tooltip="Login to Save" type="submit" disabled={!user}>SAVE</button>
                         </div>
                     </form>
                 </div>
@@ -174,10 +184,9 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = dispatch => {
     return {
         getCommand: (commandId) => {
-            API.getCommand(commandId).then(command => {
-                dispatch(getCommand(command));
-            });
-        }
+            API.getCommand(commandId).then(command => { dispatch(getCommand(command)); });
+        },
+        saveCommand: (command) => { API.saveCommand(command); }
     }
 }
 
