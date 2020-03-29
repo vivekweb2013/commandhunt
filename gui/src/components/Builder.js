@@ -165,7 +165,10 @@ class Builder extends Component {
                         </div>
                         <div className="form-buttons">
                             <button className="ripple" type="button">PRINT</button>
-                            <button className="ripple tooltip tooltip-t" data-tooltip="Login to Save" type="submit" disabled={!user}>SAVE</button>
+                            <button className="ripple tooltip-t"
+                                {...(!user ? { 'data-tooltip': 'Login to Save' } : {})}
+                                type="submit" disabled={!user}>SAVE
+                            </button>
                         </div>
                     </form>
                 </div>

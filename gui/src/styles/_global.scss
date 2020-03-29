@@ -1,6 +1,6 @@
 /* only import this file in index.scss to avoid duplication */
 
-.tooltip {
+[data-tooltip] {
   position: relative;
 
   &:before,
@@ -95,5 +95,18 @@
   &.tooltip-l:after {
     border-bottom: 6px solid transparent;
     border-top: 6px solid transparent;
+  }
+}
+
+button[data-tooltip] {
+  &.tooltip-l,
+  &.tooltip-r {
+    &:after {
+      margin-top: -6px;
+      top: 50%;
+    }
+    &:before {
+      top: auto;
+    }
   }
 }
