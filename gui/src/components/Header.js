@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { withRouter } from "react-router";
-import firebase from 'firebase';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+import FirebaseAuth from './auth/FirebaseAuth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Header.scss';
 
@@ -16,7 +16,7 @@ class Header extends Component {
 
     handleLogout(event) {
         event.preventDefault();
-        firebase.auth().signOut();
+        FirebaseAuth.signOut();
     }
 
     render() {
@@ -31,7 +31,7 @@ class Header extends Component {
                 <div className="dropdown">
                     <button onClick={(e) => this.handleLogin(e)} className="dropdown-btn">
                         {user ?
-                            <><span alt="avatar" style={{ backgroundImage: `url(${user.photoURL})` }} className="avatar" /><span>&nbsp;{user.displayName}</span></>
+                            <><span alt="avatar" style={{ backgroundImage: `url(${user.photoUrl})` }} className="avatar" /><span>&nbsp;{user.displayName}</span></>
                             : <>&nbsp;<FontAwesomeIcon icon="sign-in-alt" />&nbsp;&nbsp;Login</>
                         }
                     </button>
