@@ -1,8 +1,11 @@
 import { combineReducers } from 'redux';
-import { GET_ALL_COMMANDS, GET_MATCHING_COMMANDS, GET_COMMAND, GET_USER_COMMANDS, USER_LOGIN, USER_LOGOUT } from '../actions';
+import {
+    GET_ALL_COMMANDS, GET_MATCHING_COMMANDS, GET_COMMAND, GET_USER_COMMANDS, DELETE_USER_COMMAND,
+    USER_LOGIN, USER_LOGOUT
+} from '../actions';
 
 const commandReducer = (state = {}, action) => {
-    const { commands, command, userCommands } = action;
+    const { commands, command, userCommands, userCommand } = action;
     switch (action.type) {
         case GET_ALL_COMMANDS:
             return {
@@ -23,6 +26,11 @@ const commandReducer = (state = {}, action) => {
             return {
                 ...state,
                 userCommands
+            };
+        case DELETE_USER_COMMAND:
+            return {
+                ...state,
+                userCommands: state.userCommands.filter(c => c.__meta__.id !== userCommand.__meta__.id)
             };
         default:
             return state;

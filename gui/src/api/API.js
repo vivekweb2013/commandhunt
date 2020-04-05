@@ -32,3 +32,8 @@ export const saveUserCommand = userCommand => {
     const ref = db.reference('user-commands');
     return ref.set(userCommand);
 };
+
+export const deleteUserCommand = userCommand => {
+    const ref = db.reference(`user-commands/${userCommand.__meta__.id}`);
+    return ref.delete();
+};
