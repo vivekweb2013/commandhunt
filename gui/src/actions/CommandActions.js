@@ -1,6 +1,7 @@
 export const GET_ALL_COMMANDS = "GET_ALL_COMMANDS";
 export const GET_COMMAND = "GET_COMMAND";
 export const GET_MATCHING_COMMANDS = "GET_MATCHING_COMMANDS";
+export const GET_USER_COMMANDS = "GET_USER_COMMANDS";
 
 export function getAllCommands(commands) {
     return {
@@ -20,5 +21,12 @@ export function getCommand(command) {
     return {
         type: GET_COMMAND,
         command
+    };
+}
+
+export function getUserCommands(userCommands) {
+    return {
+        type: GET_USER_COMMANDS,
+        userCommands
     };
 }

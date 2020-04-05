@@ -26,7 +26,9 @@ export const getCommand = commandName => {
     return fetch(`${api}/command/search?name=${commandName}`, { headers }).then(res => res.json());
 };
 
-export const saveCommand = command => {
-    const ref = db.reference('saved');
-    return ref.set(command);
+export const getUserCommands = () => db.reference('user-commands').query().run();
+
+export const saveUserCommand = userCommand => {
+    const ref = db.reference('user-commands');
+    return ref.set(userCommand);
 };

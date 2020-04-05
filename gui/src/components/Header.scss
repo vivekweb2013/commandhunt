@@ -25,11 +25,28 @@ $avatar-size: 40px;
     text-decoration: none;
   }
 
+  .nav-icon-btn {
+    background-color: lighten($color-primary, 15%);
+    border: none;
+    color: #e1dee6;
+    float: right;
+    font-size: 1rem;
+    height: inherit;
+    margin-right: 6px;
+    outline: none;
+    padding: 0 6px;
+
+    &:not([disabled]):hover {
+      background-color: lighten($color-primary, 25%);
+    }
+  }
+
   .dropdown {
     font-size: 1rem;
-    position: relative;
     float: right;
     height: 100%;
+    position: relative;
+
     &:hover {
       .dropdown-btn {
         background-color: lighten($color-primary, 25%);

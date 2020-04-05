@@ -88,8 +88,13 @@ class Builder extends Component {
 
     handleSave(e) {
         e.preventDefault();
-        const commandToSave = { name: this.props.command.properties.name, ...this.state, userId: this.props.user.localId };
-        this.props.saveCommand(commandToSave);
+        const userCommand = {
+            ...this.state,
+            name: this.props.command.properties.name,
+            text: this.getGeneratedCommand(this.props.command),
+            userId: this.props.user.localId
+        };
+        this.props.saveUserCommand(userCommand);
         this.props.history.goBack();
     }
 
@@ -189,7 +194,7 @@ const mapDispatchToProps = dispatch => {
         getCommand: (commandId) => {
             API.getCommand(commandId).then(command => { dispatch(getCommand(command)); });
         },
-        saveCommand: (command) => { API.saveCommand(command); }
+        saveUserCommand: (userCommand) => { API.saveUserCommand(userCommand); }
     }
 }
 
