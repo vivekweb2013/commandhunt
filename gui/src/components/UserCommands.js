@@ -5,6 +5,7 @@ import * as API from '../api/API';
 import { getUserCommands, deleteUserCommand } from '../actions';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { formatDate, formatTime } from '../Utils';
 import './UserCommands.scss';
 
 class UserCommands extends Component {
@@ -61,7 +62,8 @@ class UserCommands extends Component {
                                     <code>{userCommand.name}</code>
                                 </td>
                                 <td className="date">
-                                    {new Date(userCommand.__meta__.updateTime).toLocaleString()}
+                                    {formatDate(new Date(userCommand.__meta__.updateTime))} <br />
+                                    <small>{formatTime(new Date(userCommand.__meta__.updateTime))}</small>
                                 </td>
                                 <td className="actions">
                                     <CopyToClipboard text={userCommand.text}>
