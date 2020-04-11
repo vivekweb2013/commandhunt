@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as API from '../api/API';
-import { getCommand, getUserCommand } from '../actions';
+import { getCommand } from '../actions';
 import { getQueryParamByName } from '../Utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Builder.scss';
@@ -16,16 +16,13 @@ class Builder extends Component {
         saveInProgress: false
     }
 
-    static getDerivedStateFromProps(nextProps, prevState) {
-        return ({ userCommand: nextProps.userCommand })
-    }
-
     componentDidMount() {
         window.scrollTo(0, 0);
         const { match, location } = this.props;
         const userCommandId = getQueryParamByName('userCommandId', location.search);
         if (userCommandId != null) {
-            this.props.getUserCommand(userCommandId).then(() => {
+            this.props.getUserCommand(userCommandId).then((userCommand) => {
+                this.setState({ userCommand });
                 this.props.getCommand(match.params.commandName);
             });
         } else {
@@ -35,36 +32,32 @@ class Builder extends Component {
 
     handleOptionChange(event) {
         const { name, value } = event.target;
-
-        this.setState({
-            userCommand: {
-                flags: {
-                    ...this.state.userCommand.flags,
-                },
-                options: {
-                    ...this.state.userCommand.options,
-                    [name]: value
-                }
+        const userCommand = {
+            flags: {
+                ...this.state.userCommand.flags,
+            },
+            options: {
+                ...this.state.userCommand.options,
+                [name]: value
             }
-        });
+        }
+
+        this.setState({ userCommand });
     }
 
     handleFlagChange(event) {
-        const target = event.target;
-        const value = target.checked; // since all flag inputs are checkboxes
-        const name = target.name;
-
-        this.setState({
-            userCommand: {
-                flags: {
-                    ...this.state.userCommand.flags,
-                    [name]: value
-                },
-                options: {
-                    ...this.state.userCommand.options
-                }
+        const { name, checked } = event.target;
+        const userCommand = {
+            flags: {
+                ...this.state.userCommand.flags,
+                [name]: checked
+            },
+            options: {
+                ...this.state.userCommand.options
             }
-        });
+        }
+
+        this.setState({ userCommand });
     }
 
     getGeneratedFlags(command) {
@@ -127,7 +120,7 @@ class Builder extends Component {
 
     render() {
         const { command, user } = this.props;
-        const userCommand = this.props.userCommand || { flags: {}, options: {} };
+        const userCommand = this.state.userCommand || { flags: {}, options: {} };
         const newlineRegex = /(?:\r\n|\r|\n)/g;
 
         const generatedCommand = this.getGeneratedCommand(command);
@@ -163,8 +156,8 @@ class Builder extends Component {
                                                 </div>
                                                 <div className="input-col">
                                                     <input id={option.id} type="text" name={option.properties.name}
-                                                        key={Date.now()} onChange={(e) => this.handleOptionChange(e)}
-                                                        defaultValue={userCommand.options[option.properties.name]} />
+                                                        onChange={(e) => this.handleOptionChange(e)}
+                                                        value={userCommand.options[option.properties.name] || ''} />
                                                 </div>
                                             </div>
                                         ))}
@@ -183,8 +176,8 @@ class Builder extends Component {
                                                 </div>
                                                 <div className="input-col">
                                                     <input id={flag.id} type="checkbox" name={flag.properties.name}
-                                                        key={Date.now()} onChange={(e) => this.handleFlagChange(e)}
-                                                        defaultChecked={userCommand.flags[flag.properties.name]} />
+                                                        onChange={(e) => this.handleFlagChange(e)}
+                                                        checked={!!userCommand.flags[flag.properties.name]} />
                                                     <label htmlFor={flag.id}>
                                                         <svg viewBox="0,0,50,50"><path d="M5 30 L 20 45 L 45 5"></path></svg>
                                                     </label>
@@ -212,7 +205,6 @@ class Builder extends Component {
 const mapStateToProps = (state, props) => {
     return {
         command: state.commandReducer.command,
-        userCommand: state.commandReducer.userCommand,
         user: state.authReducer.user
     }
 }
@@ -223,7 +215,7 @@ const mapDispatchToProps = dispatch => {
             API.getCommand(commandId).then(command => dispatch(getCommand(command)));
         },
         getUserCommand: (userCommandId) => {
-            return API.getUserCommand(userCommandId).then(userCommand => dispatch(getUserCommand(userCommand)));
+            return API.getUserCommand(userCommandId);
         },
         saveUserCommand: (userCommand) => { return API.saveUserCommand(userCommand); }
     }
