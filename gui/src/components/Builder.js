@@ -20,6 +20,7 @@ class Builder extends Component {
         window.scrollTo(0, 0);
         const { match, location } = this.props;
         const userCommandId = getQueryParamByName('userCommandId', location.search);
+        this.setState({ userCommandId });
         if (userCommandId != null) {
             this.props.getUserCommand(userCommandId).then((userCommand) => {
                 this.setState({ userCommand });
@@ -112,7 +113,7 @@ class Builder extends Component {
             userId: this.props.user.localId
         };
         this.setState({ saveInProgress: true });
-        this.props.saveUserCommand(userCommand).then(() => {
+        this.props.saveUserCommand(userCommand, this.state.userCommandId).then(() => {
             this.setState({ saveInProgress: false });
             this.props.history.push('/command/user-commands');
         });
@@ -217,7 +218,7 @@ const mapDispatchToProps = dispatch => {
         getUserCommand: (userCommandId) => {
             return API.getUserCommand(userCommandId);
         },
-        saveUserCommand: (userCommand) => { return API.saveUserCommand(userCommand); }
+        saveUserCommand: (userCommand, userCommandId) => { return API.saveUserCommand(userCommand, userCommandId); }
     }
 }
 
