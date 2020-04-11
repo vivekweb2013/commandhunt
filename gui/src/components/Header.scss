@@ -14,7 +14,7 @@ $avatar-size: 40px;
 
   .logo > a {
     border-radius: 4px;
-    color: lighten($color-primary, 60%);
+    color: lighten($color-primary, 50%);
     float: left;
     font-size: 1.6rem;
     font-weight: bold;
@@ -23,21 +23,27 @@ $avatar-size: 40px;
     padding: 12px;
     text-align: center;
     text-decoration: none;
+
+    &:hover {
+      color: white;
+    }
   }
 
   .nav-icon-btn {
     background-color: lighten($color-primary, 15%);
     border: none;
-    color: #e1dee6;
+    color: lighten($color-primary, 50%);
+    cursor: pointer;
     float: right;
     font-size: 1rem;
     height: inherit;
     margin-right: 6px;
     outline: none;
-    padding: 0 6px;
+    padding: 5px;
 
     &:not([disabled]):hover {
       background-color: lighten($color-primary, 25%);
+      color: white;
     }
   }
 
@@ -50,6 +56,7 @@ $avatar-size: 40px;
     &:hover {
       .dropdown-btn {
         background-color: lighten($color-primary, 25%);
+        color: white;
       }
       .dropdown-content {
         display: block;
@@ -60,7 +67,8 @@ $avatar-size: 40px;
     .dropdown-btn {
       background-color: lighten($color-primary, 15%);
       border: none;
-      color: lighten($color-primary, 60%);
+      color: lighten($color-primary, 50%);
+      cursor: pointer;
       font-size: 1rem;
       height: inherit;
       outline: none;

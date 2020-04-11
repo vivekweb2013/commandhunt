@@ -10,9 +10,9 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { userLogin, userLogout } from './actions';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faHome, faSignInAlt, faSignOutAlt, faUserCog, faCog, faFileAlt, faClipboard, faEdit, faTrashAlt, faSortUp, faSortDown, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faSignInAlt, faSignOutAlt, faUserCog, faCog, faClipboard, faEdit, faTrashAlt, faSortUp, faSortDown, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faHome, faSignInAlt, faSignOutAlt, faUserCog, faCog, faFileAlt, faClipboard, faEdit, faTrashAlt, faSortUp, faSortDown, faCircleNotch);
+library.add(faHome, faSignInAlt, faSignOutAlt, faUserCog, faCog, faClipboard, faEdit, faTrashAlt, faSortUp, faSortDown, faCircleNotch);
 
 class App extends Component {
   state = {

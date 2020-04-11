@@ -65,16 +65,16 @@ class UserCommands extends Component {
                                 </td>
                                 <td className="actions">
                                     <CopyToClipboard text={userCommand.text}>
-                                        <span className="copy-icon">
+                                        <span className="copy-icon" title="copy">
                                             <FontAwesomeIcon icon="clipboard" color="slateblue" size="lg" />
                                         </span>
                                     </CopyToClipboard>
-                                    <span onClick={() =>
+                                    <span title="edit" onClick={() =>
                                         history.push(`/command/build/${userCommand.name}?userCommandId=${userCommand.__meta__.id}`)
                                     } className="edit-icon">
                                         <FontAwesomeIcon icon="edit" color="slateblue" size="lg" />
                                     </span>
-                                    <span onClick={(e) => this.handleDelete(e, userCommand)} className="delete-icon">
+                                    <span title="delete" onClick={(e) => this.handleDelete(e, userCommand)} className="delete-icon">
                                         <FontAwesomeIcon icon="trash-alt" color="tomato" size="lg" />
                                     </span>
                                 </td>
