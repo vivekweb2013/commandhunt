@@ -28,6 +28,8 @@ export const getCommand = commandName => {
 
 export const getUserCommands = () => db.reference('user-commands').query().run();
 
+export const getUserCommand = (userCommandId) => db.reference(`user-commands/${userCommandId}`).get();
+
 export const saveUserCommand = userCommand => {
     const ref = db.reference('user-commands');
     return ref.set(userCommand);

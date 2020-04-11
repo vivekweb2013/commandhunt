@@ -2,30 +2,49 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as API from '../api/API';
-import { getCommand } from '../actions';
+import { getCommand, getUserCommand } from '../actions';
+import { getQueryParamByName } from '../Utils';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Builder.scss';
 
 class Builder extends Component {
     state = {
-        flags: {},
-        options: {}
+        userCommand: {
+            flags: {},
+            options: {}
+        },
+        saveInProgress: false
+    }
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+        return ({ userCommand: nextProps.userCommand })
     }
 
     componentDidMount() {
         window.scrollTo(0, 0);
-        const { match } = this.props;
-        this.props.getCommand(match.params.commandName);
+        const { match, location } = this.props;
+        const userCommandId = getQueryParamByName('userCommandId', location.search);
+        if (userCommandId != null) {
+            this.props.getUserCommand(userCommandId).then(() => {
+                this.props.getCommand(match.params.commandName);
+            });
+        } else {
+            this.props.getCommand(match.params.commandName);
+        }
     }
 
     handleOptionChange(event) {
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
+        const { name, value } = event.target;
 
         this.setState({
-            options: {
-                ...this.state.options,
-                [name]: value
+            userCommand: {
+                flags: {
+                    ...this.state.userCommand.flags,
+                },
+                options: {
+                    ...this.state.userCommand.options,
+                    [name]: value
+                }
             }
         });
     }
@@ -36,9 +55,14 @@ class Builder extends Component {
         const name = target.name;
 
         this.setState({
-            flags: {
-                ...this.state.flags,
-                [name]: value
+            userCommand: {
+                flags: {
+                    ...this.state.userCommand.flags,
+                    [name]: value
+                },
+                options: {
+                    ...this.state.userCommand.options
+                }
             }
         });
     }
@@ -47,7 +71,7 @@ class Builder extends Component {
         let flagsStr = '';
         let hyphenPrefixedFlags = '';
         let otherFlags = '';
-        command.flags.filter(f => this.state.flags[f.properties.name]).forEach(f => {
+        command.flags.filter(f => this.state.userCommand.flags[f.properties.name]).forEach(f => {
             if (f.properties.prefix === '-') {
                 // normally only single hyphen prefixed flags are allowed to group
                 hyphenPrefixedFlags += f.properties.name;
@@ -68,9 +92,9 @@ class Builder extends Component {
 
     getGeneratedOptions(command) {
         let optionsStr = '';
-        command.options.filter(o => this.state.options[o.properties.name]).forEach(o => {
+        command.options.filter(o => this.state.userCommand.options[o.properties.name]).forEach(o => {
             const prefix = !o.properties.prefix.endsWith('=') ? `${o.properties.prefix} ` : o.properties.prefix;
-            optionsStr += ` ${prefix}${this.state.options[o.properties.name]}`;
+            optionsStr += ` ${prefix}${this.state.userCommand.options[o.properties.name]}`;
         });
 
         return optionsStr.trim();
@@ -89,18 +113,21 @@ class Builder extends Component {
     handleSave(e) {
         e.preventDefault();
         const userCommand = {
-            ...this.state,
+            ...this.state.userCommand,
             name: this.props.command.properties.name,
             text: this.getGeneratedCommand(this.props.command),
             userId: this.props.user.localId
         };
-        this.props.saveUserCommand(userCommand);
-        this.props.history.goBack();
+        this.setState({ saveInProgress: true });
+        this.props.saveUserCommand(userCommand).then(() => {
+            this.setState({ saveInProgress: false });
+            this.props.history.push('/command/user-commands');
+        });
     }
 
     render() {
         const { command, user } = this.props;
-        const savedCommand = this.props.savedCommand || { flags: {}, options: {} };
+        const userCommand = this.props.userCommand || { flags: {}, options: {} };
         const newlineRegex = /(?:\r\n|\r|\n)/g;
 
         const generatedCommand = this.getGeneratedCommand(command);
@@ -136,8 +163,8 @@ class Builder extends Component {
                                                 </div>
                                                 <div className="input-col">
                                                     <input id={option.id} type="text" name={option.properties.name}
-                                                        onChange={(e) => this.handleOptionChange(e)}
-                                                        defaultValue={savedCommand.options[option.properties.name]} />
+                                                        key={Date.now()} onChange={(e) => this.handleOptionChange(e)}
+                                                        defaultValue={userCommand.options[option.properties.name]} />
                                                 </div>
                                             </div>
                                         ))}
@@ -156,8 +183,8 @@ class Builder extends Component {
                                                 </div>
                                                 <div className="input-col">
                                                     <input id={flag.id} type="checkbox" name={flag.properties.name}
-                                                        onChange={(e) => this.handleFlagChange(e)}
-                                                        defaultChecked={savedCommand.flags[flag.properties.name]} />
+                                                        key={Date.now()} onChange={(e) => this.handleFlagChange(e)}
+                                                        defaultChecked={userCommand.flags[flag.properties.name]} />
                                                     <label htmlFor={flag.id}>
                                                         <svg viewBox="0,0,50,50"><path d="M5 30 L 20 45 L 45 5"></path></svg>
                                                     </label>
@@ -171,8 +198,8 @@ class Builder extends Component {
                         <div className="form-buttons">
                             <button className="ripple" type="button">PRINT</button>
                             <button className="ripple tooltip-t"
-                                {...(!user ? { 'data-tooltip': 'Login to Save' } : {})}
-                                type="submit" disabled={!user}>SAVE
+                                {...(!user ? { 'data-tooltip': 'Login to Save' } : {})} type="submit" disabled={!user}>
+                                {this.state.saveInProgress && <FontAwesomeIcon icon="circle-notch" spin />} SAVE
                             </button>
                         </div>
                     </form>
@@ -185,6 +212,7 @@ class Builder extends Component {
 const mapStateToProps = (state, props) => {
     return {
         command: state.commandReducer.command,
+        userCommand: state.commandReducer.userCommand,
         user: state.authReducer.user
     }
 }
@@ -192,9 +220,12 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = dispatch => {
     return {
         getCommand: (commandId) => {
-            API.getCommand(commandId).then(command => { dispatch(getCommand(command)); });
+            API.getCommand(commandId).then(command => dispatch(getCommand(command)));
         },
-        saveUserCommand: (userCommand) => { API.saveUserCommand(userCommand); }
+        getUserCommand: (userCommandId) => {
+            return API.getUserCommand(userCommandId).then(userCommand => dispatch(getUserCommand(userCommand)));
+        },
+        saveUserCommand: (userCommand) => { return API.saveUserCommand(userCommand); }
     }
 }
 

@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import {
-    GET_ALL_COMMANDS, GET_MATCHING_COMMANDS, GET_COMMAND, GET_USER_COMMANDS, DELETE_USER_COMMAND,
+    GET_ALL_COMMANDS, GET_MATCHING_COMMANDS, GET_COMMAND, GET_USER_COMMANDS, GET_USER_COMMAND, DELETE_USER_COMMAND,
     USER_LOGIN, USER_LOGOUT
 } from '../actions';
 
@@ -26,6 +26,11 @@ const commandReducer = (state = {}, action) => {
             return {
                 ...state,
                 userCommands
+            };
+        case GET_USER_COMMAND:
+            return {
+                ...state,
+                userCommand
             };
         case DELETE_USER_COMMAND:
             return {
