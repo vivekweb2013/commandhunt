@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import {
-    GET_ALL_COMMANDS, GET_MATCHING_COMMANDS, GET_COMMAND, GET_USER_COMMANDS, DELETE_USER_COMMAND, SET_PAGINATION,
+    GET_ALL_COMMANDS, GET_MATCHING_COMMANDS, GET_COMMAND,
+    GET_USER_COMMANDS, DELETE_USER_COMMAND, SET_PAGINATION, SET_FILTERS,
     USER_LOGIN, USER_LOGOUT
 } from '../actions';
 
@@ -43,7 +44,7 @@ const commandReducer = (state = {}, action) => {
 };
 
 const userCommandReducer = (state = {}, action) => {
-    const { userCommands, userCommand, pagination } = action;
+    const { userCommands, userCommand, filters, pagination } = action;
     switch (action.type) {
         case GET_USER_COMMANDS:
             return {
@@ -55,6 +56,11 @@ const userCommandReducer = (state = {}, action) => {
                 ...state,
                 userCommands: state.userCommands.filter(c => c.__meta__.id !== userCommand.__meta__.id)
             };
+        case SET_FILTERS:
+            return {
+                ...state,
+                filters: { ...state.filters, ...filters }
+            }
         case SET_PAGINATION:
             return {
                 ...state,

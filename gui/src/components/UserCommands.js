@@ -2,28 +2,29 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as API from '../api/API';
-import { getUserCommands, deleteUserCommand } from '../actions';
+import { setFilters, getUserCommands, deleteUserCommand } from '../actions';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { formatDate, formatTime } from '../Utils';
 import Pagination from './common/Pagination';
+import { deepCompare } from '../Utils';
 import './UserCommands.scss';
 
 class UserCommands extends Component {
-    state = {
-        filters: {
-            sortBy: 'text',
-            sortOrder: 0
-        }
-    }
 
     componentDidMount() {
         window.scrollTo(0, 0);
         this.getUserCommands();
     }
 
+    componentDidUpdate(prevProps) {
+        if (!deepCompare(prevProps.filters, this.props.filters)) {
+            this.getUserCommands();
+        }
+    }
+
     getUserCommands() {
-        const { sortBy, sortOrder } = this.state.filters;
+        const { sortBy, sortOrder } = this.props.filters || {};
         this.props.getUserCommands({
             select: ['text', 'name', 'timestamp'],
             orderBy: { field: sortBy || 'text', direction: sortOrder ? 'desc' : 'asc' }
@@ -31,13 +32,13 @@ class UserCommands extends Component {
     }
 
     getSortIcon(column) {
-        return this.state.filters.sortBy === column ? (this.state.filters.sortOrder ? 'sort-down' : 'sort-up') : '';
+        const { filters } = this.props;
+        return filters && filters.sortBy === column ? (this.props.filters.sortOrder ? 'sort-down' : 'sort-up') : '';
     }
 
     sort(column) {
-        this.setState({
-            filters: { sortBy: column, sortOrder: this.state.filters.sortOrder ? 0 : 1 }
-        }, () => this.getUserCommands());
+        const { sortOrder } = this.props.filters || {};
+        this.props.setFilters({ sortBy: column, sortOrder: sortOrder ? 0 : 1 });
     }
 
     handleDelete(e, userCommand) {
@@ -105,7 +106,7 @@ class UserCommands extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-    const { userCommands, pagination } = state.userCommandReducer;
+    const { userCommands, filters, pagination } = state.userCommandReducer;
     const { user } = state.authReducer;
     let filteredUserCommands = [];
     if (pagination && userCommands) {
@@ -118,12 +119,16 @@ const mapStateToProps = (state, props) => {
     return {
         user,
         userCommands,
+        filters,
         filteredUserCommands
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
+        setFilters: (filters) => {
+            dispatch(setFilters(filters));
+        },
         getUserCommands: (filters) => {
             API.getUserCommands(filters).then(userCommands => dispatch(getUserCommands(userCommands)));
         },
