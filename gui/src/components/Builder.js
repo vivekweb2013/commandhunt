@@ -110,7 +110,8 @@ class Builder extends Component {
             ...this.state.userCommand,
             name: this.props.command.properties.name,
             text: this.getGeneratedCommand(this.props.command),
-            userId: this.props.user.localId
+            userId: this.props.user.localId,
+            timestamp: Date.now()
         };
         this.setState({ saveInProgress: true });
         this.props.saveUserCommand(userCommand, this.state.userCommandId).then(() => {

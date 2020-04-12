@@ -16,7 +16,14 @@ class UserCommands extends Component {
 
     componentDidMount() {
         window.scrollTo(0, 0);
-        this.props.getUserCommands();
+        this.getUserCommands();
+    }
+
+    getUserCommands() {
+        const { sortBy, sortOrder } = this.state;
+        this.props.getUserCommands({
+            orderBy: { field: sortBy || 'text', direction: sortOrder ? 'asc' : 'desc' }
+        });
     }
 
     getSortIcon(column) {
@@ -24,7 +31,7 @@ class UserCommands extends Component {
     }
 
     sort(column) {
-        this.setState({ sortBy: column, sortOrder: this.state.sortOrder ? 0 : 1 });
+        this.setState({ sortBy: column, sortOrder: this.state.sortOrder ? 0 : 1 }, () => this.getUserCommands());
     }
 
     handleDelete(e, userCommand) {
@@ -42,14 +49,14 @@ class UserCommands extends Component {
                 </div>
                 <table>
                     <thead><tr>
-                        <th className="command-column" onClick={(e) => this.sort('command')}>
-                            COMMAND {this.getSortIcon('command') && <FontAwesomeIcon icon={this.getSortIcon('command')} />}
+                        <th className="command-column" onClick={(e) => this.sort('text')}>
+                            COMMAND {this.getSortIcon('text') && <FontAwesomeIcon icon={this.getSortIcon('text')} />}
                         </th>
-                        <th className="type-column" onClick={(e) => this.sort('type')}>
-                            TYPE {this.getSortIcon('type') && <FontAwesomeIcon icon={this.getSortIcon('type')} />}
+                        <th className="type-column" onClick={(e) => this.sort('name')}>
+                            TYPE {this.getSortIcon('name') && <FontAwesomeIcon icon={this.getSortIcon('name')} />}
                         </th>
-                        <th className="date-column" onClick={(e) => this.sort('date')}>
-                            DATE {this.getSortIcon('date') && <FontAwesomeIcon icon={this.getSortIcon('date')} />}
+                        <th className="date-column" onClick={(e) => this.sort('timestamp')}>
+                            DATE {this.getSortIcon('timestamp') && <FontAwesomeIcon icon={this.getSortIcon('timestamp')} />}
                         </th>
                         <th className="actions-column">ACTIONS</th>
                     </tr></thead>
@@ -62,8 +69,8 @@ class UserCommands extends Component {
                                     <code>{userCommand.name}</code>
                                 </td>
                                 <td className="date">
-                                    {formatDate(new Date(userCommand.__meta__.updateTime))} <br />
-                                    <small>{formatTime(new Date(userCommand.__meta__.updateTime))}</small>
+                                    {formatDate(new Date(userCommand.timestamp))} <br />
+                                    <small>{formatTime(new Date(userCommand.timestamp))}</small>
                                 </td>
                                 <td className="actions">
                                     <CopyToClipboard text={userCommand.text}>
@@ -97,8 +104,8 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        getUserCommands: () => {
-            API.getUserCommands().then(userCommands => { dispatch(getUserCommands(userCommands)); });
+        getUserCommands: (filters) => {
+            API.getUserCommands(filters).then(userCommands => { dispatch(getUserCommands(userCommands)); });
         },
         deleteUserCommand: (userCommand) => {
             API.deleteUserCommand(userCommand).then(() => { dispatch(deleteUserCommand(userCommand)); });
