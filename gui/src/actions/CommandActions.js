@@ -3,6 +3,7 @@ export const GET_COMMAND = "GET_COMMAND";
 export const GET_MATCHING_COMMANDS = "GET_MATCHING_COMMANDS";
 export const GET_USER_COMMANDS = "GET_USER_COMMANDS";
 export const DELETE_USER_COMMAND = "DELETE_USER_COMMAND";
+export const SET_PAGINATION = "SET_PAGINATION";
 
 export function getAllCommands(commands) {
     return {
@@ -36,5 +37,12 @@ export function deleteUserCommand(userCommand) {
     return {
         type: DELETE_USER_COMMAND,
         userCommand
+    };
+}
+
+export function setPagination(pagination) {
+    return {
+        type: SET_PAGINATION,
+        pagination
     };
 }

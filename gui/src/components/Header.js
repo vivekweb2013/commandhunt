@@ -7,28 +7,33 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Header.scss';
 
 class Header extends Component {
-    handleLogin(event) {
-        event.preventDefault();
+    handleRootNavigation(e) {
+        e.preventDefault();
+        this.props.history.push('/');
+    }
+    handleLogin(e) {
+        e.preventDefault();
         this.props.history.push('/login');
     }
 
-    handleLogout(event) {
-        event.preventDefault();
+    handleLogout(e) {
+        e.preventDefault();
         FirebaseAuth.signOut();
     }
 
-    handleUserCommands(event) {
-        event.preventDefault();
+    handleUserCommands(e) {
+        e.preventDefault();
         this.props.history.push('/command/user-commands');
     }
 
     render() {
-        const { user } = this.props;
+        const { user, history } = this.props;
 
         return (
             <header className="site-header">
                 <div className="logo">
-                    <a href="/"><FontAwesomeIcon icon="home" />&nbsp;Command Builder</a>
+                    <a href="/" onClick={(e) => this.handleRootNavigation(e)}>
+                        <FontAwesomeIcon icon="home" />&nbsp;Command Builder</a>
                 </div>
 
                 <div className="dropdown">

@@ -6,6 +6,7 @@ import { getUserCommands, deleteUserCommand } from '../actions';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { formatDate, formatTime } from '../Utils';
+import Pagination from './common/Pagination';
 import './UserCommands.scss';
 
 class UserCommands extends Component {
@@ -22,6 +23,7 @@ class UserCommands extends Component {
     getUserCommands() {
         const { sortBy, sortOrder } = this.state;
         this.props.getUserCommands({
+            select: ['text', 'name', 'timestamp'],
             orderBy: { field: sortBy || 'text', direction: sortOrder ? 'asc' : 'desc' }
         });
     }
@@ -34,13 +36,17 @@ class UserCommands extends Component {
         this.setState({ sortBy: column, sortOrder: this.state.sortOrder ? 0 : 1 }, () => this.getUserCommands());
     }
 
+    onPageChange(currentPage, startPos) {
+        console.log(currentPage, startPos);
+    }
+
     handleDelete(e, userCommand) {
         e.preventDefault();
         this.props.deleteUserCommand(userCommand);
     }
 
     render() {
-        const { userCommands, history } = this.props;
+        const { userCommands, filteredUserCommands, history } = this.props;
 
         return (
             <div className="user-commands">
@@ -62,7 +68,7 @@ class UserCommands extends Component {
                     </tr></thead>
 
                     <tbody>
-                        {userCommands && userCommands.length > 0 ? userCommands.map(userCommand =>
+                        {filteredUserCommands && filteredUserCommands.length > 0 ? filteredUserCommands.map(userCommand =>
                             <tr key={userCommand.__meta__.id} >
                                 <td className="command"><code>{userCommand.text}</code></td>
                                 <td className="type">
@@ -90,25 +96,39 @@ class UserCommands extends Component {
                             </tr>) : <tr><td colSpan="4"><div className="no-data-msg">No Commands Found!</div></td></tr>}
                     </tbody>
                 </table>
+                <Pagination
+                    totalItems={userCommands ? userCommands.length : 0} itemsPerPage={10}
+                    onPageChange={this.onPageChange} maxPagesToShow={5} />
             </div>
         )
     }
 }
 
 const mapStateToProps = (state, props) => {
+    const { userCommands, pagination } = state.commandReducer;
+    const { user } = state.authReducer;
+    let filteredUserCommands = [];
+    if (pagination && userCommands) {
+        const { itemsPerPage } = pagination;
+        const currentPage = pagination.currentPage || 1;
+        const startPos = (currentPage - 1) * itemsPerPage;
+        filteredUserCommands = userCommands.slice(startPos, startPos + itemsPerPage)
+    }
+
     return {
-        user: state.authReducer.user,
-        userCommands: state.commandReducer.userCommands
+        user,
+        userCommands,
+        filteredUserCommands
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         getUserCommands: (filters) => {
-            API.getUserCommands(filters).then(userCommands => { dispatch(getUserCommands(userCommands)); });
+            API.getUserCommands(filters).then(userCommands => dispatch(getUserCommands(userCommands)));
         },
         deleteUserCommand: (userCommand) => {
-            API.deleteUserCommand(userCommand).then(() => { dispatch(deleteUserCommand(userCommand)); });
+            API.deleteUserCommand(userCommand).then(() => dispatch(deleteUserCommand(userCommand)));
         }
     }
 }
