@@ -58,7 +58,7 @@ export class Pagination extends Component {
 
 const mapStateToProps = (state, props) => {
     return {
-        pagination: state.commandReducer.pagination
+        pagination: state.userCommandReducer.pagination
     }
 }
 

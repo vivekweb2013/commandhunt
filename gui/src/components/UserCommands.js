@@ -11,8 +11,10 @@ import './UserCommands.scss';
 
 class UserCommands extends Component {
     state = {
-        sortBy: '',
-        sortOrder: 0
+        filters: {
+            sortBy: 'text',
+            sortOrder: 0
+        }
     }
 
     componentDidMount() {
@@ -21,23 +23,21 @@ class UserCommands extends Component {
     }
 
     getUserCommands() {
-        const { sortBy, sortOrder } = this.state;
+        const { sortBy, sortOrder } = this.state.filters;
         this.props.getUserCommands({
             select: ['text', 'name', 'timestamp'],
-            orderBy: { field: sortBy || 'text', direction: sortOrder ? 'asc' : 'desc' }
+            orderBy: { field: sortBy || 'text', direction: sortOrder ? 'desc' : 'asc' }
         });
     }
 
     getSortIcon(column) {
-        return this.state.sortBy === column ? (this.state.sortOrder ? 'sort-up' : 'sort-down') : '';
+        return this.state.filters.sortBy === column ? (this.state.filters.sortOrder ? 'sort-down' : 'sort-up') : '';
     }
 
     sort(column) {
-        this.setState({ sortBy: column, sortOrder: this.state.sortOrder ? 0 : 1 }, () => this.getUserCommands());
-    }
-
-    onPageChange(currentPage, startPos) {
-        console.log(currentPage, startPos);
+        this.setState({
+            filters: { sortBy: column, sortOrder: this.state.filters.sortOrder ? 0 : 1 }
+        }, () => this.getUserCommands());
     }
 
     handleDelete(e, userCommand) {
@@ -98,14 +98,14 @@ class UserCommands extends Component {
                 </table>
                 <Pagination
                     totalItems={userCommands ? userCommands.length : 0} itemsPerPage={10}
-                    onPageChange={this.onPageChange} maxPagesToShow={5} />
+                    maxPagesToShow={5} />
             </div>
         )
     }
 }
 
 const mapStateToProps = (state, props) => {
-    const { userCommands, pagination } = state.commandReducer;
+    const { userCommands, pagination } = state.userCommandReducer;
     const { user } = state.authReducer;
     let filteredUserCommands = [];
     if (pagination && userCommands) {

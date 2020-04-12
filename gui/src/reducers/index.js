@@ -42,6 +42,29 @@ const commandReducer = (state = {}, action) => {
     }
 };
 
+const userCommandReducer = (state = {}, action) => {
+    const { userCommands, userCommand, pagination } = action;
+    switch (action.type) {
+        case GET_USER_COMMANDS:
+            return {
+                ...state,
+                userCommands
+            };
+        case DELETE_USER_COMMAND:
+            return {
+                ...state,
+                userCommands: state.userCommands.filter(c => c.__meta__.id !== userCommand.__meta__.id)
+            };
+        case SET_PAGINATION:
+            return {
+                ...state,
+                pagination: { ...state.pagination, ...pagination }
+            };
+        default:
+            return state;
+    }
+};
+
 const authReducer = (state = {}, action) => {
     const { user } = action;
     switch (action.type) {
@@ -60,4 +83,4 @@ const authReducer = (state = {}, action) => {
     }
 };
 
-export default combineReducers({ commandReducer, authReducer });
+export default combineReducers({ authReducer, commandReducer, userCommandReducer });
