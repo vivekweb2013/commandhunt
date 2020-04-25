@@ -5,6 +5,7 @@ import Builder from './Builder';
 import Login from './Login';
 import UserCommands from './UserCommands';
 import './Content.scss';
+import SignUp from './SignUp';
 
 class Content extends Component {
     render() {
@@ -13,6 +14,7 @@ class Content extends Component {
                 <Switch>
                     <Route exact path="/" component={Finder} />
                     <Route path="/login" component={Login} />
+                    <Route path="/signup" component={SignUp} />
                     <Route path="/command/build/:commandName" component={Builder} />
                     <Route path="/command/user-commands" component={UserCommands} />
                 </Switch>

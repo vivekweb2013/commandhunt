@@ -4,11 +4,12 @@ import Content from './components/Content';
 import Footer from './components/Footer';
 import Spinner from './components/common/Spinner';
 import FirebaseAuth from './components/auth/FirebaseAuth';
-import './App.scss';
-
+import * as API from './api/API';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { userLogin, userLogout } from './actions';
+import './App.scss';
+
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faHome, faSignInAlt, faSignOutAlt, faUserCog, faCog, faClipboard, faEdit, faTrashAlt, faSortUp, faSortDown, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 
@@ -19,17 +20,12 @@ class App extends Component {
     loading: true
   }
 
-  // Listen to the Firebase Auth state and set the local state.
   componentDidMount() {
+    this.props.getUserProfile().then(() => this.setState({ loading: false }));
     this.unregisterAuthListener = FirebaseAuth.addListener((user) => {
       user ? this.props.userLogin(user) : this.props.userLogout(user);
       this.setState({ loading: false });
     });
-  }
-
-  // Make sure we un-register Firebase observers when the component unmounts.
-  componentWillUnmount() {
-    this.unregisterAuthListener();
   }
 
   render() {
@@ -54,8 +50,15 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    userLogin: ({ localId, displayName, photoUrl, email, emailVerified }) => {
-      dispatch(userLogin({ localId, displayName, photoUrl, email, emailVerified }));
+    getUserProfile: (userProfileRequest) => {
+      return API.getUserProfile(userProfileRequest).then((user) => {
+        dispatch(userLogin({
+          localId: user.id, displayName: user.properties.name, photoUrl: null,
+          email: user.properties.email, emailVerified: user.properties.emailVerified
+        }));
+      }, () => {
+        dispatch(userLogin(null));
+      });
     },
     userLogout: () => {
       dispatch(userLogout());

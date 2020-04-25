@@ -32,9 +32,9 @@ import java.util.Map;
 public class MainRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(MainRepository.class);
 
-    private MainMapper mapper = new MainMapper();
-    private JanusGraph graph;
-    private GraphTraversalSource g;
+    private final MainMapper mapper = new MainMapper();
+    private final JanusGraph graph;
+    private final GraphTraversalSource g;
 
     @Autowired
     public MainRepository(JanusGraph graph, GraphTraversalSource g) {
@@ -65,8 +65,8 @@ public class MainRepository {
     private Command getCommand(Vertex commandVertex) {
         Command command = mapper.mapToCommand(commandVertex);
 
-        List<Map<String, Object>> flagList = g.V(commandVertex).outE().hasLabel("has_flag").as("E").inV().as("V")
-                .select("E", "V").by(__.valueMap().with(WithOptions.tokens).unfold().group()
+        List<Map<String, Object>> flagList = g.V(commandVertex).outE().hasLabel("has_flag").as("E").inV()
+                .as("V").select("E", "V").by(__.valueMap().with(WithOptions.tokens).unfold().group()
                         .by(Column.keys).by(__.select(Column.values).unfold())).toList();
 
         for (Map<String, Object> flagProps : flagList) {
@@ -76,8 +76,8 @@ public class MainRepository {
             command.addFlag(flag);
         }
 
-        List<Map<String, Object>> optionList = g.V(commandVertex).outE().hasLabel("has_option").as("E").inV().as("V")
-                .select("E", "V").by(__.valueMap().with(WithOptions.tokens).unfold().group()
+        List<Map<String, Object>> optionList = g.V(commandVertex).outE().hasLabel("has_option").as("E")
+                .inV().as("V").select("E", "V").by(__.valueMap().with(WithOptions.tokens).unfold().group()
                         .by(Column.keys).by(__.select(Column.values).unfold())).toList();
 
         for (Map<String, Object> optionProps : optionList) {

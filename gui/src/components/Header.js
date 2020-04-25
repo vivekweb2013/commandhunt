@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import FirebaseAuth from './auth/FirebaseAuth';
+import * as API from '../api/API';
+import { userLogin } from '../actions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import userSVG from '../styles/icons/user.svg'
 import './Header.scss';
 
 class Header extends Component {
@@ -11,6 +13,7 @@ class Header extends Component {
         e.preventDefault();
         this.props.history.push('/');
     }
+
     handleLogin(e) {
         e.preventDefault();
         this.props.history.push('/login');
@@ -18,7 +21,7 @@ class Header extends Component {
 
     handleLogout(e) {
         e.preventDefault();
-        FirebaseAuth.signOut();
+        this.props.userLogout();
     }
 
     handleUserCommands(e) {
@@ -27,7 +30,8 @@ class Header extends Component {
     }
 
     render() {
-        const { user, history } = this.props;
+        const { user } = this.props;
+        const photoUrl = user && user.photoUrl ? user.photoUrl : userSVG;
 
         return (
             <header className="site-header">
@@ -39,12 +43,12 @@ class Header extends Component {
                 <div className="dropdown">
                     <button disabled={!!user} onClick={(e) => this.handleLogin(e)} className="dropdown-btn">
                         {user ?
-                            <><span alt="avatar" style={{ backgroundImage: `url(${user.photoUrl})` }} className="avatar" /><span>&nbsp;{user.displayName}</span></>
+                            <><span alt="avatar" style={{ backgroundImage: `url(${photoUrl})` }} className="avatar" /><span>&nbsp;{user.displayName}</span></>
                             : <>&nbsp;<FontAwesomeIcon icon="sign-in-alt" />&nbsp;&nbsp;Login</>
                         }
                     </button>
                     {user && <div className="dropdown-content">
-                        <button key="Logout" onClick={this.handleLogout}><FontAwesomeIcon icon="sign-out-alt" />&nbsp;Logout</button>
+                        <button key="Logout" onClick={e => this.handleLogout(e)}><FontAwesomeIcon icon="sign-out-alt" />&nbsp;Logout</button>
                         <Link to="/" key="Profile"><FontAwesomeIcon icon="user-cog" />&nbsp;Profile</Link>
                         <Link to="/" key="Settings"><FontAwesomeIcon icon="cog" />&nbsp;Settings</Link>
                     </div>}
@@ -67,4 +71,13 @@ const mapStateToProps = (state, props) => {
     }
 }
 
-export default withRouter(connect(mapStateToProps, null)(Header));
+const mapDispatchToProps = dispatch => {
+    return {
+        userLogout: () => {
+            // This will remove token from localStorage & also remove user from store
+            API.userLogout().then(() => dispatch(userLogin(null)));
+        }
+    }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));
