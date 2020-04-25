@@ -4,7 +4,7 @@ import com.wirehall.commandbuilder.dto.Command;
 import com.wirehall.commandbuilder.dto.Filter;
 import com.wirehall.commandbuilder.dto.Flag;
 import com.wirehall.commandbuilder.dto.Option;
-import com.wirehall.commandbuilder.mapper.MainMapper;
+import com.wirehall.commandbuilder.mapper.CommandMapper;
 import com.wirehall.commandbuilder.model.EDGE;
 import com.wirehall.commandbuilder.model.VERTEX;
 import com.wirehall.commandbuilder.model.props.COMMAND_PROPERTY;
@@ -29,15 +29,15 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class MainRepository {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MainRepository.class);
+public class CommandRepository {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommandRepository.class);
 
-    private final MainMapper mapper = new MainMapper();
+    private final CommandMapper mapper = new CommandMapper();
     private final JanusGraph graph;
     private final GraphTraversalSource g;
 
     @Autowired
-    public MainRepository(JanusGraph graph, GraphTraversalSource g) {
+    public CommandRepository(JanusGraph graph, GraphTraversalSource g) {
         this.graph = graph;
         this.g = g;
     }

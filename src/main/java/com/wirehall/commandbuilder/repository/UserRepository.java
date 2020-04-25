@@ -37,7 +37,8 @@ public class UserRepository {
 
     public Optional<User> findByEmail(String email) {
         g.tx().rollback();
-        Optional<Vertex> user = g.V().hasLabel(VERTEX.user.toString()).has("email", email).tryNext();
+        Optional<Vertex> user = g.V().hasLabel(VERTEX.user.toString())
+                .has(USER_PROPERTY.email.toString(), email).tryNext();
         return mapper.mapToUser(user);
     }
 
@@ -49,7 +50,7 @@ public class UserRepository {
 
     public Boolean existsByEmail(String email) {
         g.tx().rollback();
-        return g.V().hasLabel(VERTEX.user.toString()).has("email", email).hasNext();
+        return g.V().hasLabel(VERTEX.user.toString()).has(USER_PROPERTY.email.toString(), email).hasNext();
     }
 
     public User addUser(SignUp signUpRequest) {

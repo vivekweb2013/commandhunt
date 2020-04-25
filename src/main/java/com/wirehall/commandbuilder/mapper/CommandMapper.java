@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public final class MainMapper extends BaseMapper {
+public final class CommandMapper extends BaseMapper {
 
     /**
      * @param commandVertex Command vertex to be converted to Command dto

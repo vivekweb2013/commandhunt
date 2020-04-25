@@ -2,7 +2,7 @@ package com.wirehall.commandbuilder.graph;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wirehall.commandbuilder.dto.Command;
-import com.wirehall.commandbuilder.repository.MainRepository;
+import com.wirehall.commandbuilder.repository.CommandRepository;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.process.traversal.step.util.WithOptions;
 import org.janusgraph.core.JanusGraph;
@@ -27,26 +27,26 @@ public class GraphBuilder {
 
     private JanusGraph graph;
     private GraphTraversalSource g;
-    private MainRepository mainRepository;
+    private CommandRepository commandRepository;
 
     @Autowired
-    public GraphBuilder(JanusGraph graph, GraphTraversalSource g, MainRepository mainRepository) {
+    public GraphBuilder(JanusGraph graph, GraphTraversalSource g, CommandRepository commandRepository) {
         this.graph = graph;
         this.g = g;
-        this.mainRepository = mainRepository;
+        this.commandRepository = commandRepository;
     }
 
     public void initialize() {
         try {
             SchemaManager.createSchema(graph);
-            fillData(mainRepository);
+            fillData(commandRepository);
             readElements();
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
 
-    private void fillData(MainRepository mainRepository) {
+    private void fillData(CommandRepository commandRepository) {
         try {
             // naive check if the graph was previously created
             if (g.V().has("name", "command").hasNext()) {
@@ -59,7 +59,7 @@ public class GraphBuilder {
             for (Resource resource : jsonDataResources) {
                 ObjectMapper mapper = new ObjectMapper();
                 Command command = mapper.readValue(resource.getInputStream(), Command.class);
-                mainRepository.addCommand(command);
+                commandRepository.addCommand(command);
             }
 
             g.tx().commit();

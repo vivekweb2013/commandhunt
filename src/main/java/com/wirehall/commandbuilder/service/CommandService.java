@@ -2,39 +2,39 @@ package com.wirehall.commandbuilder.service;
 
 import com.wirehall.commandbuilder.dto.Command;
 import com.wirehall.commandbuilder.dto.Filter;
-import com.wirehall.commandbuilder.repository.MainRepository;
+import com.wirehall.commandbuilder.repository.CommandRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class MainService {
+public class CommandService {
 
-    private MainRepository mainRepository;
+    private final CommandRepository commandRepository;
 
     @Autowired
-    public MainService(MainRepository mainRepository) {
-        this.mainRepository = mainRepository;
+    public CommandService(CommandRepository commandRepository) {
+        this.commandRepository = commandRepository;
     }
 
     public List<Command> getAllCommands() {
-        return mainRepository.getAllCommands();
+        return commandRepository.getAllCommands();
     }
 
     public Command getCommandById(String id) {
-        return mainRepository.getCommandById(id);
+        return commandRepository.getCommandById(id);
     }
 
     public Command getCommandByName(String name) {
-        return mainRepository.getCommandByName(name);
+        return commandRepository.getCommandByName(name);
     }
 
     public List<Command> getMatchingCommands(Filter filter) {
-        return mainRepository.getMatchingCommands(filter);
+        return commandRepository.getMatchingCommands(filter);
     }
 
     public List<Command> getMatchingCommands(String query) {
-        return mainRepository.getMatchingCommands(query);
+        return commandRepository.getMatchingCommands(query);
     }
 }
