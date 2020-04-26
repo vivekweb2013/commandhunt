@@ -1,28 +1,38 @@
 package com.wirehall.commandbuilder.dto;
 
-import com.wirehall.commandbuilder.model.props.COMMAND_PROPERTY;
-
+import com.wirehall.commandbuilder.model.props.CommandProperty;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-public class Command extends Node<COMMAND_PROPERTY> {
+public class Command extends Node<CommandProperty> {
+
   private List<Flag> flags;
   private List<Option> options;
 
   public Command() {
-    super(COMMAND_PROPERTY.class);
+    super(CommandProperty.class);
   }
 
+  /**
+   * Retrieve the properties of command.
+   *
+   * @return The command properties.
+   */
   @Override
-  public Map<COMMAND_PROPERTY, Object> getProperties() {
+  public Map<CommandProperty, Object> getProperties() {
     if (properties == null) {
-      properties = new EnumMap<>(COMMAND_PROPERTY.class);
+      properties = new EnumMap<>(CommandProperty.class);
     }
     return properties;
   }
 
+  /**
+   * Retrieve the flags of command.
+   *
+   * @return The list of command flags,
+   */
   public List<Flag> getFlags() {
     if (flags == null) {
       flags = new ArrayList<>();
@@ -38,6 +48,11 @@ public class Command extends Node<COMMAND_PROPERTY> {
     getFlags().add(flag);
   }
 
+  /**
+   * Retrieve the option of command.
+   *
+   * @return The list of command options.
+   */
   public List<Option> getOptions() {
     if (options == null) {
       options = new ArrayList<>();

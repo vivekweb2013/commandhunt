@@ -1,6 +1,6 @@
 package com.wirehall.commandbuilder.model;
 
-public enum VERTEX {
+public enum VertexType {
   command,
   flag,
   option,

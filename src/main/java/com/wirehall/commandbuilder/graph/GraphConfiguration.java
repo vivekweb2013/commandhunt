@@ -16,14 +16,11 @@ public class GraphConfiguration {
 
   @Bean
   JanusGraph janusGraph() throws ConfigurationException {
-    JanusGraph graph =
-        (JanusGraph) GraphFactory.open(new PropertiesConfiguration(appGraphConfigPath));
-    return graph;
+    return (JanusGraph) GraphFactory.open(new PropertiesConfiguration(appGraphConfigPath));
   }
 
   @Bean
   GraphTraversalSource graphTraversalSource(JanusGraph janusGraph) {
-    GraphTraversalSource g = janusGraph.traversal();
-    return g;
+    return janusGraph.traversal();
   }
 }

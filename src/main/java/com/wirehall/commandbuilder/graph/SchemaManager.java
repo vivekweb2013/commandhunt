@@ -1,10 +1,10 @@
 package com.wirehall.commandbuilder.graph;
 
-import com.wirehall.commandbuilder.model.EDGE;
-import com.wirehall.commandbuilder.model.VERTEX;
-import com.wirehall.commandbuilder.model.props.COMMAND_PROPERTY;
-import com.wirehall.commandbuilder.model.props.FLAG_PROPERTY;
-import com.wirehall.commandbuilder.model.props.OPTION_PROPERTY;
+import com.wirehall.commandbuilder.model.Edge;
+import com.wirehall.commandbuilder.model.VertexType;
+import com.wirehall.commandbuilder.model.props.CommandProperty;
+import com.wirehall.commandbuilder.model.props.FlagProperty;
+import com.wirehall.commandbuilder.model.props.OptionProperty;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.Multiplicity;
@@ -14,8 +14,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SchemaManager {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(SchemaManager.class);
 
+  /**
+   * Creates the application's graph db schema.
+   *
+   * @param graph The janus graph instance.
+   */
   public static void createSchema(final JanusGraph graph) {
     final JanusGraphManagement management = graph.openManagement();
     try {
@@ -40,42 +46,42 @@ public class SchemaManager {
   }
 
   private static void createVertexLabels(final JanusGraphManagement management) {
-    management.makeVertexLabel(VERTEX.command.toString()).make();
-    management.makeVertexLabel(VERTEX.option.toString()).make();
-    management.makeVertexLabel(VERTEX.flag.toString()).make();
+    management.makeVertexLabel(VertexType.command.toString()).make();
+    management.makeVertexLabel(VertexType.option.toString()).make();
+    management.makeVertexLabel(VertexType.flag.toString()).make();
   }
 
   private static void createEdgeLabels(final JanusGraphManagement management) {
-    management.makeEdgeLabel(EDGE.belongs_to.toString()).multiplicity(Multiplicity.MANY2ONE).make();
-    management.makeEdgeLabel(EDGE.has_option.toString()).multiplicity(Multiplicity.ONE2MANY).make();
-    management.makeEdgeLabel(EDGE.has_flag.toString()).multiplicity(Multiplicity.ONE2MANY).make();
+    management.makeEdgeLabel(Edge.belongs_to.toString()).multiplicity(Multiplicity.MANY2ONE).make();
+    management.makeEdgeLabel(Edge.has_option.toString()).multiplicity(Multiplicity.ONE2MANY).make();
+    management.makeEdgeLabel(Edge.has_flag.toString()).multiplicity(Multiplicity.ONE2MANY).make();
   }
 
   private static void createProperties(final JanusGraphManagement management) {
-    management.makePropertyKey(COMMAND_PROPERTY.name.toString()).dataType(String.class).make();
-    management.makePropertyKey(COMMAND_PROPERTY.desc.toString()).dataType(String.class).make();
-    management.makePropertyKey(COMMAND_PROPERTY.long_desc.toString()).dataType(String.class).make();
-    management.makePropertyKey(COMMAND_PROPERTY.syntax.toString()).dataType(String.class).make();
+    management.makePropertyKey(CommandProperty.name.toString()).dataType(String.class).make();
+    management.makePropertyKey(CommandProperty.desc.toString()).dataType(String.class).make();
+    management.makePropertyKey(CommandProperty.long_desc.toString()).dataType(String.class).make();
+    management.makePropertyKey(CommandProperty.syntax.toString()).dataType(String.class).make();
     management
-        .makePropertyKey(COMMAND_PROPERTY.man_page_url.toString())
+        .makePropertyKey(CommandProperty.man_page_url.toString())
         .dataType(String.class)
         .make();
 
-    management.makePropertyKey(FLAG_PROPERTY.prefix.toString()).dataType(String.class).make();
-    management.makePropertyKey(FLAG_PROPERTY.alias.toString()).dataType(String.class).make();
+    management.makePropertyKey(FlagProperty.prefix.toString()).dataType(String.class).make();
+    management.makePropertyKey(FlagProperty.alias.toString()).dataType(String.class).make();
     management
-        .makePropertyKey(FLAG_PROPERTY.is_grouping_allowed.toString())
+        .makePropertyKey(FlagProperty.is_grouping_allowed.toString())
         .dataType(String.class)
         .make();
-    management.makePropertyKey(FLAG_PROPERTY.sequence.toString()).dataType(Byte.class).make();
+    management.makePropertyKey(FlagProperty.sequence.toString()).dataType(Byte.class).make();
 
-    management.makePropertyKey(OPTION_PROPERTY.data_type.toString()).dataType(String.class).make();
+    management.makePropertyKey(OptionProperty.data_type.toString()).dataType(String.class).make();
     management
-        .makePropertyKey(OPTION_PROPERTY.is_repeatable.toString())
+        .makePropertyKey(OptionProperty.is_repeatable.toString())
         .dataType(String.class)
         .make();
     management
-        .makePropertyKey(OPTION_PROPERTY.is_mandatory.toString())
+        .makePropertyKey(OptionProperty.is_mandatory.toString())
         .dataType(String.class)
         .make();
   }
@@ -83,7 +89,7 @@ public class SchemaManager {
   private static void createCompositeIndexes(final JanusGraphManagement management) {
     management
         .buildIndex("nameIndex", Vertex.class)
-        .addKey(management.getPropertyKey(COMMAND_PROPERTY.name.toString()))
+        .addKey(management.getPropertyKey(CommandProperty.name.toString()))
         .buildCompositeIndex();
   }
 }

@@ -3,10 +3,9 @@ package com.wirehall.commandbuilder.service;
 import com.wirehall.commandbuilder.dto.Command;
 import com.wirehall.commandbuilder.dto.Filter;
 import com.wirehall.commandbuilder.repository.CommandRepository;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class CommandService {

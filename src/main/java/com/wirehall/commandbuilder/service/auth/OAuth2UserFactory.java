@@ -1,33 +1,40 @@
 package com.wirehall.commandbuilder.service.auth;
 
 import com.wirehall.commandbuilder.dto.User;
+import com.wirehall.commandbuilder.dto.User.OAuthProvider;
 import com.wirehall.commandbuilder.exception.OAuth2AuthProcessingException;
-import com.wirehall.commandbuilder.model.props.USER_PROPERTY;
-
+import com.wirehall.commandbuilder.model.props.UserProperty;
 import java.util.Map;
 
 public class OAuth2UserFactory {
 
+  /**
+   * Factory used to get the user dto with the info received from OAuth provider.
+   *
+   * @param registrationId The user's registration id received from provider.
+   * @param attributes     User attributes received from provider.
+   * @return User DTO.
+   */
   public static User getOAuth2UserInfo(String registrationId, Map<String, Object> attributes) {
     User user = new User();
-    user.addProperty(USER_PROPERTY.providerId, registrationId);
-    user.addProperty(USER_PROPERTY.name, attributes.get(USER_PROPERTY.name.toString()));
-    user.addProperty(USER_PROPERTY.email, attributes.get(USER_PROPERTY.email.toString()));
+    user.addProperty(UserProperty.providerId, registrationId);
+    user.addProperty(UserProperty.name, attributes.get(UserProperty.name.toString()));
+    user.addProperty(UserProperty.email, attributes.get(UserProperty.email.toString()));
 
-    if (registrationId.equalsIgnoreCase(User.OAUTH_PROVIDER.google.toString())) {
+    if (registrationId.equalsIgnoreCase(OAuthProvider.google.toString())) {
       user.setId(attributes.get("sub"));
-      user.addProperty(USER_PROPERTY.provider, User.OAUTH_PROVIDER.google.toString());
-      user.addProperty(USER_PROPERTY.imageUrl, attributes.get("picture"));
+      user.addProperty(UserProperty.provider, OAuthProvider.google.toString());
+      user.addProperty(UserProperty.imageUrl, attributes.get("picture"));
       return user;
-    } else if (registrationId.equalsIgnoreCase(User.OAUTH_PROVIDER.facebook.toString())) {
+    } else if (registrationId.equalsIgnoreCase(OAuthProvider.facebook.toString())) {
       user.setId(attributes.get("id"));
-      user.addProperty(USER_PROPERTY.provider, User.OAUTH_PROVIDER.facebook.toString());
-      user.addProperty(USER_PROPERTY.imageUrl, attributes.get(getFacebookImageUrl(attributes)));
+      user.addProperty(UserProperty.provider, OAuthProvider.facebook.toString());
+      user.addProperty(UserProperty.imageUrl, attributes.get(getFacebookImageUrl(attributes)));
       return user;
-    } else if (registrationId.equalsIgnoreCase(User.OAUTH_PROVIDER.github.toString())) {
+    } else if (registrationId.equalsIgnoreCase(OAuthProvider.github.toString())) {
       user.setId(attributes.get("id"));
-      user.addProperty(USER_PROPERTY.provider, User.OAUTH_PROVIDER.github.toString());
-      user.addProperty(USER_PROPERTY.imageUrl, attributes.get("avatar_url"));
+      user.addProperty(UserProperty.provider, OAuthProvider.github.toString());
+      user.addProperty(UserProperty.imageUrl, attributes.get("avatar_url"));
       return user;
     } else {
       throw new OAuth2AuthProcessingException(

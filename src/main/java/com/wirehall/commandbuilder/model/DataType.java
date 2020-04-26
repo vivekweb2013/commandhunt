@@ -1,6 +1,6 @@
 package com.wirehall.commandbuilder.model;
 
-public enum DATA_TYPE {
+public enum DataType {
   PATH,
   FILE_NAME,
   NUMERIC_PERMISSION,

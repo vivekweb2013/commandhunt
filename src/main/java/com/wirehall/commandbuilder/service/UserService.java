@@ -4,12 +4,11 @@ import com.wirehall.commandbuilder.dto.User;
 import com.wirehall.commandbuilder.dto.auth.SignUp;
 import com.wirehall.commandbuilder.exception.BadRequestException;
 import com.wirehall.commandbuilder.repository.UserRepository;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -22,6 +21,12 @@ public class UserService {
     this.userRepository = userRepository;
   }
 
+  /**
+   * Adds the user created as a result of sign up request.
+   *
+   * @param signUpRequest Sign up request payload.
+   * @return User DTO.
+   */
   public User addUser(SignUp signUpRequest) {
     if (userRepository.existsByEmail(signUpRequest.getEmail())) {
       throw new BadRequestException("Email address already in use.");

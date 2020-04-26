@@ -3,6 +3,9 @@ package com.wirehall.commandbuilder.graph;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wirehall.commandbuilder.dto.Command;
 import com.wirehall.commandbuilder.repository.CommandRepository;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.process.traversal.step.util.WithOptions;
 import org.janusgraph.core.JanusGraph;
@@ -14,29 +17,36 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 @Component
 public class GraphBuilder {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(GraphBuilder.class);
 
   @Value("classpath*:/data/**/*.json")
   private Resource[] jsonDataResources;
 
   private JanusGraph graph;
-  private GraphTraversalSource g;
+  private GraphTraversalSource gt;
   private final CommandRepository commandRepository;
 
+  /**
+   * Performs graph db initialization operations.
+   *
+   * @param graph             Graph instance.
+   * @param gt                Graph Traversal instance.
+   * @param commandRepository The command repository.
+   */
   @Autowired
   public GraphBuilder(
-      JanusGraph graph, GraphTraversalSource g, CommandRepository commandRepository) {
+      JanusGraph graph, GraphTraversalSource gt, CommandRepository commandRepository) {
     this.graph = graph;
-    this.g = g;
+    this.gt = gt;
     this.commandRepository = commandRepository;
   }
 
+  /**
+   * Creates the schema and imports the data.
+   */
   public void initialize() {
     try {
       SchemaManager.createSchema(graph);
@@ -50,9 +60,9 @@ public class GraphBuilder {
   private void fillData(CommandRepository commandRepository) {
     try {
       // naive check if the graph was previously created
-      if (g.V().has("name", "command").hasNext()) {
+      if (gt.V().has("name", "command").hasNext()) {
         LOGGER.info("Skip Data Creation. Data Already Exist!!!");
-        g.tx().rollback();
+        gt.tx().rollback();
         return;
       }
       LOGGER.info("Creating Data");
@@ -63,25 +73,24 @@ public class GraphBuilder {
         commandRepository.addCommand(command);
       }
 
-      g.tx().commit();
+      gt.tx().commit();
 
     } catch (Exception e) {
       LOGGER.error(e.getMessage(), e);
-      g.tx().rollback();
+      gt.tx().rollback();
     }
   }
 
   private void readElements() {
+    if (gt == null) {
+      return;
+    }
     try {
-      if (g == null) {
-        return;
-      }
-
       LOGGER.info("reading elements");
 
       // look up vertex by name
       final Optional<Map<Object, Object>> v =
-          g.V().has("name", "cp").valueMap().with(WithOptions.tokens).tryNext();
+          gt.V().has("name", "cp").valueMap().with(WithOptions.tokens).tryNext();
       if (v.isPresent()) {
         LOGGER.info(v.get().toString());
       } else {
@@ -90,7 +99,7 @@ public class GraphBuilder {
 
       // look up an incident edge
       final Optional<Map<Object, Object>> edge =
-          g.V()
+          gt.V()
               .has("name", "cp")
               .outE("has_flag")
               .as("e")
@@ -107,7 +116,7 @@ public class GraphBuilder {
       }
 
       // ansible might be deleted
-      final boolean plutoExists = g.V().has("name", "ansible").hasNext();
+      final boolean plutoExists = gt.V().has("name", "ansible").hasNext();
       if (plutoExists) {
         LOGGER.info("ansible exists");
       } else {
@@ -116,32 +125,37 @@ public class GraphBuilder {
 
       // look up options
       final List<Object> options =
-          g.V().has("name", "cp").both("has_option").values("name").dedup().toList();
+          gt.V().has("name", "cp").both("has_option").values("name").dedup().toList();
       LOGGER.info("options: " + options.toString());
 
     } finally {
       // the default behavior automatically starts a transaction for
       // any graph interaction, so it is best to finish the transaction
       // even for read-only graph query operations
-      g.tx().rollback();
+      gt.tx().rollback();
     }
   }
 
   private void closeGraph() throws Exception {
     LOGGER.info("closing graph");
     try {
-      if (g != null) {
-        g.close();
+      if (gt != null) {
+        gt.close();
       }
       if (graph != null) {
         graph.close();
       }
     } finally {
-      g = null;
+      gt = null;
       graph = null;
     }
   }
 
+  /**
+   * Drops the graph.
+   *
+   * @throws Exception Any exception occurred while dropping the graph.
+   */
   public void dropGraph() throws Exception {
     if (graph != null) {
       JanusGraphFactory.drop(graph);

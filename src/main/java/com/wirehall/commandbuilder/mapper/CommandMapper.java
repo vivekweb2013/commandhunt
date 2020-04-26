@@ -3,27 +3,26 @@ package com.wirehall.commandbuilder.mapper;
 import com.wirehall.commandbuilder.dto.Command;
 import com.wirehall.commandbuilder.dto.Flag;
 import com.wirehall.commandbuilder.dto.Option;
-import com.wirehall.commandbuilder.model.props.COMMAND_PROPERTY;
-import com.wirehall.commandbuilder.model.props.FLAG_PROPERTY;
-import com.wirehall.commandbuilder.model.props.OPTION_PROPERTY;
+import com.wirehall.commandbuilder.model.props.CommandProperty;
+import com.wirehall.commandbuilder.model.props.FlagProperty;
+import com.wirehall.commandbuilder.model.props.OptionProperty;
+import java.util.Map;
 import org.apache.tinkerpop.gremlin.structure.T;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public final class CommandMapper extends BaseMapper {
 
   /**
-   * @param commandVertex Command vertex to be converted to Command dto
-   * @return The Command dto is returned, Only the Command details are available in the dto
+   * Used to map the vertex to command dto.
+   *
+   * @param commandVertex Command vertex to be converted to Command dto.
+   * @return The Command dto is returned, Only the Command details are available in the dto.
    */
   public Command mapToCommand(Vertex commandVertex) {
     Command command = new Command();
     command.setId(commandVertex.id());
 
-    for (COMMAND_PROPERTY commandProperty : COMMAND_PROPERTY.values()) {
+    for (CommandProperty commandProperty : CommandProperty.values()) {
       if (commandProperty.isMandatory()
           || commandVertex.property(commandProperty.toString()).isPresent()) {
         command.addProperty(
@@ -33,21 +32,17 @@ public final class CommandMapper extends BaseMapper {
     return command;
   }
 
-  private Flag mapToFlag(Vertex flagVertex) {
-    Flag flag = new Flag();
-    flag.setId(flagVertex.id());
-    for (FLAG_PROPERTY flagProperty : FLAG_PROPERTY.values()) {
-      if (flagProperty.isMandatory() || flagVertex.property(flagProperty.toString()).isPresent()) {
-        flag.addProperty(flagProperty, flagVertex.property(flagProperty.toString()).value());
-      }
-    }
-    return flag;
-  }
-
+  /**
+   * Used to map the vertex to Flag dto.
+   *
+   * @param flagVertexProps Properties of flag's vertex.
+   * @param flagEdgeProps   Properties of flag's edge.
+   * @return Flag dto.
+   */
   public Flag mapToFlag(Map<Object, Object> flagVertexProps, Map<Object, Object> flagEdgeProps) {
     Flag flag = new Flag();
 
-    for (FLAG_PROPERTY flagProperty : FLAG_PROPERTY.values()) {
+    for (FlagProperty flagProperty : FlagProperty.values()) {
       if (flagProperty.isMandatory()
           || flagVertexProps.containsKey(flagProperty.toString())
           || flagEdgeProps.containsKey(flagProperty.toString())) {
@@ -64,11 +59,18 @@ public final class CommandMapper extends BaseMapper {
     return flag;
   }
 
+  /**
+   * Used to map the vertex to option dto.
+   *
+   * @param optionVertexProps Properties of options's vertex.
+   * @param optionEdgeProps   Properties of options's edge.
+   * @return Option dto.
+   */
   public Option mapToOption(
       Map<Object, Object> optionVertexProps, Map<Object, Object> optionEdgeProps) {
     Option option = new Option();
 
-    for (OPTION_PROPERTY optionProperty : OPTION_PROPERTY.values()) {
+    for (OptionProperty optionProperty : OptionProperty.values()) {
       if (optionProperty.isMandatory()
           || optionVertexProps.containsKey(optionProperty.toString())
           || optionEdgeProps.containsKey(optionProperty.toString())) {
@@ -83,36 +85,5 @@ public final class CommandMapper extends BaseMapper {
 
     option.setId(optionVertexProps.get(T.id));
     return option;
-  }
-
-  public List<Flag> mapToFlag(List<Vertex> flagVertexList) {
-    List<Flag> flags = new ArrayList<>();
-    for (Vertex flagVertex : flagVertexList) {
-      Flag flag = mapToFlag(flagVertex);
-      flags.add(flag);
-    }
-    return flags;
-  }
-
-  private Option mapToOption(Vertex optionVertex) {
-    Option option = new Option();
-    option.setId(optionVertex.id());
-    for (OPTION_PROPERTY optionProperty : OPTION_PROPERTY.values()) {
-      if (optionProperty.isMandatory()
-          || optionVertex.property(optionProperty.toString()).isPresent()) {
-        option.addProperty(
-            optionProperty, optionVertex.property(optionProperty.toString()).value());
-      }
-    }
-    return option;
-  }
-
-  public List<Option> mapToOptions(List<Vertex> optionVertexList) {
-    List<Option> options = new ArrayList<>();
-    for (Vertex optionVertex : optionVertexList) {
-      Option option = mapToOption(optionVertex);
-      options.add(option);
-    }
-    return options;
   }
 }

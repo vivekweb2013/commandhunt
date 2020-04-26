@@ -1,24 +1,23 @@
 package com.wirehall.commandbuilder.dto;
 
-import com.wirehall.commandbuilder.model.props.USER_PROPERTY;
-
+import com.wirehall.commandbuilder.model.props.UserProperty;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class User extends Node<USER_PROPERTY> {
+public class User extends Node<UserProperty> {
   public User() {
-    super(USER_PROPERTY.class);
+    super(UserProperty.class);
   }
 
   @Override
-  public Map<USER_PROPERTY, Object> getProperties() {
+  public Map<UserProperty, Object> getProperties() {
     if (properties == null) {
-      properties = new EnumMap<>(USER_PROPERTY.class);
+      properties = new EnumMap<>(UserProperty.class);
     }
     return properties;
   }
 
-  public enum OAUTH_PROVIDER {
+  public enum OAuthProvider {
     local,
     facebook,
     google,

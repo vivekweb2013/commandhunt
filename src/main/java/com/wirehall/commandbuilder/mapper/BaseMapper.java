@@ -1,8 +1,7 @@
 package com.wirehall.commandbuilder.mapper;
 
-import org.apache.tinkerpop.gremlin.structure.Vertex;
-
 import java.time.LocalDate;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 
 public class BaseMapper {
   public String mapString(Vertex v, String prop) {

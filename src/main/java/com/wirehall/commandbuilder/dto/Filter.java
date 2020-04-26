@@ -3,7 +3,7 @@ package com.wirehall.commandbuilder.dto;
 public class Filter {
   private String key;
   private String value;
-  private OPERATOR operator;
+  private Operator operator;
 
   public String getKey() {
     return key;
@@ -21,11 +21,11 @@ public class Filter {
     this.value = value;
   }
 
-  public OPERATOR getOperator() {
+  public Operator getOperator() {
     return operator;
   }
 
-  public void setOperator(OPERATOR operator) {
+  public void setOperator(Operator operator) {
     this.operator = operator;
   }
 
@@ -38,12 +38,12 @@ public class Filter {
         + ", value='"
         + value
         + '\''
-        + ", operator="
+        + ", Operator="
         + operator
         + '}';
   }
 
-  public enum OPERATOR {
+  public enum Operator {
     EQUALS,
     CONTAINS,
     STARTS_WITH,

@@ -35,6 +35,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     return CustomUserPrincipal.create(user);
   }
 
+  /**
+   * Finds the returns the user with specified id from repository.
+   *
+   * @param id User id.
+   * @return UserDetails instance.
+   */
   public UserDetails loadUserById(Object id) {
     User user =
         userRepository

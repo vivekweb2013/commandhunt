@@ -6,7 +6,11 @@ import com.wirehall.commandbuilder.dto.auth.SignUp;
 import com.wirehall.commandbuilder.model.auth.CustomUserPrincipal;
 import com.wirehall.commandbuilder.security.CurrentUser;
 import com.wirehall.commandbuilder.service.UserService;
-import com.wirehall.commandbuilder.util.JWTUtil;
+import com.wirehall.commandbuilder.util.JwtUtil;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.Valid;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -40,40 +39,43 @@ public class AuthController {
   private UserService userService;
 
   @Autowired
-  private JWTUtil jwtUtil;
+  private JwtUtil jwtUtil;
 
   /**
-   * @param loginRequest Login request from the client
-   * @return Response indicating the authentication status
+   * The endpoint used by clients to login into the application with user credentials.
+   *
+   * @param loginRequest Login request from the client.
+   * @return Response indicating the authentication status.
    */
   @PostMapping("/login")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody Login loginRequest) {
     LOGGER.info(loginRequest.toString());
 
     Authentication authentication =
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginRequest.getEmail(), loginRequest.getPassword()));
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                loginRequest.getEmail(), loginRequest.getPassword()));
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
     User user = ((CustomUserPrincipal) authentication.getPrincipal()).getUser();
     String token = jwtUtil.createToken(authentication, 864000000L);
 
-    Map<String, Object> resp =
-            new HashMap<String, Object>() {
-              {
-                put("user", user);
-                put("token", token);
-              }
-            };
+    Map<String, Object> resp = new HashMap<String, Object>() {
+      {
+        put("user", user);
+        put("token", token);
+      }
+    };
 
     return ResponseEntity.ok(resp);
   }
 
   /**
-   * @param signUpRequest Sign up request from client
-   * @return Response indicating the status of sign up action
+   * The endpoint used by clients to sign up with user credentials.
+   *
+   * @param signUpRequest Sign up request from client.
+   * @return Response indicating the status of sign up action.
    */
   @PostMapping("/signup")
   public ResponseEntity<?> registerUser(@Valid @RequestBody SignUp signUpRequest) {
@@ -90,8 +92,10 @@ public class AuthController {
   }
 
   /**
-   * @param customUserPrincipal User principal
-   * @return Currently logged in user
+   * The endpoint used by clients to get the currently logged in user details.
+   *
+   * @param customUserPrincipal User principal.
+   * @return Currently logged in user.
    */
   @GetMapping("/user/me")
   @PreAuthorize("hasRole('USER')")

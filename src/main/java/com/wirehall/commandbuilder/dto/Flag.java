@@ -1,20 +1,19 @@
 package com.wirehall.commandbuilder.dto;
 
-import com.wirehall.commandbuilder.model.props.FLAG_PROPERTY;
-
+import com.wirehall.commandbuilder.model.props.FlagProperty;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class Flag extends Node<FLAG_PROPERTY> {
+public class Flag extends Node<FlagProperty> {
 
   public Flag() {
-    super(FLAG_PROPERTY.class);
+    super(FlagProperty.class);
   }
 
   @Override
-  public Map<FLAG_PROPERTY, Object> getProperties() {
+  public Map<FlagProperty, Object> getProperties() {
     if (properties == null) {
-      properties = new EnumMap<>(FLAG_PROPERTY.class);
+      properties = new EnumMap<>(FlagProperty.class);
     }
     return properties;
   }

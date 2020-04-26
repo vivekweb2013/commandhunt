@@ -1,6 +1,6 @@
 package com.wirehall.commandbuilder.model.props;
 
-public enum USER_PROPERTY {
+public enum UserProperty {
   name(true),
   email(true),
   imageUrl(false),
@@ -11,11 +11,15 @@ public enum USER_PROPERTY {
 
   private final boolean isMandatory;
 
-  USER_PROPERTY(boolean isMandatory) {
+  UserProperty(boolean isMandatory) {
     this.isMandatory = isMandatory;
   }
 
-  /** @return true if the property is mandatory, false otherwise */
+  /**
+   * Used to check if the property is mandatory or optional.
+   *
+   * @return true if the property is mandatory, false otherwise.
+   */
   public boolean isMandatory() {
     return isMandatory;
   }

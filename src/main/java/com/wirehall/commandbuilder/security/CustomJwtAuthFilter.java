@@ -1,7 +1,12 @@
 package com.wirehall.commandbuilder.security;
 
 import com.wirehall.commandbuilder.service.auth.CustomUserDetailsService;
-import com.wirehall.commandbuilder.util.JWTUtil;
+import com.wirehall.commandbuilder.util.JwtUtil;
+import java.io.IOException;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,18 +17,15 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+public class CustomJwtAuthFilter extends OncePerRequestFilter {
 
-public class CustomJWTAuthFilter extends OncePerRequestFilter {
-  private static final Logger LOGGER = LoggerFactory.getLogger(CustomJWTAuthFilter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CustomJwtAuthFilter.class);
 
-  @Autowired private CustomUserDetailsService customUserDetailsService;
+  @Autowired
+  private CustomUserDetailsService customUserDetailsService;
 
-  @Autowired private JWTUtil jwtUtil;
+  @Autowired
+  private JwtUtil jwtUtil;
 
   @Override
   protected void doFilterInternal(
@@ -34,7 +36,7 @@ public class CustomJWTAuthFilter extends OncePerRequestFilter {
       String jwt = getJwtFromRequest(request);
 
       if (StringUtils.hasText(jwt) && jwtUtil.validateToken(jwt)) {
-        Long userId = jwtUtil.getUserIdFromToken(jwt);
+        String userId = jwtUtil.getUserIdFromToken(jwt);
 
         UserDetails userDetails = customUserDetailsService.loadUserById(userId);
         UsernamePasswordAuthenticationToken authentication =

@@ -1,20 +1,19 @@
 package com.wirehall.commandbuilder.dto;
 
-import com.wirehall.commandbuilder.model.props.OPTION_PROPERTY;
-
+import com.wirehall.commandbuilder.model.props.OptionProperty;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class Option extends Node<OPTION_PROPERTY> {
+public class Option extends Node<OptionProperty> {
 
   public Option() {
-    super(OPTION_PROPERTY.class);
+    super(OptionProperty.class);
   }
 
   @Override
-  public Map<OPTION_PROPERTY, Object> getProperties() {
+  public Map<OptionProperty, Object> getProperties() {
     if (properties == null) {
-      properties = new EnumMap<>(OPTION_PROPERTY.class);
+      properties = new EnumMap<>(OptionProperty.class);
     }
     return properties;
   }
