@@ -51,10 +51,9 @@ public class AuthController {
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody Login loginRequest) {
     LOGGER.info(loginRequest.toString());
 
-    Authentication authentication =
-        authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(), loginRequest.getPassword()));
+    Authentication authentication = authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),
+            loginRequest.getPassword()));
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -79,14 +78,12 @@ public class AuthController {
    */
   @PostMapping("/signup")
   public ResponseEntity<?> registerUser(@Valid @RequestBody SignUp signUpRequest) {
+
     LOGGER.info(signUpRequest.toString());
     User user = userService.addUser(signUpRequest);
 
-    URI location =
-            ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path("/user/me")
-                    .buildAndExpand(user.getId())
-                    .toUri();
+    URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/me")
+        .buildAndExpand(user.getId()).toUri();
 
     return ResponseEntity.created(location).body(user);
   }

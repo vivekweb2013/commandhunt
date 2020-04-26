@@ -2,7 +2,7 @@ package com.wirehall.commandbuilder.service.auth;
 
 import com.wirehall.commandbuilder.dto.User;
 import com.wirehall.commandbuilder.dto.User.OAuthProvider;
-import com.wirehall.commandbuilder.exception.OAuth2AuthProcessingException;
+import com.wirehall.commandbuilder.exception.OAuth2Exception;
 import com.wirehall.commandbuilder.model.props.UserProperty;
 import java.util.Map;
 
@@ -37,7 +37,7 @@ public class OAuth2UserFactory {
       user.addProperty(UserProperty.imageUrl, attributes.get("avatar_url"));
       return user;
     } else {
-      throw new OAuth2AuthProcessingException(
+      throw new OAuth2Exception(
           "Sorry! Login with " + registrationId + " is not supported yet.");
     }
   }

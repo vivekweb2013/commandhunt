@@ -41,6 +41,10 @@ public abstract class Node<E extends Enum<E>> {
     addProperty(Enum.valueOf(enumClass, key), value);
   }
 
+  public Object removeProperty(E key) {
+    return getProperties().remove(key);
+  }
+
   @Override
   public String toString() {
     return "Node{" + "id=" + id + ", properties=" + properties + '}';

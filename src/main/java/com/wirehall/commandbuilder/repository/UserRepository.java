@@ -9,7 +9,6 @@ import java.util.Optional;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
-import org.janusgraph.core.JanusGraph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +20,13 @@ public class UserRepository {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(UserRepository.class);
   private final UserMapper mapper = new UserMapper();
-  private final JanusGraph graph;
   private final GraphTraversalSource gt;
 
   @Autowired
   private PasswordEncoder passwordEncoder;
 
   @Autowired
-  public UserRepository(JanusGraph graph, GraphTraversalSource gt) {
-    this.graph = graph;
+  public UserRepository(GraphTraversalSource gt) {
     this.gt = gt;
   }
 
@@ -80,8 +77,18 @@ public class UserRepository {
    * @return User DTO.
    */
   public User addUser(SignUp signUpRequest) {
-    gt.tx().rollback();
     User user = mapper.mapToUser(signUpRequest, passwordEncoder);
+    return addUser(user);
+  }
+
+  /**
+   * Persist the user to db.
+   *
+   * @param user User DTO.
+   * @return Persisted user DTO.
+   */
+  public User addUser(User user) {
+    gt.tx().rollback();
 
     GraphTraversal<Vertex, Vertex> graphTraversal = gt.addV(VertexType.user.toString());
 
@@ -94,10 +101,36 @@ public class UserRepository {
     user.setId(userVertex.id());
 
     // Remove password field
-    user.getProperties().remove(UserProperty.password);
+    user.removeProperty(UserProperty.password);
 
     LOGGER.info(user.toString());
     gt.tx().commit();
     return user;
   }
+
+  /**
+   * Updates the user in database.
+   *
+   * @param user The user DTO to update.
+   */
+  public void updateUser(User user) {
+    gt.tx().rollback();
+
+    GraphTraversal<Vertex, Vertex> graphTraversal = gt.V(user.getId());
+
+    for (UserProperty property : UserProperty.values()) {
+      if (user.getProperty(property) != null) {
+        graphTraversal.property(property.toString(), user.getProperty(property));
+      }
+    }
+    graphTraversal.next();
+    gt.tx().commit();
+
+    // Remove password field
+    user.removeProperty(UserProperty.password);
+
+    LOGGER.info(user.toString());
+  }
+
+
 }
