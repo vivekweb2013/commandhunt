@@ -52,12 +52,7 @@ const mapDispatchToProps = dispatch => {
   return {
     getUserProfile: (userProfileRequest) => {
       return API.getUserProfile(userProfileRequest).then((user) => {
-        dispatch(userLogin({
-          localId: user.id, displayName: user.properties.name, photoUrl: null,
-          email: user.properties.email, emailVerified: user.properties.emailVerified
-        }));
-      }, () => {
-        dispatch(userLogin(null));
+        dispatch(userLogin(user));
       });
     },
     userLogout: () => {

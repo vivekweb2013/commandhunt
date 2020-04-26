@@ -21,8 +21,12 @@ const handleErrors = (response) => {
     return response;
 }
 
+const catchError = (error) => {
+    console.log(error);
+}
+
 export const userSignUp = (signUpRequest) => {
-    return fetch(`${api}/auth/signup`, { method: 'POST', body: JSON.stringify(signUpRequest), headers }).then(handleErrors);
+    return fetch(`${api}/auth/signup`, { method: 'POST', body: JSON.stringify(signUpRequest), headers }).then(handleErrors).catch(catchError);
 }
 
 export const userLogin = (loginRequest) => {
@@ -31,8 +35,13 @@ export const userLogin = (loginRequest) => {
         const token = payload.token;
         localStorage.setItem('token', token);
         headers.Authorization = `Bearer ${token}`;
-        return payload.user;
-    });
+        const userPayload = payload.user;
+        const user = {
+            localId: userPayload.id, displayName: userPayload.properties.name, photoUrl: null,
+            email: userPayload.properties.email, emailVerified: userPayload.properties.emailVerified
+        }
+        return user;
+    }).catch(catchError);
 };
 
 export const userLogout = () => {
@@ -41,18 +50,18 @@ export const userLogout = () => {
     return Promise.resolve();
 };
 
-export const getUserProfile = () => fetch(`${api}/auth/user/me`, { headers }).then(handleErrors).then(res => res.json());
+export const getUserProfile = () => fetch(`${api}/auth/user/me`, { headers }).then(handleErrors).then(res => res.json()).catch(catchError);
 
-export const getAllCommands = () => fetch(`${api}/command`, { headers }).then(handleErrors).then(res => res.json());
+export const getAllCommands = () => fetch(`${api}/command`, { headers }).then(handleErrors).then(res => res.json()).catch(catchError);
 
 export const getMatchingCommands = query => {
     query = encodeURIComponent(query);
-    return fetch(`${api}/command/search?query=${query}`, { headers }).then(handleErrors).then(res => res.json());
+    return fetch(`${api}/command/search?query=${query}`, { headers }).then(handleErrors).then(res => res.json()).catch(catchError);
 };
 
 export const getCommand = commandName => {
     commandName = encodeURIComponent(commandName);
-    return fetch(`${api}/command/search?name=${commandName}`, { headers }).then(handleErrors).then(res => res.json());
+    return fetch(`${api}/command/search?name=${commandName}`, { headers }).then(handleErrors).then(res => res.json()).catch(catchError);
 };
 
 export const getUserCommands = (filters) => db.reference('user-commands').query(filters).run();

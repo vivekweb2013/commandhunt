@@ -89,10 +89,7 @@ const mapDispatchToProps = dispatch => {
     return {
         userLogin: (loginRequest) => {
             return API.userLogin(loginRequest).then((user) => {
-                dispatch(userLogin({
-                    localId: user.id, displayName: user.properties.name, photoUrl: null,
-                    email: user.properties.email, emailVerified: user.properties.emailVerified
-                }));
+                dispatch(userLogin(user));
             });
         }
     }

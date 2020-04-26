@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as API from '../api/API';
-import { userLogin } from '../actions';
+import { userLogout } from '../actions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import userSVG from '../styles/icons/user.svg'
 import './Header.scss';
@@ -75,7 +75,7 @@ const mapDispatchToProps = dispatch => {
     return {
         userLogout: () => {
             // This will remove token from localStorage & also remove user from store
-            API.userLogout().then(() => dispatch(userLogin(null)));
+            API.userLogout().then(() => dispatch(userLogout()));
         }
     }
 }
