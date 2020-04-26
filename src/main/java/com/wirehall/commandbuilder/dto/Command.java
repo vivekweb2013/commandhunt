@@ -8,57 +8,60 @@ import java.util.List;
 import java.util.Map;
 
 public class Command extends Node<COMMAND_PROPERTY> {
-    private List<Flag> flags;
-    private List<Option> options;
+  private List<Flag> flags;
+  private List<Option> options;
 
-    public Command() {
-        super(COMMAND_PROPERTY.class);
-    }
+  public Command() {
+    super(COMMAND_PROPERTY.class);
+  }
 
-    @Override
-    public Map<COMMAND_PROPERTY, Object> getProperties() {
-        if (properties == null) {
-            properties = new EnumMap<>(COMMAND_PROPERTY.class);
-        }
-        return properties;
+  @Override
+  public Map<COMMAND_PROPERTY, Object> getProperties() {
+    if (properties == null) {
+      properties = new EnumMap<>(COMMAND_PROPERTY.class);
     }
+    return properties;
+  }
 
-    public List<Flag> getFlags() {
-        if (flags == null) {
-            flags = new ArrayList<>();
-        }
-        return flags;
+  public List<Flag> getFlags() {
+    if (flags == null) {
+      flags = new ArrayList<>();
     }
+    return flags;
+  }
 
-    public void addFlag(Flag flag) {
-        getFlags().add(flag);
-    }
+  public void setFlags(List<Flag> flags) {
+    this.flags = flags;
+  }
 
-    public void setFlags(List<Flag> flags) {
-        this.flags = flags;
-    }
+  public void addFlag(Flag flag) {
+    getFlags().add(flag);
+  }
 
-    public List<Option> getOptions() {
-        if (options == null) {
-            options = new ArrayList<>();
-        }
-        return options;
+  public List<Option> getOptions() {
+    if (options == null) {
+      options = new ArrayList<>();
     }
+    return options;
+  }
 
-    public void addOption(Option option) {
-        getOptions().add(option);
-    }
+  public void setOptions(List<Option> options) {
+    this.options = options;
+  }
 
-    public void setOptions(List<Option> options) {
-        this.options = options;
-    }
+  public void addOption(Option option) {
+    getOptions().add(option);
+  }
 
-    @Override
-    public String toString() {
-        return "Command{" +
-                "flags=" + flags +
-                ", options=" + options +
-                ", properties=" + properties +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "Command{"
+        + "flags="
+        + flags
+        + ", options="
+        + options
+        + ", properties="
+        + properties
+        + '}';
+  }
 }

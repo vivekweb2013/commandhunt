@@ -9,19 +9,19 @@ import org.springframework.context.event.EventListener;
 
 @SpringBootApplication
 public class CommandBuilderApplication {
-    private GraphBuilder graphBuilder;
+  private final GraphBuilder graphBuilder;
 
-    @Autowired
-    public CommandBuilderApplication(GraphBuilder graphBuilder) {
-        this.graphBuilder = graphBuilder;
-    }
+  @Autowired
+  public CommandBuilderApplication(GraphBuilder graphBuilder) {
+    this.graphBuilder = graphBuilder;
+  }
 
-    @EventListener(ApplicationReadyEvent.class)
-    public void init() {
-        graphBuilder.initialize();
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(CommandBuilderApplication.class, args);
+  }
 
-    public static void main(String[] args) {
-        SpringApplication.run(CommandBuilderApplication.class, args);
-    }
+  @EventListener(ApplicationReadyEvent.class)
+  public void init() {
+    graphBuilder.initialize();
+  }
 }

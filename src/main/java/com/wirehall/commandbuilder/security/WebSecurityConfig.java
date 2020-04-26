@@ -18,72 +18,70 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(
-        securedEnabled = true,
-        jsr250Enabled = true,
-        prePostEnabled = true
-)
+@EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+  @Autowired private CustomUserDetailsService customUserDetailsService;
 
-    @Bean
-    public CustomJWTAuthFilter customJWTAuthFilter() {
-        return new CustomJWTAuthFilter();
-    }
+  @Bean
+  public CustomJWTAuthFilter customJWTAuthFilter() {
+    return new CustomJWTAuthFilter();
+  }
 
-    @Override
-    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
-    }
+  @Override
+  public void configure(AuthenticationManagerBuilder authenticationManagerBuilder)
+      throws Exception {
+    authenticationManagerBuilder
+        .userDetailsService(customUserDetailsService)
+        .passwordEncoder(passwordEncoder());
+  }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
+  @Bean(BeanIds.AUTHENTICATION_MANAGER)
+  @Override
+  public AuthenticationManager authenticationManagerBean() throws Exception {
+    return super.authenticationManagerBean();
+  }
 
-    @Bean(BeanIds.AUTHENTICATION_MANAGER)
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.cors()
+        .and()
+        .sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .csrf()
+        .disable()
+        .formLogin()
+        .disable()
+        .httpBasic()
+        .disable()
+        .exceptionHandling()
+        .authenticationEntryPoint(new RestAuthenticationEntryPoint())
+        .and()
+        .authorizeRequests()
+        .antMatchers(
+            "/**", // TODO: Remove the ** later
+            "/error",
+            "/favicon.ico",
+            "/**/*.png",
+            "/**/*.gif",
+            "/**/*.svg",
+            "/**/*.jpg",
+            "/**/*.html",
+            "/**/*.css",
+            "/**/*.js")
+        .permitAll()
+        .antMatchers("/auth/**", "/oauth2/**")
+        .permitAll()
+        .anyRequest()
+        .authenticated();
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.cors()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .csrf()
-                .disable()
-                .formLogin()
-                .disable()
-                .httpBasic()
-                .disable()
-                .exceptionHandling()
-                .authenticationEntryPoint(new RestAuthenticationEntryPoint())
-                .and()
-                .authorizeRequests()
-                .antMatchers("/**", //TODO: Remove the ** later
-                        "/error",
-                        "/favicon.ico",
-                        "/**/*.png",
-                        "/**/*.gif",
-                        "/**/*.svg",
-                        "/**/*.jpg",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js")
-                .permitAll()
-                .antMatchers("/auth/**", "/oauth2/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated();
-
-        // Add our custom Token based authentication filter
-        http.addFilterBefore(customJWTAuthFilter(), UsernamePasswordAuthenticationFilter.class);
-    }
+    // Add our custom Token based authentication filter
+    http.addFilterBefore(customJWTAuthFilter(), UsernamePasswordAuthenticationFilter.class);
+  }
 }

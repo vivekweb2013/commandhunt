@@ -11,18 +11,19 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class GraphConfiguration {
-    @Value("${app.graph.config}")
-    private String appGraphConfigPath;
+  @Value("${app.graph.config}")
+  private String appGraphConfigPath;
 
-    @Bean
-    JanusGraph janusGraph() throws ConfigurationException {
-        JanusGraph graph = (JanusGraph) GraphFactory.open(new PropertiesConfiguration(appGraphConfigPath));
-        return graph;
-    }
+  @Bean
+  JanusGraph janusGraph() throws ConfigurationException {
+    JanusGraph graph =
+        (JanusGraph) GraphFactory.open(new PropertiesConfiguration(appGraphConfigPath));
+    return graph;
+  }
 
-    @Bean
-    GraphTraversalSource graphTraversalSource(JanusGraph janusGraph) {
-        GraphTraversalSource g = janusGraph.traversal();
-        return g;
-    }
+  @Bean
+  GraphTraversalSource graphTraversalSource(JanusGraph janusGraph) {
+    GraphTraversalSource g = janusGraph.traversal();
+    return g;
+  }
 }

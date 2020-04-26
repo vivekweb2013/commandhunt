@@ -30,132 +30,165 @@ import java.util.Map;
 
 @Repository
 public class CommandRepository {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommandRepository.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CommandRepository.class);
 
-    private final CommandMapper mapper = new CommandMapper();
-    private final JanusGraph graph;
-    private final GraphTraversalSource g;
+  private final CommandMapper mapper = new CommandMapper();
+  private final JanusGraph graph;
+  private final GraphTraversalSource g;
 
-    @Autowired
-    public CommandRepository(JanusGraph graph, GraphTraversalSource g) {
-        this.graph = graph;
-        this.g = g;
+  @Autowired
+  public CommandRepository(JanusGraph graph, GraphTraversalSource g) {
+    this.graph = graph;
+    this.g = g;
+  }
+
+  public List<Command> getAllCommands() {
+    List<Vertex> vertices = g.V().hasLabel(VERTEX.command.toString()).toList();
+    List<Command> commands = new ArrayList<>();
+    for (Vertex commandVertex : vertices) {
+      Command command = mapper.mapToCommand(commandVertex);
+      commands.add(command);
+    }
+    return commands;
+  }
+
+  public Command getCommandById(String id) {
+    Vertex commandVertex = g.V(id).next();
+    return getCommand(commandVertex);
+  }
+
+  public Command getCommandByName(String name) {
+    Vertex commandVertex = g.V().hasLabel(VERTEX.command.toString()).has("name", name).next();
+    return getCommand(commandVertex);
+  }
+
+  private Command getCommand(Vertex commandVertex) {
+    Command command = mapper.mapToCommand(commandVertex);
+
+    List<Map<String, Object>> flagList =
+        g.V(commandVertex)
+            .outE()
+            .hasLabel("has_flag")
+            .as("E")
+            .inV()
+            .as("V")
+            .select("E", "V")
+            .by(
+                __.valueMap()
+                    .with(WithOptions.tokens)
+                    .unfold()
+                    .group()
+                    .by(Column.keys)
+                    .by(__.select(Column.values).unfold()))
+            .toList();
+
+    for (Map<String, Object> flagProps : flagList) {
+      Map<Object, Object> flagVertexProps = (Map<Object, Object>) flagProps.get("V");
+      Map<Object, Object> flagEdgeProps = (Map<Object, Object>) flagProps.get("E");
+      Flag flag = mapper.mapToFlag(flagVertexProps, flagEdgeProps);
+      command.addFlag(flag);
     }
 
-    public List<Command> getAllCommands() {
-        List<Vertex> vertices = g.V().hasLabel(VERTEX.command.toString()).toList();
-        List<Command> commands = new ArrayList<>();
-        for (Vertex commandVertex : vertices) {
-            Command command = mapper.mapToCommand(commandVertex);
-            commands.add(command);
-        }
-        return commands;
+    List<Map<String, Object>> optionList =
+        g.V(commandVertex)
+            .outE()
+            .hasLabel("has_option")
+            .as("E")
+            .inV()
+            .as("V")
+            .select("E", "V")
+            .by(
+                __.valueMap()
+                    .with(WithOptions.tokens)
+                    .unfold()
+                    .group()
+                    .by(Column.keys)
+                    .by(__.select(Column.values).unfold()))
+            .toList();
+
+    for (Map<String, Object> optionProps : optionList) {
+      Map<Object, Object> optionVertexProps = (Map<Object, Object>) optionProps.get("V");
+      Map<Object, Object> optionEdgeProps = (Map<Object, Object>) optionProps.get("E");
+      Option option = mapper.mapToOption(optionVertexProps, optionEdgeProps);
+      command.addOption(option);
     }
+    return command;
+  }
 
-    public Command getCommandById(String id) {
-        Vertex commandVertex = g.V(id).next();
-        return getCommand(commandVertex);
-    }
+  public List<Command> getMatchingCommands(Filter filter) {
+    List<Command> commands = new ArrayList<>();
+    return commands;
+  }
 
-    public Command getCommandByName(String name) {
-        Vertex commandVertex = g.V().hasLabel(VERTEX.command.toString()).has("name", name).next();
-        return getCommand(commandVertex);
-    }
-
-    private Command getCommand(Vertex commandVertex) {
-        Command command = mapper.mapToCommand(commandVertex);
-
-        List<Map<String, Object>> flagList = g.V(commandVertex).outE().hasLabel("has_flag").as("E").inV()
-                .as("V").select("E", "V").by(__.valueMap().with(WithOptions.tokens).unfold().group()
-                        .by(Column.keys).by(__.select(Column.values).unfold())).toList();
-
-        for (Map<String, Object> flagProps : flagList) {
-            Map<Object, Object> flagVertexProps = (Map<Object, Object>) flagProps.get("V");
-            Map<Object, Object> flagEdgeProps = (Map<Object, Object>) flagProps.get("E");
-            Flag flag = mapper.mapToFlag(flagVertexProps, flagEdgeProps);
-            command.addFlag(flag);
-        }
-
-        List<Map<String, Object>> optionList = g.V(commandVertex).outE().hasLabel("has_option").as("E")
-                .inV().as("V").select("E", "V").by(__.valueMap().with(WithOptions.tokens).unfold().group()
-                        .by(Column.keys).by(__.select(Column.values).unfold())).toList();
-
-        for (Map<String, Object> optionProps : optionList) {
-            Map<Object, Object> optionVertexProps = (Map<Object, Object>) optionProps.get("V");
-            Map<Object, Object> optionEdgeProps = (Map<Object, Object>) optionProps.get("E");
-            Option option = mapper.mapToOption(optionVertexProps, optionEdgeProps);
-            command.addOption(option);
-        }
-        return command;
-    }
-
-    public List<Command> getMatchingCommands(Filter filter) {
-        List<Command> commands = new ArrayList<>();
-        return commands;
-    }
-
-    public List<Command> getMatchingCommands(String query) {
-        List<Vertex> vertices = g.V().hasLabel(VERTEX.command.toString()).or(__.has(COMMAND_PROPERTY.name.toString(), Text.textContainsFuzzy(query)),
+  public List<Command> getMatchingCommands(String query) {
+    List<Vertex> vertices =
+        g.V()
+            .hasLabel(VERTEX.command.toString())
+            .or(
+                __.has(COMMAND_PROPERTY.name.toString(), Text.textContainsFuzzy(query)),
                 __.has(COMMAND_PROPERTY.desc.toString(), Text.textContainsFuzzy(query)),
-                __.has(COMMAND_PROPERTY.long_desc.toString(), Text.textContainsFuzzy(query))).toList();
+                __.has(COMMAND_PROPERTY.long_desc.toString(), Text.textContainsFuzzy(query)))
+            .toList();
 
-        List<Command> commands = new ArrayList<>();
-        for (Vertex commandVertex : vertices) {
-            Command command = mapper.mapToCommand(commandVertex);
-            commands.add(command);
-        }
-
-        return commands;
+    List<Command> commands = new ArrayList<>();
+    for (Vertex commandVertex : vertices) {
+      Command command = mapper.mapToCommand(commandVertex);
+      commands.add(command);
     }
 
-    public void addCommand(Command command) {
-        GraphTraversal<Vertex, Vertex> graphTraversal = g.addV(VERTEX.command.toString());
+    return commands;
+  }
 
-        for (COMMAND_PROPERTY property : COMMAND_PROPERTY.values()) {
-            if (command.getProperty(property) != null) {
-                graphTraversal.property(property.toString(), command.getProperty(property));
-            }
-        }
-        Vertex commandVertex = graphTraversal.next();
+  public void addCommand(Command command) {
+    GraphTraversal<Vertex, Vertex> graphTraversal = g.addV(VERTEX.command.toString());
 
-        for (Flag flag : command.getFlags()) {
-            addFlag(commandVertex, flag);
-        }
+    for (COMMAND_PROPERTY property : COMMAND_PROPERTY.values()) {
+      if (command.getProperty(property) != null) {
+        graphTraversal.property(property.toString(), command.getProperty(property));
+      }
+    }
+    Vertex commandVertex = graphTraversal.next();
 
-        for (Option option : command.getOptions()) {
-            addOption(commandVertex, option);
-        }
+    for (Flag flag : command.getFlags()) {
+      addFlag(commandVertex, flag);
     }
 
-    private void addFlag(Vertex commandVertex, Flag flag) {
-        Vertex flagVertex = g.addV(VERTEX.flag.toString()).next();
-        GraphTraversal<Vertex, Vertex> vertexGraphTraversal = g.V(flagVertex);
-        GraphTraversal<Vertex, Edge> edgeGraphTraversal = g.V(commandVertex).as("a").V(flagVertex).addE(EDGE.has_flag.toString());
-
-        for (FLAG_PROPERTY property : FLAG_PROPERTY.values()) {
-            if (flag.getProperty(property) != null && property.propertyOf().equals("V")) {
-                vertexGraphTraversal.property(property.toString(), flag.getProperty(property));
-            } else if (flag.getProperty(property) != null && property.propertyOf().equals("E")) {
-                edgeGraphTraversal.property(property.toString(), flag.getProperty(property));
-            }
-        }
-        vertexGraphTraversal.next();
-        edgeGraphTraversal.from("a").next();
+    for (Option option : command.getOptions()) {
+      addOption(commandVertex, option);
     }
+  }
 
-    private void addOption(Vertex commandVertex, Option option) {
-        Vertex optionVertex = g.addV(VERTEX.option.toString()).next();
-        GraphTraversal<Vertex, Vertex> vertexGraphTraversal = g.V(optionVertex);
-        GraphTraversal<Vertex, Edge> edgeGraphTraversal = g.V(commandVertex).as("a").V(optionVertex).addE(EDGE.has_option.toString());
+  private void addFlag(Vertex commandVertex, Flag flag) {
+    Vertex flagVertex = g.addV(VERTEX.flag.toString()).next();
+    GraphTraversal<Vertex, Vertex> vertexGraphTraversal = g.V(flagVertex);
+    GraphTraversal<Vertex, Edge> edgeGraphTraversal =
+        g.V(commandVertex).as("a").V(flagVertex).addE(EDGE.has_flag.toString());
 
-        for (OPTION_PROPERTY property : OPTION_PROPERTY.values()) {
-            if (option.getProperty(property) != null && property.propertyOf().equals("V")) {
-                vertexGraphTraversal.property(property.toString(), option.getProperty(property));
-            } else if (option.getProperty(property) != null && property.propertyOf().equals("E")) {
-                edgeGraphTraversal.property(property.toString(), option.getProperty(property));
-            }
-        }
-        vertexGraphTraversal.next();
-        edgeGraphTraversal.from("a").next();
+    for (FLAG_PROPERTY property : FLAG_PROPERTY.values()) {
+      if (flag.getProperty(property) != null && property.propertyOf().equals("V")) {
+        vertexGraphTraversal.property(property.toString(), flag.getProperty(property));
+      } else if (flag.getProperty(property) != null && property.propertyOf().equals("E")) {
+        edgeGraphTraversal.property(property.toString(), flag.getProperty(property));
+      }
     }
+    vertexGraphTraversal.next();
+    edgeGraphTraversal.from("a").next();
+  }
+
+  private void addOption(Vertex commandVertex, Option option) {
+    Vertex optionVertex = g.addV(VERTEX.option.toString()).next();
+    GraphTraversal<Vertex, Vertex> vertexGraphTraversal = g.V(optionVertex);
+    GraphTraversal<Vertex, Edge> edgeGraphTraversal =
+        g.V(commandVertex).as("a").V(optionVertex).addE(EDGE.has_option.toString());
+
+    for (OPTION_PROPERTY property : OPTION_PROPERTY.values()) {
+      if (option.getProperty(property) != null && property.propertyOf().equals("V")) {
+        vertexGraphTraversal.property(property.toString(), option.getProperty(property));
+      } else if (option.getProperty(property) != null && property.propertyOf().equals("E")) {
+        edgeGraphTraversal.property(property.toString(), option.getProperty(property));
+      }
+    }
+    vertexGraphTraversal.next();
+    edgeGraphTraversal.from("a").next();
+  }
 }

@@ -13,23 +13,23 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
-    private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-    @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+  @Autowired
+  public UserService(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
+
+  public User addUser(SignUp signUpRequest) {
+    if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+      throw new BadRequestException("Email address already in use.");
     }
+    return userRepository.addUser(signUpRequest);
+  }
 
-    public User addUser(SignUp signUpRequest) {
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            throw new BadRequestException("Email address already in use.");
-        }
-        return userRepository.addUser(signUpRequest);
-    }
-
-    public Optional<User> findById(Object id) {
-        return userRepository.findById(id);
-    }
+  public Optional<User> findById(Object id) {
+    return userRepository.findById(id);
+  }
 }

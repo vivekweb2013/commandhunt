@@ -11,30 +11,30 @@ import java.util.List;
 @Service
 public class CommandService {
 
-    private final CommandRepository commandRepository;
+  private final CommandRepository commandRepository;
 
-    @Autowired
-    public CommandService(CommandRepository commandRepository) {
-        this.commandRepository = commandRepository;
-    }
+  @Autowired
+  public CommandService(CommandRepository commandRepository) {
+    this.commandRepository = commandRepository;
+  }
 
-    public List<Command> getAllCommands() {
-        return commandRepository.getAllCommands();
-    }
+  public List<Command> getAllCommands() {
+    return commandRepository.getAllCommands();
+  }
 
-    public Command getCommandById(String id) {
-        return commandRepository.getCommandById(id);
-    }
+  public Command getCommandById(String id) {
+    return commandRepository.getCommandById(id);
+  }
 
-    public Command getCommandByName(String name) {
-        return commandRepository.getCommandByName(name);
-    }
+  public Command getCommandByName(String name) {
+    return commandRepository.getCommandByName(name);
+  }
 
-    public List<Command> getMatchingCommands(Filter filter) {
-        return commandRepository.getMatchingCommands(filter);
-    }
+  public List<Command> getMatchingCommands(Filter filter) {
+    return commandRepository.getMatchingCommands(filter);
+  }
 
-    public List<Command> getMatchingCommands(String query) {
-        return commandRepository.getMatchingCommands(query);
-    }
+  public List<Command> getMatchingCommands(String query) {
+    return commandRepository.getMatchingCommands(query);
+  }
 }
