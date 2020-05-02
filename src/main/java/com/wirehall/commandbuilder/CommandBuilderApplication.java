@@ -9,6 +9,7 @@ import org.springframework.context.event.EventListener;
 
 @SpringBootApplication
 public class CommandBuilderApplication {
+
   private final GraphBuilder graphBuilder;
 
   @Autowired

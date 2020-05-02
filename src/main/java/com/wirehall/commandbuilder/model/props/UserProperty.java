@@ -4,8 +4,8 @@ public enum UserProperty {
   name(true),
   email(true),
   imageUrl(false),
-  emailVerified(true),
-  password(true),
+  emailVerified(false),
+  password(false),
   provider(true),
   providerId(false);
 

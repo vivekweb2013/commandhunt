@@ -2,10 +2,11 @@ package com.wirehall.commandbuilder.service.auth;
 
 
 import com.wirehall.commandbuilder.dto.User;
-import com.wirehall.commandbuilder.exception.OAuth2Exception;
+import com.wirehall.commandbuilder.exception.OAuthException;
 import com.wirehall.commandbuilder.model.auth.CustomUserPrincipal;
 import com.wirehall.commandbuilder.model.props.UserProperty;
 import com.wirehall.commandbuilder.repository.UserRepository;
+import com.wirehall.commandbuilder.security.OAuthUserFactory;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 @Service
-public class CustomOAuth2UserService extends DefaultOAuth2UserService {
+public class CustomOAuthUserService extends DefaultOAuth2UserService {
 
   @Autowired
   private UserRepository userRepository;
@@ -34,13 +35,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
       throw ex;
     } catch (Exception ex) {
       // Throwing an instance of AuthenticationException,
-      // This will trigger the OAuth2AuthenticationFailureHandler
+      // This will trigger the OAuthFailureHandler
       throw new InternalAuthenticationServiceException(ex.getMessage(), ex.getCause());
     }
   }
 
   private OAuth2User processOAuth2User(OAuth2UserRequest oauth2UserRequest, OAuth2User oauth2User) {
-    User oauthUser = OAuth2UserFactory
+    User oauthUser = OAuthUserFactory
         .getOAuth2UserInfo(oauth2UserRequest.getClientRegistration().getRegistrationId(),
             oauth2User.getAttributes());
 
@@ -48,7 +49,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     String provider = (String) oauthUser.getProperty(UserProperty.provider);
     String regId = oauth2UserRequest.getClientRegistration().getRegistrationId();
     if (StringUtils.isEmpty(email)) {
-      throw new OAuth2Exception("Email not found from OAuth2 provider");
+      throw new OAuthException("Email not found from OAuth2 provider");
     }
 
     Optional<User> existingUserOptional = userRepository.findByEmail(email);
@@ -56,7 +57,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
       // User already exists with same email id.
       User existingUser = existingUserOptional.get();
       if (!provider.equals(regId)) {
-        throw new OAuth2Exception("Looks like you're signed up with " + provider
+        throw new OAuthException("Looks like you're signed up with " + provider
             + " account. Please use your " + provider + " account to login.");
       }
 

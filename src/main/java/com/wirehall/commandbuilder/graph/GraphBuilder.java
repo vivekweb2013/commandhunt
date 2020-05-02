@@ -21,13 +21,11 @@ import org.springframework.stereotype.Component;
 public class GraphBuilder {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GraphBuilder.class);
-
+  private final CommandRepository commandRepository;
   @Value("classpath*:/data/**/*.json")
   private Resource[] jsonDataResources;
-
   private JanusGraph graph;
   private GraphTraversalSource gt;
-  private final CommandRepository commandRepository;
 
   /**
    * Performs graph db initialization operations.

@@ -1,6 +1,7 @@
 package com.wirehall.commandbuilder.dto;
 
 public class Filter {
+
   private String key;
   private String value;
   private Operator operator;

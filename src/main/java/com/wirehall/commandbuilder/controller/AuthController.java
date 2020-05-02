@@ -30,6 +30,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
 
   @Autowired

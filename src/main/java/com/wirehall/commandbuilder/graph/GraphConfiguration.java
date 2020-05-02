@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class GraphConfiguration {
+
   @Value("${app.graph.config}")
   private String appGraphConfigPath;
 

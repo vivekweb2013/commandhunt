@@ -5,6 +5,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public class User extends Node<UserProperty> {
+
   public User() {
     super(UserProperty.class);
   }

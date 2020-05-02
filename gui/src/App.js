@@ -22,10 +22,6 @@ class App extends Component {
 
   componentDidMount() {
     this.props.getUserProfile().then(() => this.setState({ loading: false }));
-    this.unregisterAuthListener = FirebaseAuth.addListener((user) => {
-      user ? this.props.userLogin(user) : this.props.userLogout(user);
-      this.setState({ loading: false });
-    });
   }
 
   render() {
@@ -50,8 +46,8 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getUserProfile: (userProfileRequest) => {
-      return API.getUserProfile(userProfileRequest).then((user) => {
+    getUserProfile: () => {
+      return API.getUserProfile().then((user) => {
         dispatch(userLogin(user));
       });
     },

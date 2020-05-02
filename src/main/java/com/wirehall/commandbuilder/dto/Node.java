@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import java.util.Map;
 
 public abstract class Node<E extends Enum<E>> {
+
   protected final Class<E> enumClass;
   protected Map<E, Object> properties;
   private Object id;

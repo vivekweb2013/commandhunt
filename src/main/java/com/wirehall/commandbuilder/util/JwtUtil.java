@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtUtil {
 
-  private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtil.class);
 
   @Value("${app.jwt.secret}")
   private String appJwtSecret;
@@ -37,7 +37,7 @@ public class JwtUtil {
     Date expiryDate = new Date(now.getTime() + expiry);
 
     return Jwts.builder()
-        .setSubject(customUserPrincipal.getId().toString())
+        .setSubject(customUserPrincipal.getEmail())
         .setIssuedAt(new Date())
         .setExpiration(expiryDate)
         .signWith(SignatureAlgorithm.HS512, appJwtSecret)
@@ -45,12 +45,12 @@ public class JwtUtil {
   }
 
   /**
-   * Retrieve user id from token.
+   * Retrieve user's email from token.
    *
    * @param token JWT token.
-   * @return user id.
+   * @return User's email address.
    */
-  public String getUserIdFromToken(String token) {
+  public String getUserEmailFromToken(String token) {
     Claims claims = Jwts.parser().setSigningKey(appJwtSecret).parseClaimsJws(token).getBody();
 
     return claims.getSubject();
@@ -67,15 +67,15 @@ public class JwtUtil {
       Jwts.parser().setSigningKey(appJwtSecret).parseClaimsJws(authToken);
       return true;
     } catch (SignatureException ex) {
-      logger.error("Invalid JWT signature");
+      LOGGER.error("Invalid JWT signature");
     } catch (MalformedJwtException ex) {
-      logger.error("Invalid JWT token");
+      LOGGER.error("Invalid JWT token");
     } catch (ExpiredJwtException ex) {
-      logger.error("Expired JWT token");
+      LOGGER.error("Expired JWT token");
     } catch (UnsupportedJwtException ex) {
-      logger.error("Unsupported JWT token");
+      LOGGER.error("Unsupported JWT token");
     } catch (IllegalArgumentException ex) {
-      logger.error("JWT claims string is empty.");
+      LOGGER.error("JWT claims string is empty.");
     }
     return false;
   }

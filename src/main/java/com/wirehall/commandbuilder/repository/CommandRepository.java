@@ -28,6 +28,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class CommandRepository {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(CommandRepository.class);
 
   private final CommandMapper mapper = new CommandMapper();

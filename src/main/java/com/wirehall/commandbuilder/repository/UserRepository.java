@@ -38,21 +38,9 @@ public class UserRepository {
    */
   public Optional<User> findByEmail(String email) {
     gt.tx().rollback();
-    Optional<Vertex> user =
-        gt.V().hasLabel(VertexType.user.toString()).has(UserProperty.email.toString(), email)
-            .tryNext();
-    return mapper.mapToUser(user);
-  }
+    Optional<Vertex> user = gt.V().hasLabel(VertexType.user.toString())
+        .has(UserProperty.email.toString(), email).tryNext();
 
-  /**
-   * Retrieve user by id.
-   *
-   * @param id User id.
-   * @return User DTO.
-   */
-  public Optional<User> findById(Object id) {
-    gt.tx().rollback();
-    Optional<Vertex> user = gt.V(id).tryNext();
     return mapper.mapToUser(user);
   }
 
@@ -64,10 +52,9 @@ public class UserRepository {
    */
   public Boolean existsByEmail(String email) {
     gt.tx().rollback();
-    return gt.V()
-        .hasLabel(VertexType.user.toString())
-        .has(UserProperty.email.toString(), email)
-        .hasNext();
+
+    return gt.V().hasLabel(VertexType.user.toString())
+        .has(UserProperty.email.toString(), email).hasNext();
   }
 
   /**
@@ -116,7 +103,8 @@ public class UserRepository {
   public void updateUser(User user) {
     gt.tx().rollback();
 
-    GraphTraversal<Vertex, Vertex> graphTraversal = gt.V(user.getId());
+    GraphTraversal<Vertex, Vertex> graphTraversal = gt.V().hasLabel(VertexType.user.toString())
+        .has(UserProperty.email.toString(), user.getProperty(UserProperty.email));
 
     for (UserProperty property : UserProperty.values()) {
       if (user.getProperty(property) != null) {

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import FirebaseAuth from './auth/FirebaseAuth';
 import Spinner from './common/Spinner';
 import { userLogin } from '../actions';
 import * as API from '../api/API';
+import { getQueryParamByName } from '../Utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Login.scss';
 
@@ -14,7 +14,12 @@ class Login extends Component {
         loginRequest: {}
     }
     componentDidMount() {
-        FirebaseAuth.handlePostSignInRedirect();
+        const token = getQueryParamByName('token', window.location.search);
+        const error = getQueryParamByName('error', window.location.search);
+        if (token || error) {
+            window.history.replaceState(null, null, window.location.origin + window.location.pathname); // URL Cleanup
+            (token && this.props.getUserProfile(token)) || alert(error);
+        }
     }
     handleInputChange(event) {
         const { name, value } = event.target;
@@ -25,7 +30,7 @@ class Login extends Component {
     handleOAuthLogin(e, provider) {
         e.preventDefault();
         this.setState({ loginInProgress: true });
-        FirebaseAuth.signInWithProvider(provider);
+        window.location.href = `${API.API_URL}/oauth2/authorize/${provider}?redirect_uri=${window.location.href}`;
     }
     handleManualLogin(e) {
         e.preventDefault();
@@ -44,7 +49,7 @@ class Login extends Component {
         if (user) this.props.history.goBack();
 
         const { loginInProgress } = this.state;
-        const isRedirected = window.location.href.match(/[&?]code=/);
+        const isRedirected = window.location.href.match(/[&?]token=/);
         return (
             loginInProgress || isRedirected ? <div className="app loading" ><Spinner size="50" /> <br />LOADING</div> :
                 <div className="login">
@@ -67,10 +72,10 @@ class Login extends Component {
                         </div>
 
                         <div className="social-buttons">
-                            <button className="google" onClick={(e) => this.handleOAuthLogin(e, 'google.com')}> <span className="icon-google"></span>Login with Google</button>
-                            <button className="facebook" onClick={(e) => this.handleOAuthLogin(e, 'facebook.com')}> <span className="icon-facebook"></span>Login with Facebook</button>
-                            <button className="github" onClick={(e) => this.handleOAuthLogin(e, 'github.com')}> <span className="icon-github" ></span>Login with GitHub</button>
-                            <button className="twitter" onClick={(e) => this.handleOAuthLogin(e, 'twitter.com')}> <span className="icon-twitter"></span>Login with Twitter</button>
+                            <button className="google" onClick={(e) => this.handleOAuthLogin(e, 'google')}> <span className="icon-google"></span>Login with Google</button>
+                            <button className="facebook" onClick={(e) => this.handleOAuthLogin(e, 'facebook')}> <span className="icon-facebook"></span>Login with Facebook</button>
+                            <button className="github" onClick={(e) => this.handleOAuthLogin(e, 'github')}> <span className="icon-github" ></span>Login with GitHub</button>
+                            <button className="twitter" onClick={(e) => this.handleOAuthLogin(e, 'twitter')}> <span className="icon-twitter"></span>Login with Twitter</button>
                         </div>
 
                     </div>
@@ -87,6 +92,11 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        getUserProfile: (token) => {
+            return API.getUserProfile(token).then((user) => {
+                dispatch(userLogin(user));
+            });
+        },
         userLogin: (loginRequest) => {
             return API.userLogin(loginRequest).then((user) => {
                 dispatch(userLogin(user));

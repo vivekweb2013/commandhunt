@@ -1,7 +1,7 @@
 import auth from '../components/auth/FirebaseAuth';
 import Firestore from 'firebase-firestore-lite';
 
-const api = process.env.REACT_APP_API_URL || "http://localhost:8080/api";
+export const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8080/api";
 
 const projectId = 'command-builder';
 const db = new Firestore({ projectId, auth });
@@ -26,16 +26,17 @@ const catchError = (error) => {
 }
 
 export const userSignUp = (signUpRequest) => {
-    return fetch(`${api}/auth/signup`, { method: 'POST', body: JSON.stringify(signUpRequest), headers }).then(handleErrors).catch(catchError);
+    return fetch(`${API_URL}/auth/signup`, { method: 'POST', body: JSON.stringify(signUpRequest), headers }).then(handleErrors).catch(catchError);
 }
 
 export const userLogin = (loginRequest) => {
-    return fetch(`${api}/auth/login`, { method: 'POST', body: JSON.stringify(loginRequest), headers }).then(handleErrors).then(async res => {
+    return fetch(`${API_URL}/auth/login`, { method: 'POST', body: JSON.stringify(loginRequest), headers }).then(handleErrors).then(async res => {
         const payload = await res.json();
         const token = payload.token;
         localStorage.setItem('token', token);
         headers.Authorization = `Bearer ${token}`;
         const userPayload = payload.user;
+        //TODO: Rather than transforming, set the user as it is in redux store, update the views accordingly
         const user = {
             localId: userPayload.id, displayName: userPayload.properties.name, photoUrl: null,
             email: userPayload.properties.email, emailVerified: userPayload.properties.emailVerified
@@ -50,18 +51,34 @@ export const userLogout = () => {
     return Promise.resolve();
 };
 
-export const getUserProfile = () => fetch(`${api}/auth/user/me`, { headers }).then(handleErrors).then(res => res.json()).catch(catchError);
+export const getUserProfile = (token) => {
+    if (token) {
+        localStorage.setItem('token', token);
+        headers.Authorization = `Bearer ${token}`;
+    }
 
-export const getAllCommands = () => fetch(`${api}/command`, { headers }).then(handleErrors).then(res => res.json()).catch(catchError);
+    return fetch(`${API_URL}/auth/user/me`, { headers }).then(handleErrors).then(async res => {
+        const payload = await res.json();
+        const userPayload = payload;
+        //TODO: Rather than transforming, set the user as it is in redux store, update the views accordingly
+        const user = {
+            localId: userPayload.id, displayName: userPayload.properties.name, photoUrl: userPayload.properties.imageUrl,
+            email: userPayload.properties.email, emailVerified: userPayload.properties.emailVerified
+        }
+        return user;
+    }).catch(catchError);
+}
+
+export const getAllCommands = () => fetch(`${API_URL}/command`, { headers }).then(handleErrors).then(res => res.json()).catch(catchError);
 
 export const getMatchingCommands = query => {
     query = encodeURIComponent(query);
-    return fetch(`${api}/command/search?query=${query}`, { headers }).then(handleErrors).then(res => res.json()).catch(catchError);
+    return fetch(`${API_URL}/command/search?query=${query}`, { headers }).then(handleErrors).then(res => res.json()).catch(catchError);
 };
 
 export const getCommand = commandName => {
     commandName = encodeURIComponent(commandName);
-    return fetch(`${api}/command/search?name=${commandName}`, { headers }).then(handleErrors).then(res => res.json()).catch(catchError);
+    return fetch(`${API_URL}/command/search?name=${commandName}`, { headers }).then(handleErrors).then(res => res.json()).catch(catchError);
 };
 
 export const getUserCommands = (filters) => db.reference('user-commands').query(filters).run();

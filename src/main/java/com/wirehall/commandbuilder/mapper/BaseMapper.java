@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 
 public class BaseMapper {
+
   public String mapString(Vertex v, String prop) {
     return (String) v.property(prop).value();
   }
