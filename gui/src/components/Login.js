@@ -75,7 +75,6 @@ class Login extends Component {
                             <button className="google" onClick={(e) => this.handleOAuthLogin(e, 'google')}> <span className="icon-google"></span>Login with Google</button>
                             <button className="facebook" onClick={(e) => this.handleOAuthLogin(e, 'facebook')}> <span className="icon-facebook"></span>Login with Facebook</button>
                             <button className="github" onClick={(e) => this.handleOAuthLogin(e, 'github')}> <span className="icon-github" ></span>Login with GitHub</button>
-                            <button className="twitter" onClick={(e) => this.handleOAuthLogin(e, 'twitter')}> <span className="icon-twitter"></span>Login with Twitter</button>
                         </div>
 
                     </div>

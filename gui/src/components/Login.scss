@@ -1,7 +1,6 @@
 $google-btn-color: #dc4639;
 $facebook-btn-color: #1877f2;
 $github-btn-color: #1b1817;
-$twitter-btn-color: #1da1f3;
 
 .login {
   align-items: center;
@@ -70,6 +69,7 @@ $twitter-btn-color: #1da1f3;
       }
     }
     .social-buttons {
+      align-self: center;
       display: flex;
       flex-direction: column;
       padding: 10px 50px;
@@ -102,12 +102,6 @@ $twitter-btn-color: #1da1f3;
           background-color: $facebook-btn-color;
           span.icon-facebook {
             background: url(../styles/icons/facebook.svg) no-repeat center left;
-          }
-        }
-        &.twitter {
-          background-color: $twitter-btn-color;
-          span.icon-twitter {
-            background: url(../styles/icons/twitter.svg) no-repeat center left;
           }
         }
         &.github {
