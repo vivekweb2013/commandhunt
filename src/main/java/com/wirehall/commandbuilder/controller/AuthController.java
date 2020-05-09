@@ -49,8 +49,12 @@ public class AuthController {
    * @return Response indicating the authentication status.
    */
   @PostMapping("/login")
-  public ResponseEntity<?> authenticateUser(@Valid @RequestBody Login loginRequest) {
-    LOGGER.info(loginRequest.toString());
+  public ResponseEntity<Map<String, Object>> authenticateUser(
+      @Valid @RequestBody Login loginRequest) {
+
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug(loginRequest.toString());
+    }
 
     Authentication authentication = authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),
@@ -61,12 +65,9 @@ public class AuthController {
     User user = ((CustomUserPrincipal) authentication.getPrincipal()).getUser();
     String token = jwtUtil.createToken(authentication, 864000000L);
 
-    Map<String, Object> resp = new HashMap<String, Object>() {
-      {
-        put("user", user);
-        put("token", token);
-      }
-    };
+    Map<String, Object> resp = new HashMap<>();
+    resp.put("user", user);
+    resp.put("token", token);
 
     return ResponseEntity.ok(resp);
   }
@@ -78,9 +79,12 @@ public class AuthController {
    * @return Response indicating the status of sign up action.
    */
   @PostMapping("/signup")
-  public ResponseEntity<?> registerUser(@Valid @RequestBody SignUp signUpRequest) {
+  public ResponseEntity<User> registerUser(@Valid @RequestBody SignUp signUpRequest) {
 
-    LOGGER.info(signUpRequest.toString());
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug(signUpRequest.toString());
+    }
+
     User user = userService.addUser(signUpRequest);
 
     URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/me")
