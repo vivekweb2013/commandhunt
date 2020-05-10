@@ -3,7 +3,6 @@ package com.wirehall.commandbuilder.security;
 import static com.wirehall.commandbuilder.security.CustomOAuthRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
 import com.wirehall.commandbuilder.exception.BadRequestException;
-import com.wirehall.commandbuilder.graph.SchemaManager;
 import com.wirehall.commandbuilder.util.CookieUtil;
 import com.wirehall.commandbuilder.util.JwtUtil;
 import java.io.IOException;
@@ -25,7 +24,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Component
 public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(SchemaManager.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(OAuthSuccessHandler.class);
 
   private final CustomOAuthRequestRepository customOAuthRequestRepository;
 
@@ -46,7 +45,7 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     String targetUrl = determineTargetUrl(request, response, authentication);
 
     if (response.isCommitted()) {
-      LOGGER.debug("Response has already been committed. Unable to redirect to " + targetUrl);
+      LOGGER.warn("Response has already been committed. Unable to redirect to url: {}", targetUrl);
       return;
     }
 
@@ -54,6 +53,7 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     getRedirectStrategy().sendRedirect(request, response, targetUrl);
   }
 
+  @Override
   protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) {
     Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)

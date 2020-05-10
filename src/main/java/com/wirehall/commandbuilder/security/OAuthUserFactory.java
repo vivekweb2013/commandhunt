@@ -8,6 +8,10 @@ import java.util.Map;
 
 public class OAuthUserFactory {
 
+  private OAuthUserFactory() {
+    // Utility classes should not have public constructors.
+  }
+
   /**
    * Factory used to get the user dto with the info received from OAuth provider.
    *

@@ -10,6 +10,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 import org.apache.tinkerpop.gremlin.process.traversal.step.util.WithOptions;
 import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.JanusGraphFactory;
+import org.janusgraph.diskstorage.BackendException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,8 @@ public class GraphBuilder {
    * @param commandRepository The command repository.
    */
   @Autowired
-  public GraphBuilder(
-      JanusGraph graph, GraphTraversalSource gt, CommandRepository commandRepository) {
+  public GraphBuilder(JanusGraph graph, GraphTraversalSource gt,
+      CommandRepository commandRepository) {
     this.graph = graph;
     this.gt = gt;
     this.commandRepository = commandRepository;
@@ -90,7 +91,7 @@ public class GraphBuilder {
       final Optional<Map<Object, Object>> v =
           gt.V().has("name", "cp").valueMap().with(WithOptions.tokens).tryNext();
       if (v.isPresent()) {
-        LOGGER.info(v.get().toString());
+        LOGGER.info("Vertex: {}", v.get());
       } else {
         LOGGER.warn("cp not found");
       }
@@ -108,9 +109,9 @@ public class GraphBuilder {
               .with(WithOptions.tokens)
               .tryNext();
       if (edge.isPresent()) {
-        LOGGER.info(edge.get().toString());
+        LOGGER.info("Edge {}", edge.get());
       } else {
-        LOGGER.warn("edge not found");
+        LOGGER.warn("Edge not found");
       }
 
       // ansible might be deleted
@@ -124,7 +125,7 @@ public class GraphBuilder {
       // look up options
       final List<Object> options =
           gt.V().has("name", "cp").both("has_option").values("name").dedup().toList();
-      LOGGER.info("options: " + options.toString());
+      LOGGER.info("options: {}", options);
 
     } finally {
       // the default behavior automatically starts a transaction for
@@ -152,9 +153,9 @@ public class GraphBuilder {
   /**
    * Drops the graph.
    *
-   * @throws Exception Any exception occurred while dropping the graph.
+   * @throws BackendException Exception occurred while dropping the graph.
    */
-  public void dropGraph() throws Exception {
+  public void dropGraph() throws BackendException {
     if (graph != null) {
       JanusGraphFactory.drop(graph);
     }

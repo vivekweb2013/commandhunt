@@ -28,7 +28,8 @@ public class UserService {
    * @return User DTO.
    */
   public User addUser(SignUp signUpRequest) {
-    if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+    if (Boolean.TRUE.equals(userRepository.existsByEmail(signUpRequest.getEmail()))) {
+      LOGGER.error("Email: {} is already in use", signUpRequest.getEmail());
       throw new BadRequestException("Email address already in use.");
     }
     return userRepository.addUser(signUpRequest);

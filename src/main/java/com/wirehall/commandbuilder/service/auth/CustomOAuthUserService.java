@@ -13,7 +13,6 @@ import org.springframework.security.authentication.InternalAuthenticationService
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -25,8 +24,7 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
   private UserRepository userRepository;
 
   @Override
-  public OAuth2User loadUser(OAuth2UserRequest oauthUserRequest)
-      throws OAuth2AuthenticationException {
+  public OAuth2User loadUser(OAuth2UserRequest oauthUserRequest) {
     OAuth2User oauthUser = super.loadUser(oauthUserRequest);
 
     try {

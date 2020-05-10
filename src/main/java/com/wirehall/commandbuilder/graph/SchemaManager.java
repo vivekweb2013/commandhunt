@@ -1,6 +1,6 @@
 package com.wirehall.commandbuilder.graph;
 
-import com.wirehall.commandbuilder.model.Edge;
+import com.wirehall.commandbuilder.model.EdgeType;
 import com.wirehall.commandbuilder.model.VertexType;
 import com.wirehall.commandbuilder.model.props.CommandProperty;
 import com.wirehall.commandbuilder.model.props.FlagProperty;
@@ -16,6 +16,10 @@ import org.slf4j.LoggerFactory;
 public class SchemaManager {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SchemaManager.class);
+
+  private SchemaManager() {
+    // Utility classes should not have public constructors
+  }
 
   /**
    * Creates the application's graph db schema.
@@ -52,9 +56,12 @@ public class SchemaManager {
   }
 
   private static void createEdgeLabels(final JanusGraphManagement management) {
-    management.makeEdgeLabel(Edge.belongs_to.toString()).multiplicity(Multiplicity.MANY2ONE).make();
-    management.makeEdgeLabel(Edge.has_option.toString()).multiplicity(Multiplicity.ONE2MANY).make();
-    management.makeEdgeLabel(Edge.has_flag.toString()).multiplicity(Multiplicity.ONE2MANY).make();
+    management.makeEdgeLabel(EdgeType.belongs_to.toString()).multiplicity(Multiplicity.MANY2ONE)
+        .make();
+    management.makeEdgeLabel(EdgeType.has_option.toString()).multiplicity(Multiplicity.ONE2MANY)
+        .make();
+    management.makeEdgeLabel(EdgeType.has_flag.toString()).multiplicity(Multiplicity.ONE2MANY)
+        .make();
   }
 
   private static void createProperties(final JanusGraphManagement management) {

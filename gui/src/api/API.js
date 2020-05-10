@@ -81,17 +81,24 @@ export const getCommand = commandName => {
     return fetch(`${API_URL}/command/search?name=${commandName}`, { headers }).then(handleErrors).then(res => res.json()).catch(catchError);
 };
 
-export const getUserCommands = (filters) => db.reference('user-commands').query(filters).run();
+export const getUserCommands = () => fetch(`${API_URL}/user/user-command`, { headers }).then(handleErrors).then(res => res.json()).catch(catchError);
 
-export const getUserCommand = (userCommandId) => db.reference(`user-commands/${userCommandId}`).get();
+export const getUserCommand = (userCommandId) =>
+    fetch(`${API_URL}/user/user-command/${userCommandId}`, { headers }).then(handleErrors).then(res => res.json()).catch(catchError);
 
-export const saveUserCommand = (userCommand, userCommandId) => {
-    userCommandId = userCommandId || '';
-    const ref = db.reference(`user-commands/${userCommandId}`);
-    return ref.set(userCommand);
-};
+export const saveUserCommand = (userCommand) => fetch(`${API_URL}/user/user-command`, {
+    method: 'POST',
+    body: JSON.stringify(userCommand),
+    headers
+}).then(handleErrors).then(res => res.json()).catch(catchError);
 
-export const deleteUserCommand = userCommand => {
-    const ref = db.reference(`user-commands/${userCommand.__meta__.id}`);
-    return ref.delete();
-};
+export const updateUserCommand = (userCommand) => fetch(`${API_URL}/user/user-command/${userCommand.id}`, {
+    method: 'PUT',
+    body: JSON.stringify(userCommand),
+    headers
+}).then(handleErrors).then(res => res.json()).catch(catchError);
+
+export const deleteUserCommand = (userCommand) => fetch(`${API_URL}/user/user-command/${userCommand.id}`, {
+    method: 'DELETE',
+    headers
+}).then(handleErrors).then(res => res.json()).catch(catchError);

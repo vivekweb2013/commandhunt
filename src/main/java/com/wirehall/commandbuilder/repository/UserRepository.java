@@ -31,13 +31,14 @@ public class UserRepository {
   }
 
   /**
-   * Retrieve user by email address.
+   * Retrieves user by email address from the database.
    *
    * @param email Email address.
    * @return User DTO.
    */
   public Optional<User> findByEmail(String email) {
     gt.tx().rollback();
+
     Optional<Vertex> user = gt.V().hasLabel(VertexType.user.toString())
         .has(UserProperty.email.toString(), email).tryNext();
 
@@ -45,7 +46,7 @@ public class UserRepository {
   }
 
   /**
-   * Checks if the user already exists with specifies email address.
+   * Checks if the user already exists with specifies email address in the database.
    *
    * @param email Email address.
    * @return true if user with specified email exists, false otherwise.
@@ -58,7 +59,7 @@ public class UserRepository {
   }
 
   /**
-   * Creates and persists the user using sign up request payload.
+   * Creates and persists the user in the database using sign up request payload.
    *
    * @param signUpRequest Sign up request payload.
    * @return User DTO.
@@ -69,7 +70,7 @@ public class UserRepository {
   }
 
   /**
-   * Persist the user to db.
+   * Persist the user to database.
    *
    * @param user User DTO.
    * @return Persisted user DTO.
@@ -90,8 +91,9 @@ public class UserRepository {
     // Remove password field
     user.removeProperty(UserProperty.password);
 
-    LOGGER.info(user.toString());
     gt.tx().commit();
+
+    LOGGER.info("User successfully added in the database.");
     return user;
   }
 
@@ -117,7 +119,7 @@ public class UserRepository {
     // Remove password field
     user.removeProperty(UserProperty.password);
 
-    LOGGER.info(user.toString());
+    LOGGER.info("User successfully updated in the database.");
   }
 
 

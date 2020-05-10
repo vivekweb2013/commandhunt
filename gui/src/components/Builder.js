@@ -108,13 +108,15 @@ class Builder extends Component {
         e.preventDefault();
         const userCommand = {
             ...this.state.userCommand,
-            name: this.props.command.properties.name,
-            text: this.getGeneratedCommand(this.props.command),
-            userId: this.props.user.localId,
-            timestamp: Date.now()
+            id: this.state.userCommandId,
+            properties :{
+                commandName: this.props.command.properties.name,
+                commandText: this.getGeneratedCommand(this.props.command),
+                userEmail: this.props.user.email
+            }
         };
         this.setState({ saveInProgress: true });
-        this.props.saveUserCommand(userCommand, this.state.userCommandId).then(() => {
+        this.props.saveUserCommand(userCommand).then(() => {
             this.setState({ saveInProgress: false });
             this.props.history.push('/command/user-commands');
         });
@@ -220,7 +222,9 @@ const mapDispatchToProps = dispatch => {
         getUserCommand: (userCommandId) => {
             return API.getUserCommand(userCommandId);
         },
-        saveUserCommand: (userCommand, userCommandId) => { return API.saveUserCommand(userCommand, userCommandId); }
+        saveUserCommand: (userCommand) => {
+            return userCommand.id ? API.updateUserCommand(userCommand) : API.saveUserCommand(userCommand);
+        }
     }
 }
 

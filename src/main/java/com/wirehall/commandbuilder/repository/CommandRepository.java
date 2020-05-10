@@ -5,7 +5,7 @@ import com.wirehall.commandbuilder.dto.Filter;
 import com.wirehall.commandbuilder.dto.Flag;
 import com.wirehall.commandbuilder.dto.Option;
 import com.wirehall.commandbuilder.mapper.CommandMapper;
-import com.wirehall.commandbuilder.model.Edge;
+import com.wirehall.commandbuilder.model.EdgeType;
 import com.wirehall.commandbuilder.model.VertexType;
 import com.wirehall.commandbuilder.model.props.CommandProperty;
 import com.wirehall.commandbuilder.model.props.FlagProperty;
@@ -19,7 +19,6 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
 import org.apache.tinkerpop.gremlin.process.traversal.step.util.WithOptions;
 import org.apache.tinkerpop.gremlin.structure.Column;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
-import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.attribute.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,12 +31,10 @@ public class CommandRepository {
   private static final Logger LOGGER = LoggerFactory.getLogger(CommandRepository.class);
 
   private final CommandMapper mapper = new CommandMapper();
-  private final JanusGraph graph;
   private final GraphTraversalSource gt;
 
   @Autowired
-  public CommandRepository(JanusGraph graph, GraphTraversalSource gt) {
-    this.graph = graph;
+  public CommandRepository(GraphTraversalSource gt) {
     this.gt = gt;
   }
 
@@ -47,12 +44,15 @@ public class CommandRepository {
    * @return List of command DTOs This will return the list of all command DTOs.
    */
   public List<Command> getAllCommands() {
+    LOGGER.debug("Retrieving all commands from database.");
+
     List<Vertex> vertices = gt.V().hasLabel(VertexType.command.toString()).toList();
     List<Command> commands = new ArrayList<>();
     for (Vertex commandVertex : vertices) {
       Command command = mapper.mapToCommand(commandVertex);
       commands.add(command);
     }
+
     return commands;
   }
 
@@ -63,6 +63,8 @@ public class CommandRepository {
    * @return The command DTO This will return the command DTO with the matching id.
    */
   public Command getCommandById(String id) {
+    LOGGER.debug("Retrieving command with id: {}", id);
+
     Vertex commandVertex = gt.V(id).next();
     return getCommand(commandVertex);
   }
@@ -74,6 +76,8 @@ public class CommandRepository {
    * @return The command DTO This will return the command DTO with the matching name.
    */
   public Command getCommandByName(String name) {
+    LOGGER.debug("Retrieving command with name: {}", name);
+
     Vertex commandVertex = gt.V().hasLabel(VertexType.command.toString()).has("name", name).next();
     return getCommand(commandVertex);
   }
@@ -81,22 +85,20 @@ public class CommandRepository {
   private Command getCommand(Vertex commandVertex) {
     Command command = mapper.mapToCommand(commandVertex);
 
-    List<Map<String, Object>> flagList =
-        gt.V(commandVertex)
-            .outE()
-            .hasLabel("has_flag")
-            .as("E")
-            .inV()
-            .as("V")
-            .select("E", "V")
-            .by(
-                __.valueMap()
-                    .with(WithOptions.tokens)
-                    .unfold()
-                    .group()
-                    .by(Column.keys)
-                    .by(__.select(Column.values).unfold()))
-            .toList();
+    List<Map<String, Object>> flagList = gt.V(commandVertex)
+        .outE()
+        .hasLabel(EdgeType.has_flag.toString())
+        .as("E")
+        .inV()
+        .as("V")
+        .select("E", "V")
+        .by(__.valueMap()
+            .with(WithOptions.tokens)
+            .unfold()
+            .group()
+            .by(Column.keys)
+            .by(__.select(Column.values).unfold()))
+        .toList();
 
     for (Map<String, Object> flagProps : flagList) {
       Map<Object, Object> flagVertexProps = (Map<Object, Object>) flagProps.get("V");
@@ -105,22 +107,20 @@ public class CommandRepository {
       command.addFlag(flag);
     }
 
-    List<Map<String, Object>> optionList =
-        gt.V(commandVertex)
-            .outE()
-            .hasLabel("has_option")
-            .as("E")
-            .inV()
-            .as("V")
-            .select("E", "V")
-            .by(
-                __.valueMap()
-                    .with(WithOptions.tokens)
-                    .unfold()
-                    .group()
-                    .by(Column.keys)
-                    .by(__.select(Column.values).unfold()))
-            .toList();
+    List<Map<String, Object>> optionList = gt.V(commandVertex)
+        .outE()
+        .hasLabel(EdgeType.has_option.toString())
+        .as("E")
+        .inV()
+        .as("V")
+        .select("E", "V")
+        .by(__.valueMap()
+            .with(WithOptions.tokens)
+            .unfold()
+            .group()
+            .by(Column.keys)
+            .by(__.select(Column.values).unfold()))
+        .toList();
 
     for (Map<String, Object> optionProps : optionList) {
       Map<Object, Object> optionVertexProps = (Map<Object, Object>) optionProps.get("V");
@@ -132,6 +132,7 @@ public class CommandRepository {
   }
 
   public List<Command> getMatchingCommands(Filter filter) {
+    // TODO: To be implemented.
     return new ArrayList<>();
   }
 
@@ -142,11 +143,11 @@ public class CommandRepository {
    * @return List of all the matching command.
    */
   public List<Command> getMatchingCommands(String query) {
+    LOGGER.debug("Retrieving matching commands by query: {}", query);
+
     List<Vertex> vertices =
-        gt.V()
-            .hasLabel(VertexType.command.toString())
-            .or(
-                __.has(CommandProperty.name.toString(), Text.textContainsFuzzy(query)),
+        gt.V().hasLabel(VertexType.command.toString())
+            .or(__.has(CommandProperty.name.toString(), Text.textContainsFuzzy(query)),
                 __.has(CommandProperty.desc.toString(), Text.textContainsFuzzy(query)),
                 __.has(CommandProperty.long_desc.toString(), Text.textContainsFuzzy(query)))
             .toList();
@@ -166,6 +167,8 @@ public class CommandRepository {
    * @param command he command to add to database.
    */
   public void addCommand(Command command) {
+    LOGGER.trace("Adding command: {}", command);
+
     GraphTraversal<Vertex, Vertex> graphTraversal = gt.addV(VertexType.command.toString());
 
     for (CommandProperty property : CommandProperty.values()) {
@@ -188,7 +191,7 @@ public class CommandRepository {
     Vertex flagVertex = gt.addV(VertexType.flag.toString()).next();
     GraphTraversal<Vertex, Vertex> vertexGraphTraversal = gt.V(flagVertex);
     GraphTraversal<Vertex, org.apache.tinkerpop.gremlin.structure.Edge> edgeGraphTraversal =
-        gt.V(commandVertex).as("a").V(flagVertex).addE(Edge.has_flag.toString());
+        gt.V(commandVertex).as("a").V(flagVertex).addE(EdgeType.has_flag.toString());
 
     for (FlagProperty property : FlagProperty.values()) {
       if (flag.getProperty(property) != null && property.propertyOf().equals("V")) {
@@ -205,7 +208,7 @@ public class CommandRepository {
     Vertex optionVertex = gt.addV(VertexType.option.toString()).next();
     GraphTraversal<Vertex, Vertex> vertexGraphTraversal = gt.V(optionVertex);
     GraphTraversal<Vertex, org.apache.tinkerpop.gremlin.structure.Edge> edgeGraphTraversal =
-        gt.V(commandVertex).as("a").V(optionVertex).addE(Edge.has_option.toString());
+        gt.V(commandVertex).as("a").V(optionVertex).addE(EdgeType.has_option.toString());
 
     for (OptionProperty property : OptionProperty.values()) {
       if (option.getProperty(property) != null && property.propertyOf().equals("V")) {

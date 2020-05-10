@@ -70,23 +70,23 @@ class UserCommands extends Component {
 
                     <tbody>
                         {filteredUserCommands && filteredUserCommands.length > 0 ? filteredUserCommands.map(userCommand =>
-                            <tr key={userCommand.__meta__.id} >
-                                <td className="command"><code>{userCommand.text}</code></td>
+                            <tr key={userCommand.id} >
+                                <td className="command"><code>{userCommand.properties.commandText}</code></td>
                                 <td className="type">
-                                    <code>{userCommand.name}</code>
+                                    <code>{userCommand.properties.commandName}</code>
                                 </td>
                                 <td className="date">
-                                    {formatDate(new Date(userCommand.timestamp))} <br />
-                                    <small>{formatTime(new Date(userCommand.timestamp))}</small>
+                                    {formatDate(new Date(userCommand.properties.timestamp))} <br />
+                                    <small>{formatTime(new Date(userCommand.properties.timestamp))}</small>
                                 </td>
                                 <td className="actions">
-                                    <CopyToClipboard text={userCommand.text}>
+                                    <CopyToClipboard text={userCommand.properties.commandText}>
                                         <span className="copy-icon" title="copy">
                                             <FontAwesomeIcon icon="clipboard" color="slateblue" size="lg" />
                                         </span>
                                     </CopyToClipboard>
                                     <span title="edit" onClick={() =>
-                                        history.push(`/command/build/${userCommand.name}?userCommandId=${userCommand.__meta__.id}`)
+                                        history.push(`/command/build/${userCommand.properties.commandName}?userCommandId=${userCommand.id}`)
                                     } className="edit-icon">
                                         <FontAwesomeIcon icon="edit" color="slateblue" size="lg" />
                                     </span>

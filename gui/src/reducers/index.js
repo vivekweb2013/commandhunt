@@ -31,7 +31,7 @@ const commandReducer = (state = {}, action) => {
         case DELETE_USER_COMMAND:
             return {
                 ...state,
-                userCommands: state.userCommands.filter(c => c.__meta__.id !== userCommand.__meta__.id)
+                userCommands: state.userCommands.filter(c => c.id !== userCommand.id)
             };
         case SET_PAGINATION:
             return {
@@ -54,7 +54,7 @@ const userCommandReducer = (state = {}, action) => {
         case DELETE_USER_COMMAND:
             return {
                 ...state,
-                userCommands: state.userCommands.filter(c => c.__meta__.id !== userCommand.__meta__.id)
+                userCommands: state.userCommands.filter(c => c.id !== userCommand.id)
             };
         case SET_FILTERS:
             return {

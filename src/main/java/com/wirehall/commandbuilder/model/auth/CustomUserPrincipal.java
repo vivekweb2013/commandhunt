@@ -14,9 +14,9 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 public class CustomUserPrincipal implements OAuth2User, UserDetails {
 
   private final Collection<? extends GrantedAuthority> authorities;
-  private final User user;
-  private final String password;
-  private Map<String, Object> attributes;
+  private final transient User user;
+  private final transient String password;
+  private transient Map<String, Object> attributes;
 
   /**
    * Custom User Principal.

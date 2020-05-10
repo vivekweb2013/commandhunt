@@ -52,9 +52,7 @@ public class AuthController {
   public ResponseEntity<Map<String, Object>> authenticateUser(
       @Valid @RequestBody Login loginRequest) {
 
-    if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug(loginRequest.toString());
-    }
+    LOGGER.debug("Login requested: {}", loginRequest);
 
     Authentication authentication = authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),
@@ -81,9 +79,7 @@ public class AuthController {
   @PostMapping("/signup")
   public ResponseEntity<User> registerUser(@Valid @RequestBody SignUp signUpRequest) {
 
-    if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug(signUpRequest.toString());
-    }
+    LOGGER.debug("Signup requested: {}", signUpRequest);
 
     User user = userService.addUser(signUpRequest);
 
