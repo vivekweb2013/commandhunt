@@ -1,11 +1,18 @@
 package com.wirehall.commandbuilder.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum VertexType {
-  command,
-  usercommand,
-  flag,
-  flagvalue,
-  option,
-  optionvalue,
-  user
+  COMMAND,
+  USERCOMMAND,
+  FLAG,
+  FLAGVALUE,
+  OPTION,
+  OPTIONVALUE,
+  USER;
+
+  @JsonValue
+  public String toLowerCase() {
+    return name().toLowerCase();
+  }
 }

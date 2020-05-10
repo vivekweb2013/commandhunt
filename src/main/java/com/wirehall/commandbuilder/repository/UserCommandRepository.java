@@ -44,7 +44,7 @@ public class UserCommandRepository {
   public List<UserCommand> getAllUserCommands() {
     LOGGER.debug("Retrieving all user-commands");
 
-    List<Vertex> vertices = gt.V().hasLabel(VertexType.usercommand.toString()).toList();
+    List<Vertex> vertices = gt.V().hasLabel(VertexType.USERCOMMAND.toLowerCase()).toList();
     List<UserCommand> userCommands = new ArrayList<>();
     for (Vertex userCommandsVertex : vertices) {
       UserCommand userCommand = mapper.mapToUserCommand(userCommandsVertex);
@@ -72,7 +72,7 @@ public class UserCommandRepository {
     Map<String, Object> flagValueProps =
         gt.V(userCommandVertex)
             .outE()
-            .hasLabel(EdgeType.has_flag_value.toString())
+            .hasLabel(EdgeType.HAS_FLAG_VALUE.toLowerCase())
             .as("E")
             .inV()
             .as("V")
@@ -90,7 +90,7 @@ public class UserCommandRepository {
     Map<String, Object> optionValueProps =
         gt.V(userCommandVertex)
             .outE()
-            .hasLabel(EdgeType.has_option_value.toString())
+            .hasLabel(EdgeType.HAS_OPTION_VALUE.toLowerCase())
             .as("E")
             .inV()
             .as("V")
@@ -120,9 +120,9 @@ public class UserCommandRepository {
    * @return List of all the matching user-command.
    */
   public List<UserCommand> getMatchingUserCommands(String query) {
-    List<Vertex> vertices = gt.V().hasLabel(VertexType.usercommand.toString()).or(
-        __.has(UserCommandProperty.commandText.toString(), Text.textContainsFuzzy(query)),
-        __.has(UserCommandProperty.commandName.toString(), Text.textContainsFuzzy(query)))
+    List<Vertex> vertices = gt.V().hasLabel(VertexType.USERCOMMAND.toLowerCase()).or(
+        __.has(UserCommandProperty.COMMAND_TEXT.toLowerCase(), Text.textContainsFuzzy(query)),
+        __.has(UserCommandProperty.COMMAND_NAME.toLowerCase(), Text.textContainsFuzzy(query)))
         .toList();
 
     List<UserCommand> commands = new ArrayList<>();
@@ -142,11 +142,11 @@ public class UserCommandRepository {
   public void addUserCommand(UserCommand userCommand) {
     gt.tx().rollback();
 
-    GraphTraversal<Vertex, Vertex> graphTraversal = gt.addV(VertexType.usercommand.toString());
+    GraphTraversal<Vertex, Vertex> graphTraversal = gt.addV(VertexType.USERCOMMAND.toLowerCase());
 
     for (UserCommandProperty property : UserCommandProperty.values()) {
       if (userCommand.getProperty(property) != null) {
-        graphTraversal.property(property.toString(), userCommand.getProperty(property));
+        graphTraversal.property(property.toLowerCase(), userCommand.getProperty(property));
       }
     }
     Vertex userCommandVertex = graphTraversal.next();
@@ -157,10 +157,10 @@ public class UserCommandRepository {
   }
 
   private void addFlagValue(Vertex userCommandVertex, Map<String, Object> flags) {
-    Vertex flagValueVertex = gt.addV(VertexType.flagvalue.toString()).next();
+    Vertex flagValueVertex = gt.addV(VertexType.FLAGVALUE.toLowerCase()).next();
     GraphTraversal<Vertex, Vertex> vertexGraphTraversal = gt.V(flagValueVertex);
     GraphTraversal<Vertex, Edge> edgeGraphTraversal = gt.V(userCommandVertex).as("a")
-        .V(flagValueVertex).addE(EdgeType.has_flag_value.toString());
+        .V(flagValueVertex).addE(EdgeType.HAS_FLAG_VALUE.toLowerCase());
 
     for (Entry<String, Object> entry : flags.entrySet()) {
       vertexGraphTraversal.property(entry.getKey(), entry.getValue());
@@ -172,7 +172,7 @@ public class UserCommandRepository {
 
   private void updateFlagValue(Vertex userCommandVertex, Map<String, Object> flags) {
     GraphTraversal<Vertex, Vertex> graphTraversal = gt.V(userCommandVertex).outE()
-        .hasLabel(EdgeType.has_flag_value.toString()).inV();
+        .hasLabel(EdgeType.HAS_FLAG_VALUE.toLowerCase()).inV();
 
     for (Entry<String, Object> entry : flags.entrySet()) {
       graphTraversal.property(entry.getKey(), entry.getValue());
@@ -182,10 +182,10 @@ public class UserCommandRepository {
   }
 
   private void addOptionValue(Vertex userCommandVertex, Map<String, Object> options) {
-    Vertex optionValueVertex = gt.addV(VertexType.optionvalue.toString()).next();
+    Vertex optionValueVertex = gt.addV(VertexType.OPTIONVALUE.toLowerCase()).next();
     GraphTraversal<Vertex, Vertex> vertexGraphTraversal = gt.V(optionValueVertex);
     GraphTraversal<Vertex, Edge> edgeGraphTraversal = gt.V(userCommandVertex).as("a")
-        .V(optionValueVertex).addE(EdgeType.has_option_value.toString());
+        .V(optionValueVertex).addE(EdgeType.HAS_OPTION_VALUE.toLowerCase());
 
     for (Entry<String, Object> entry : options.entrySet()) {
       vertexGraphTraversal.property(entry.getKey(), entry.getValue());
@@ -197,7 +197,7 @@ public class UserCommandRepository {
 
   private void updateOptionValue(Vertex userCommandVertex, Map<String, Object> options) {
     GraphTraversal<Vertex, Vertex> graphTraversal = gt.V(userCommandVertex).outE()
-        .hasLabel(EdgeType.has_option_value.toString()).inV();
+        .hasLabel(EdgeType.HAS_OPTION_VALUE.toLowerCase()).inV();
 
     for (Entry<String, Object> entry : options.entrySet()) {
       graphTraversal.property(entry.getKey(), entry.getValue());
@@ -218,7 +218,7 @@ public class UserCommandRepository {
 
     for (UserCommandProperty property : UserCommandProperty.values()) {
       if (userCommand.getProperty(property) != null) {
-        graphTraversal.property(property.toString(), userCommand.getProperty(property));
+        graphTraversal.property(property.toLowerCase(), userCommand.getProperty(property));
       }
     }
     Vertex userCommandVertex = graphTraversal.next();

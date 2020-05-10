@@ -11,6 +11,9 @@ app:
     authorizedRedirectUris: http://localhost:3000/oauth2/redirect,commandbuilder://oauth2/redirect
 
 spring:
+  jackson:
+    mapper:
+      accept-case-insensitive-enums: true
   security:
     oauth2:
       client:

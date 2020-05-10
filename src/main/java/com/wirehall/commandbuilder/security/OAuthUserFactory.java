@@ -21,22 +21,22 @@ public class OAuthUserFactory {
    */
   public static User getOAuth2UserInfo(String registrationId, Map<String, Object> attributes) {
     User user = new User();
-    user.addProperty(UserProperty.provider, registrationId);
-    user.addProperty(UserProperty.name, attributes.get(UserProperty.name.toString()));
-    user.addProperty(UserProperty.email, attributes.get(UserProperty.email.toString()));
+    user.addProperty(UserProperty.PROVIDER, registrationId);
+    user.addProperty(UserProperty.NAME, attributes.get(UserProperty.NAME.toLowerCase()));
+    user.addProperty(UserProperty.EMAIL, attributes.get(UserProperty.EMAIL.toLowerCase()));
 
     if (registrationId.equalsIgnoreCase(OAuthProvider.google.toString())) {
-      user.addProperty(UserProperty.providerId, attributes.get("sub"));
-      user.addProperty(UserProperty.imageUrl, attributes.get("picture"));
-      user.addProperty(UserProperty.emailVerified, attributes.get("email_verified"));
+      user.addProperty(UserProperty.PROVIDER_ID, attributes.get("sub"));
+      user.addProperty(UserProperty.IMAGE_URL, attributes.get("picture"));
+      user.addProperty(UserProperty.EMAIL_VERIFIED, attributes.get("email_verified"));
       return user;
     } else if (registrationId.equalsIgnoreCase(OAuthProvider.facebook.toString())) {
-      user.addProperty(UserProperty.providerId, attributes.get("id"));
-      user.addProperty(UserProperty.imageUrl, getFacebookImageUrl(attributes));
+      user.addProperty(UserProperty.PROVIDER_ID, attributes.get("id"));
+      user.addProperty(UserProperty.IMAGE_URL, getFacebookImageUrl(attributes));
       return user;
     } else if (registrationId.equalsIgnoreCase(OAuthProvider.github.toString())) {
-      user.addProperty(UserProperty.providerId, attributes.get("id"));
-      user.addProperty(UserProperty.imageUrl, attributes.get("avatar_url"));
+      user.addProperty(UserProperty.PROVIDER_ID, attributes.get("id"));
+      user.addProperty(UserProperty.IMAGE_URL, attributes.get("avatar_url"));
       return user;
     } else {
       throw new OAuthException("Sorry! Login with " + registrationId + " is not supported yet.");

@@ -21,9 +21,9 @@ public final class UserCommandMapper extends BaseMapper {
 
     for (UserCommandProperty userCommandProperty : UserCommandProperty.values()) {
       if (userCommandProperty.isMandatory()
-          || userCommandVertex.property(userCommandProperty.toString()).isPresent()) {
+          || userCommandVertex.property(userCommandProperty.toLowerCase()).isPresent()) {
         userCommand.addProperty(userCommandProperty,
-            userCommandVertex.property(userCommandProperty.toString()).value());
+            userCommandVertex.property(userCommandProperty.toLowerCase()).value());
       }
     }
     return userCommand;

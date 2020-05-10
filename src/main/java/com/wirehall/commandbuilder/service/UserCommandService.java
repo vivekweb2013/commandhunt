@@ -42,7 +42,7 @@ public class UserCommandService {
    * @param userCommand The user-command dto to be added.
    */
   public void addUserCommand(UserCommand userCommand) {
-    userCommand.addProperty(UserCommandProperty.timestamp, System.currentTimeMillis());
+    userCommand.addProperty(UserCommandProperty.TIMESTAMP, System.currentTimeMillis());
     userCommandRepository.addUserCommand(userCommand);
   }
 
@@ -52,7 +52,7 @@ public class UserCommandService {
    * @param userCommand The user-command dto to be updated.
    */
   public void updateUserCommand(UserCommand userCommand) {
-    userCommand.addProperty(UserCommandProperty.timestamp, System.currentTimeMillis());
+    userCommand.addProperty(UserCommandProperty.TIMESTAMP, System.currentTimeMillis());
     userCommandRepository.updateUserCommand(userCommand);
   }
 

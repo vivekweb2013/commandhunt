@@ -43,8 +43,8 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
         .getOAuth2UserInfo(oauth2UserRequest.getClientRegistration().getRegistrationId(),
             oauth2User.getAttributes());
 
-    String email = (String) oauthUser.getProperty(UserProperty.email);
-    String provider = (String) oauthUser.getProperty(UserProperty.provider);
+    String email = (String) oauthUser.getProperty(UserProperty.EMAIL);
+    String provider = (String) oauthUser.getProperty(UserProperty.PROVIDER);
     String regId = oauth2UserRequest.getClientRegistration().getRegistrationId();
     if (StringUtils.isEmpty(email)) {
       throw new OAuthException("Email not found from OAuth2 provider");
@@ -74,8 +74,8 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
   }
 
   private boolean userUpdateRequired(User existingUser, User oauthUser) {
-    return !existingUser.getProperty(UserProperty.name)
-        .equals(oauthUser.getProperty(UserProperty.name)) || !existingUser
-        .getProperty(UserProperty.imageUrl).equals(oauthUser.getProperty(UserProperty.imageUrl));
+    return !existingUser.getProperty(UserProperty.NAME)
+        .equals(oauthUser.getProperty(UserProperty.NAME)) || !existingUser
+        .getProperty(UserProperty.IMAGE_URL).equals(oauthUser.getProperty(UserProperty.IMAGE_URL));
   }
 }

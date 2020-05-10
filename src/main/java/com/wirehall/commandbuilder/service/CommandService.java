@@ -1,7 +1,8 @@
 package com.wirehall.commandbuilder.service;
 
 import com.wirehall.commandbuilder.dto.Command;
-import com.wirehall.commandbuilder.dto.Filter;
+import com.wirehall.commandbuilder.dto.filter.Filter;
+import com.wirehall.commandbuilder.dto.filter.Page;
 import com.wirehall.commandbuilder.repository.CommandRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,10 @@ public class CommandService {
 
   public List<Command> getAllCommands() {
     return commandRepository.getAllCommands();
+  }
+
+  public Page<Command> getAllCommands(Filter filter) {
+    return commandRepository.getAllCommands(filter);
   }
 
   public Command getCommandById(String id) {

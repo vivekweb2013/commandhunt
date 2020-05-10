@@ -50,45 +50,47 @@ public class SchemaManager {
   }
 
   private static void createVertexLabels(final JanusGraphManagement management) {
-    management.makeVertexLabel(VertexType.command.toString()).make();
-    management.makeVertexLabel(VertexType.option.toString()).make();
-    management.makeVertexLabel(VertexType.flag.toString()).make();
+    management.makeVertexLabel(VertexType.COMMAND.toLowerCase()).make();
+    management.makeVertexLabel(VertexType.OPTION.toLowerCase()).make();
+    management.makeVertexLabel(VertexType.FLAG.toLowerCase()).make();
   }
 
   private static void createEdgeLabels(final JanusGraphManagement management) {
-    management.makeEdgeLabel(EdgeType.belongs_to.toString()).multiplicity(Multiplicity.MANY2ONE)
+    management.makeEdgeLabel(EdgeType.BELONGS_TO.toLowerCase()).multiplicity(Multiplicity.MANY2ONE)
         .make();
-    management.makeEdgeLabel(EdgeType.has_option.toString()).multiplicity(Multiplicity.ONE2MANY)
+    management.makeEdgeLabel(EdgeType.HAS_OPTION.toLowerCase()).multiplicity(Multiplicity.ONE2MANY)
         .make();
-    management.makeEdgeLabel(EdgeType.has_flag.toString()).multiplicity(Multiplicity.ONE2MANY)
+    management.makeEdgeLabel(EdgeType.HAS_FLAG.toLowerCase()).multiplicity(Multiplicity.ONE2MANY)
         .make();
   }
 
   private static void createProperties(final JanusGraphManagement management) {
-    management.makePropertyKey(CommandProperty.name.toString()).dataType(String.class).make();
-    management.makePropertyKey(CommandProperty.desc.toString()).dataType(String.class).make();
-    management.makePropertyKey(CommandProperty.long_desc.toString()).dataType(String.class).make();
-    management.makePropertyKey(CommandProperty.syntax.toString()).dataType(String.class).make();
+    management.makePropertyKey(CommandProperty.NAME.toLowerCase()).dataType(String.class).make();
+    management.makePropertyKey(CommandProperty.DESC.toLowerCase()).dataType(String.class).make();
+    management.makePropertyKey(CommandProperty.LONG_DESC.toLowerCase()).dataType(String.class)
+        .make();
+    management.makePropertyKey(CommandProperty.SYNTAX.toLowerCase()).dataType(String.class).make();
     management
-        .makePropertyKey(CommandProperty.man_page_url.toString())
+        .makePropertyKey(CommandProperty.MAN_PAGE_URL.toLowerCase())
         .dataType(String.class)
         .make();
 
-    management.makePropertyKey(FlagProperty.prefix.toString()).dataType(String.class).make();
-    management.makePropertyKey(FlagProperty.alias.toString()).dataType(String.class).make();
+    management.makePropertyKey(FlagProperty.PREFIX.toLowerCase()).dataType(String.class).make();
+    management.makePropertyKey(FlagProperty.ALIAS.toLowerCase()).dataType(String.class).make();
     management
-        .makePropertyKey(FlagProperty.is_grouping_allowed.toString())
+        .makePropertyKey(FlagProperty.IS_GROUPING_ALLOWED.toLowerCase())
         .dataType(String.class)
         .make();
-    management.makePropertyKey(FlagProperty.sequence.toString()).dataType(Byte.class).make();
+    management.makePropertyKey(FlagProperty.SEQUENCE.toLowerCase()).dataType(Byte.class).make();
 
-    management.makePropertyKey(OptionProperty.data_type.toString()).dataType(String.class).make();
+    management.makePropertyKey(OptionProperty.DATA_TYPE.toLowerCase()).dataType(String.class)
+        .make();
     management
-        .makePropertyKey(OptionProperty.is_repeatable.toString())
+        .makePropertyKey(OptionProperty.IS_REPEATABLE.toLowerCase())
         .dataType(String.class)
         .make();
     management
-        .makePropertyKey(OptionProperty.is_mandatory.toString())
+        .makePropertyKey(OptionProperty.IS_MANDATORY.toLowerCase())
         .dataType(String.class)
         .make();
   }
@@ -96,7 +98,7 @@ public class SchemaManager {
   private static void createCompositeIndexes(final JanusGraphManagement management) {
     management
         .buildIndex("nameIndex", Vertex.class)
-        .addKey(management.getPropertyKey(CommandProperty.name.toString()))
+        .addKey(management.getPropertyKey(CommandProperty.NAME.toLowerCase()))
         .buildCompositeIndex();
   }
 }

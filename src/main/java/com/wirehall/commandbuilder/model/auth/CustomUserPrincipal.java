@@ -25,7 +25,7 @@ public class CustomUserPrincipal implements OAuth2User, UserDetails {
    * @param authorities Collection of authorities.
    */
   public CustomUserPrincipal(User user, Collection<? extends GrantedAuthority> authorities) {
-    this.password = (String) user.removeProperty(UserProperty.password);
+    this.password = (String) user.removeProperty(UserProperty.PASSWORD);
     this.user = user;
     this.authorities = authorities;
   }
@@ -64,7 +64,7 @@ public class CustomUserPrincipal implements OAuth2User, UserDetails {
   }
 
   public String getEmail() {
-    return (String) user.getProperty(UserProperty.email);
+    return (String) user.getProperty(UserProperty.EMAIL);
   }
 
   @Override
@@ -74,7 +74,7 @@ public class CustomUserPrincipal implements OAuth2User, UserDetails {
 
   @Override
   public String getUsername() {
-    return (String) user.getProperty(UserProperty.email);
+    return (String) user.getProperty(UserProperty.EMAIL);
   }
 
   @Override

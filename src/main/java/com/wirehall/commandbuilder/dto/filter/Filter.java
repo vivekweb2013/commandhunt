@@ -1,11 +1,14 @@
 package com.wirehall.commandbuilder.dto.filter;
 
+import javax.validation.constraints.NotNull;
+
 public class Filter {
 
   private String key;
   private String value;
   private Operator operator;
 
+  @NotNull
   private Pageable pageable;
 
   public String getKey() {
@@ -42,12 +45,8 @@ public class Filter {
 
   @Override
   public String toString() {
-    return "Filter{" +
-        "key='" + key + '\'' +
-        ", value='" + value + '\'' +
-        ", operator=" + operator +
-        ", pageable=" + pageable +
-        '}';
+    return "Filter{" + "key='" + key + '\'' + ", value='" + value + '\''
+        + ", operator=" + operator + ", pageable=" + pageable + '}';
   }
 
   public enum Operator {

@@ -39,7 +39,7 @@ public abstract class Node<E extends Enum<E>> {
   // Since @JsonAnySetter does not work with Enum key parameter
   @JsonAnySetter
   private void addProperty(String key, Object value) {
-    addProperty(Enum.valueOf(enumClass, key), value);
+    addProperty(Enum.valueOf(enumClass, key.toUpperCase()), value);
   }
 
   public Object removeProperty(E key) {

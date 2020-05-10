@@ -1,13 +1,15 @@
 package com.wirehall.commandbuilder.model.props;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum FlagProperty {
-  name("V", true),
-  alias("V", false),
-  prefix("V", true),
-  desc("V", true),
-  long_desc("V", false),
-  sequence("E", true),
-  is_grouping_allowed("V", false);
+  NAME("V", true),
+  ALIAS("V", false),
+  PREFIX("V", true),
+  DESC("V", true),
+  LONG_DESC("V", false),
+  SEQUENCE("E", true),
+  IS_GROUPING_ALLOWED("V", false);
 
   private final String propertyOf;
   private final boolean isMandatory;
@@ -33,5 +35,10 @@ public enum FlagProperty {
    */
   public boolean isMandatory() {
     return isMandatory;
+  }
+
+  @JsonValue
+  public String toLowerCase() {
+    return name().toLowerCase();
   }
 }

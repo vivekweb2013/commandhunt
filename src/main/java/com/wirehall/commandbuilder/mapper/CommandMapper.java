@@ -24,9 +24,9 @@ public final class CommandMapper extends BaseMapper {
 
     for (CommandProperty commandProperty : CommandProperty.values()) {
       if (commandProperty.isMandatory()
-          || commandVertex.property(commandProperty.toString()).isPresent()) {
+          || commandVertex.property(commandProperty.toLowerCase()).isPresent()) {
         command.addProperty(
-            commandProperty, commandVertex.property(commandProperty.toString()).value());
+            commandProperty, commandVertex.property(commandProperty.toLowerCase()).value());
       }
     }
     return command;
@@ -44,13 +44,13 @@ public final class CommandMapper extends BaseMapper {
 
     for (FlagProperty flagProperty : FlagProperty.values()) {
       if (flagProperty.isMandatory()
-          || flagVertexProps.containsKey(flagProperty.toString())
-          || flagEdgeProps.containsKey(flagProperty.toString())) {
+          || flagVertexProps.containsKey(flagProperty.toLowerCase())
+          || flagEdgeProps.containsKey(flagProperty.toLowerCase())) {
 
         if (flagProperty.propertyOf().equals("V")) {
-          flag.addProperty(flagProperty, flagVertexProps.get(flagProperty.toString()));
+          flag.addProperty(flagProperty, flagVertexProps.get(flagProperty.toLowerCase()));
         } else if (flagProperty.propertyOf().equals("E")) {
-          flag.addProperty(flagProperty, flagEdgeProps.get(flagProperty.toString()));
+          flag.addProperty(flagProperty, flagEdgeProps.get(flagProperty.toLowerCase()));
         }
       }
     }
@@ -72,13 +72,13 @@ public final class CommandMapper extends BaseMapper {
 
     for (OptionProperty optionProperty : OptionProperty.values()) {
       if (optionProperty.isMandatory()
-          || optionVertexProps.containsKey(optionProperty.toString())
-          || optionEdgeProps.containsKey(optionProperty.toString())) {
+          || optionVertexProps.containsKey(optionProperty.toLowerCase())
+          || optionEdgeProps.containsKey(optionProperty.toLowerCase())) {
 
         if (optionProperty.propertyOf().equals("V")) {
-          option.addProperty(optionProperty, optionVertexProps.get(optionProperty.toString()));
+          option.addProperty(optionProperty, optionVertexProps.get(optionProperty.toLowerCase()));
         } else if (optionProperty.propertyOf().equals("E")) {
-          option.addProperty(optionProperty, optionEdgeProps.get(optionProperty.toString()));
+          option.addProperty(optionProperty, optionEdgeProps.get(optionProperty.toLowerCase()));
         }
       }
     }

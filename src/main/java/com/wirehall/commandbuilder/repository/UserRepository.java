@@ -39,8 +39,8 @@ public class UserRepository {
   public Optional<User> findByEmail(String email) {
     gt.tx().rollback();
 
-    Optional<Vertex> user = gt.V().hasLabel(VertexType.user.toString())
-        .has(UserProperty.email.toString(), email).tryNext();
+    Optional<Vertex> user = gt.V().hasLabel(VertexType.USER.toLowerCase())
+        .has(UserProperty.EMAIL.toLowerCase(), email).tryNext();
 
     return mapper.mapToUser(user);
   }
@@ -54,8 +54,8 @@ public class UserRepository {
   public Boolean existsByEmail(String email) {
     gt.tx().rollback();
 
-    return gt.V().hasLabel(VertexType.user.toString())
-        .has(UserProperty.email.toString(), email).hasNext();
+    return gt.V().hasLabel(VertexType.USER.toLowerCase())
+        .has(UserProperty.EMAIL.toLowerCase(), email).hasNext();
   }
 
   /**
@@ -78,18 +78,18 @@ public class UserRepository {
   public User addUser(User user) {
     gt.tx().rollback();
 
-    GraphTraversal<Vertex, Vertex> graphTraversal = gt.addV(VertexType.user.toString());
+    GraphTraversal<Vertex, Vertex> graphTraversal = gt.addV(VertexType.USER.toLowerCase());
 
     for (UserProperty property : UserProperty.values()) {
       if (user.getProperty(property) != null) {
-        graphTraversal.property(property.toString(), user.getProperty(property));
+        graphTraversal.property(property.toLowerCase(), user.getProperty(property));
       }
     }
     Vertex userVertex = graphTraversal.next();
     user.setId(userVertex.id());
 
     // Remove password field
-    user.removeProperty(UserProperty.password);
+    user.removeProperty(UserProperty.PASSWORD);
 
     gt.tx().commit();
 
@@ -105,22 +105,20 @@ public class UserRepository {
   public void updateUser(User user) {
     gt.tx().rollback();
 
-    GraphTraversal<Vertex, Vertex> graphTraversal = gt.V().hasLabel(VertexType.user.toString())
-        .has(UserProperty.email.toString(), user.getProperty(UserProperty.email));
+    GraphTraversal<Vertex, Vertex> graphTraversal = gt.V().hasLabel(VertexType.USER.toLowerCase())
+        .has(UserProperty.EMAIL.toLowerCase(), user.getProperty(UserProperty.EMAIL));
 
     for (UserProperty property : UserProperty.values()) {
       if (user.getProperty(property) != null) {
-        graphTraversal.property(property.toString(), user.getProperty(property));
+        graphTraversal.property(property.toLowerCase(), user.getProperty(property));
       }
     }
     graphTraversal.next();
     gt.tx().commit();
 
     // Remove password field
-    user.removeProperty(UserProperty.password);
+    user.removeProperty(UserProperty.PASSWORD);
 
     LOGGER.info("User successfully updated in the database.");
   }
-
-
 }

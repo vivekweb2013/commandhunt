@@ -1,13 +1,15 @@
 package com.wirehall.commandbuilder.model.props;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum UserProperty {
-  name(true),
-  email(true),
-  imageUrl(false),
-  emailVerified(false),
-  password(false),
-  provider(true),
-  providerId(false);
+  NAME(true),
+  EMAIL(true),
+  IMAGE_URL(false),
+  EMAIL_VERIFIED(false),
+  PASSWORD(false),
+  PROVIDER(true),
+  PROVIDER_ID(false);
 
   private final boolean isMandatory;
 
@@ -22,5 +24,10 @@ public enum UserProperty {
    */
   public boolean isMandatory() {
     return isMandatory;
+  }
+
+  @JsonValue
+  public String toLowerCase() {
+    return name().toLowerCase();
   }
 }

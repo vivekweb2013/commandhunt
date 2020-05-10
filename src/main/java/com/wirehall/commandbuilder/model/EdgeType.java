@@ -1,10 +1,17 @@
 package com.wirehall.commandbuilder.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum EdgeType {
-  belongs_to,
-  has_flag,
-  has_flag_value,
-  has_option,
-  has_option_value,
-  overrides
+  BELONGS_TO,
+  HAS_FLAG,
+  HAS_FLAG_VALUE,
+  HAS_OPTION,
+  HAS_OPTION_VALUE,
+  OVERRIDES;
+
+  @JsonValue
+  public String toLowerCase() {
+    return name().toLowerCase();
+  }
 }

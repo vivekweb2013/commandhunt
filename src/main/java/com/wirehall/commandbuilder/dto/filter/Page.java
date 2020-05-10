@@ -53,11 +53,7 @@ public class Page<T> {
 
   @Override
   public String toString() {
-    return "Page{" +
-        "pageNumber=" + pageNumber +
-        ", totalSize=" + totalSize +
-        ", pageSize=" + pageSize +
-        ", records=" + records +
-        '}';
+    return "Page{" + "pageNumber=" + pageNumber + ", totalSize=" + totalSize
+        + ", pageSize=" + pageSize + ", records=" + records + '}';
   }
 }

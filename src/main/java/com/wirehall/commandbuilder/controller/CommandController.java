@@ -1,7 +1,8 @@
 package com.wirehall.commandbuilder.controller;
 
 import com.wirehall.commandbuilder.dto.Command;
-import com.wirehall.commandbuilder.dto.Filter;
+import com.wirehall.commandbuilder.dto.filter.Filter;
+import com.wirehall.commandbuilder.dto.filter.Page;
 import com.wirehall.commandbuilder.service.CommandService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,11 @@ public class CommandController {
   @GetMapping(value = "/command")
   public List<Command> getAllCommands() {
     return commandService.getAllCommands();
+  }
+
+  @PostMapping(value = "/command")
+  public Page<Command> getAllCommands(@RequestBody Filter filter) {
+    return commandService.getAllCommands(filter);
   }
 
   @GetMapping(value = "/command/{id}")

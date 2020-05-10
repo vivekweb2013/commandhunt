@@ -1,7 +1,10 @@
 package com.wirehall.commandbuilder.dto.filter;
 
+import javax.validation.constraints.NotBlank;
+
 public class Sort {
 
+  @NotBlank
   private String sortBy;
 
   private Direction sortOrder = Direction.ASC;

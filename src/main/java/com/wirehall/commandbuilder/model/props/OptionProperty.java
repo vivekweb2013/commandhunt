@@ -1,15 +1,17 @@
 package com.wirehall.commandbuilder.model.props;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum OptionProperty {
-  name("V", true),
-  alias("V", false),
-  prefix("V", false),
-  desc("V", true),
-  long_desc("V", false),
-  data_type("V", true),
-  is_mandatory("E", true),
-  is_repeatable("E", true),
-  sequence("E", true);
+  NAME("V", true),
+  ALIAS("V", false),
+  PREFIX("V", false),
+  DESC("V", true),
+  LONG_DESC("V", false),
+  DATA_TYPE("V", true),
+  IS_MANDATORY("E", true),
+  IS_REPEATABLE("E", true),
+  SEQUENCE("E", true);
 
   private final String propertyOf;
   private final boolean isMandatory;
@@ -35,5 +37,10 @@ public enum OptionProperty {
    */
   public boolean isMandatory() {
     return isMandatory;
+  }
+
+  @JsonValue
+  public String toLowerCase() {
+    return name().toLowerCase();
   }
 }

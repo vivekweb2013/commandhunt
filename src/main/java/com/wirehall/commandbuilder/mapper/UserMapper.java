@@ -23,8 +23,8 @@ public class UserMapper extends BaseMapper {
       user.setId(v.id());
 
       for (UserProperty userProperty : UserProperty.values()) {
-        if (userProperty.isMandatory() || v.property(userProperty.toString()).isPresent()) {
-          user.addProperty(userProperty, v.property(userProperty.toString()).value());
+        if (userProperty.isMandatory() || v.property(userProperty.toLowerCase()).isPresent()) {
+          user.addProperty(userProperty, v.property(userProperty.toLowerCase()).value());
         }
       }
 
@@ -43,11 +43,11 @@ public class UserMapper extends BaseMapper {
   public User mapToUser(SignUp signUpRequest, PasswordEncoder passwordEncoder) {
     User user = new User();
 
-    user.addProperty(UserProperty.name, signUpRequest.getName());
-    user.addProperty(UserProperty.email, signUpRequest.getEmail());
-    user.addProperty(UserProperty.emailVerified, false);
-    user.addProperty(UserProperty.provider, OAuthProvider.local.toString());
-    user.addProperty(UserProperty.password, passwordEncoder.encode(signUpRequest.getPassword()));
+    user.addProperty(UserProperty.NAME, signUpRequest.getName());
+    user.addProperty(UserProperty.EMAIL, signUpRequest.getEmail());
+    user.addProperty(UserProperty.EMAIL_VERIFIED, false);
+    user.addProperty(UserProperty.PROVIDER, OAuthProvider.local.toString());
+    user.addProperty(UserProperty.PASSWORD, passwordEncoder.encode(signUpRequest.getPassword()));
     return user;
   }
 }

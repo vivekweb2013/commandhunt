@@ -1,9 +1,10 @@
 package com.wirehall.commandbuilder.repository;
 
 import com.wirehall.commandbuilder.dto.Command;
-import com.wirehall.commandbuilder.dto.Filter;
 import com.wirehall.commandbuilder.dto.Flag;
 import com.wirehall.commandbuilder.dto.Option;
+import com.wirehall.commandbuilder.dto.filter.Filter;
+import com.wirehall.commandbuilder.dto.filter.Page;
 import com.wirehall.commandbuilder.mapper.CommandMapper;
 import com.wirehall.commandbuilder.model.EdgeType;
 import com.wirehall.commandbuilder.model.VertexType;
@@ -13,6 +14,7 @@ import com.wirehall.commandbuilder.model.props.OptionProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.apache.tinkerpop.gremlin.process.traversal.Order;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
@@ -46,7 +48,7 @@ public class CommandRepository {
   public List<Command> getAllCommands() {
     LOGGER.debug("Retrieving all commands from database.");
 
-    List<Vertex> vertices = gt.V().hasLabel(VertexType.command.toString()).toList();
+    List<Vertex> vertices = gt.V().hasLabel(VertexType.COMMAND.toLowerCase()).toList();
     List<Command> commands = new ArrayList<>();
     for (Vertex commandVertex : vertices) {
       Command command = mapper.mapToCommand(commandVertex);
@@ -54,6 +56,33 @@ public class CommandRepository {
     }
 
     return commands;
+  }
+
+  /**
+   * Get all the commands.
+   *
+   * @param filter Filter criteria.
+   * @return List of command DTOs This will return the list of all command DTOs.
+   */
+  public Page<Command> getAllCommands(Filter filter) {
+    LOGGER.debug("Retrieving all commands from database.");
+    LOGGER.debug("Applying the filter: {}", filter);
+
+    Page<Command> commandPage = new Page<>();
+
+    List<Vertex> vertices = gt.V().hasLabel(VertexType.COMMAND.toLowerCase()).order()
+        .by(filter.getPageable().getSort().getSortBy(),
+            Order.valueOf(filter.getPageable().getSort().getSortOrder().name().toLowerCase()))
+        .toList();
+    List<Command> commands = new ArrayList<>();
+    for (Vertex commandVertex : vertices) {
+      Command command = mapper.mapToCommand(commandVertex);
+      commands.add(command);
+    }
+
+    commandPage.setRecords(commands);
+
+    return commandPage;
   }
 
   /**
@@ -78,7 +107,8 @@ public class CommandRepository {
   public Command getCommandByName(String name) {
     LOGGER.debug("Retrieving command with name: {}", name);
 
-    Vertex commandVertex = gt.V().hasLabel(VertexType.command.toString()).has("name", name).next();
+    Vertex commandVertex = gt.V().hasLabel(VertexType.COMMAND.toLowerCase()).has("name", name)
+        .next();
     return getCommand(commandVertex);
   }
 
@@ -87,7 +117,7 @@ public class CommandRepository {
 
     List<Map<String, Object>> flagList = gt.V(commandVertex)
         .outE()
-        .hasLabel(EdgeType.has_flag.toString())
+        .hasLabel(EdgeType.HAS_FLAG.toLowerCase())
         .as("E")
         .inV()
         .as("V")
@@ -109,7 +139,7 @@ public class CommandRepository {
 
     List<Map<String, Object>> optionList = gt.V(commandVertex)
         .outE()
-        .hasLabel(EdgeType.has_option.toString())
+        .hasLabel(EdgeType.HAS_OPTION.toLowerCase())
         .as("E")
         .inV()
         .as("V")
@@ -146,10 +176,10 @@ public class CommandRepository {
     LOGGER.debug("Retrieving matching commands by query: {}", query);
 
     List<Vertex> vertices =
-        gt.V().hasLabel(VertexType.command.toString())
-            .or(__.has(CommandProperty.name.toString(), Text.textContainsFuzzy(query)),
-                __.has(CommandProperty.desc.toString(), Text.textContainsFuzzy(query)),
-                __.has(CommandProperty.long_desc.toString(), Text.textContainsFuzzy(query)))
+        gt.V().hasLabel(VertexType.COMMAND.toLowerCase())
+            .or(__.has(CommandProperty.NAME.toLowerCase(), Text.textContainsFuzzy(query)),
+                __.has(CommandProperty.DESC.toLowerCase(), Text.textContainsFuzzy(query)),
+                __.has(CommandProperty.LONG_DESC.toLowerCase(), Text.textContainsFuzzy(query)))
             .toList();
 
     List<Command> commands = new ArrayList<>();
@@ -169,11 +199,11 @@ public class CommandRepository {
   public void addCommand(Command command) {
     LOGGER.trace("Adding command: {}", command);
 
-    GraphTraversal<Vertex, Vertex> graphTraversal = gt.addV(VertexType.command.toString());
+    GraphTraversal<Vertex, Vertex> graphTraversal = gt.addV(VertexType.COMMAND.toLowerCase());
 
     for (CommandProperty property : CommandProperty.values()) {
       if (command.getProperty(property) != null) {
-        graphTraversal.property(property.toString(), command.getProperty(property));
+        graphTraversal.property(property.toLowerCase(), command.getProperty(property));
       }
     }
     Vertex commandVertex = graphTraversal.next();
@@ -188,16 +218,16 @@ public class CommandRepository {
   }
 
   private void addFlag(Vertex commandVertex, Flag flag) {
-    Vertex flagVertex = gt.addV(VertexType.flag.toString()).next();
+    Vertex flagVertex = gt.addV(VertexType.FLAG.toLowerCase()).next();
     GraphTraversal<Vertex, Vertex> vertexGraphTraversal = gt.V(flagVertex);
     GraphTraversal<Vertex, org.apache.tinkerpop.gremlin.structure.Edge> edgeGraphTraversal =
-        gt.V(commandVertex).as("a").V(flagVertex).addE(EdgeType.has_flag.toString());
+        gt.V(commandVertex).as("a").V(flagVertex).addE(EdgeType.HAS_FLAG.toLowerCase());
 
     for (FlagProperty property : FlagProperty.values()) {
       if (flag.getProperty(property) != null && property.propertyOf().equals("V")) {
-        vertexGraphTraversal.property(property.toString(), flag.getProperty(property));
+        vertexGraphTraversal.property(property.toLowerCase(), flag.getProperty(property));
       } else if (flag.getProperty(property) != null && property.propertyOf().equals("E")) {
-        edgeGraphTraversal.property(property.toString(), flag.getProperty(property));
+        edgeGraphTraversal.property(property.toLowerCase(), flag.getProperty(property));
       }
     }
     vertexGraphTraversal.next();
@@ -205,16 +235,16 @@ public class CommandRepository {
   }
 
   private void addOption(Vertex commandVertex, Option option) {
-    Vertex optionVertex = gt.addV(VertexType.option.toString()).next();
+    Vertex optionVertex = gt.addV(VertexType.OPTION.toLowerCase()).next();
     GraphTraversal<Vertex, Vertex> vertexGraphTraversal = gt.V(optionVertex);
     GraphTraversal<Vertex, org.apache.tinkerpop.gremlin.structure.Edge> edgeGraphTraversal =
-        gt.V(commandVertex).as("a").V(optionVertex).addE(EdgeType.has_option.toString());
+        gt.V(commandVertex).as("a").V(optionVertex).addE(EdgeType.HAS_OPTION.toLowerCase());
 
     for (OptionProperty property : OptionProperty.values()) {
       if (option.getProperty(property) != null && property.propertyOf().equals("V")) {
-        vertexGraphTraversal.property(property.toString(), option.getProperty(property));
+        vertexGraphTraversal.property(property.toLowerCase(), option.getProperty(property));
       } else if (option.getProperty(property) != null && property.propertyOf().equals("E")) {
-        edgeGraphTraversal.property(property.toString(), option.getProperty(property));
+        edgeGraphTraversal.property(property.toLowerCase(), option.getProperty(property));
       }
     }
     vertexGraphTraversal.next();
