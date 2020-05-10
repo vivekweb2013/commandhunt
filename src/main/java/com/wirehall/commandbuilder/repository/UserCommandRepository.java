@@ -1,8 +1,8 @@
 package com.wirehall.commandbuilder.repository;
 
 
-import com.wirehall.commandbuilder.dto.Filter;
 import com.wirehall.commandbuilder.dto.UserCommand;
+import com.wirehall.commandbuilder.dto.filter.Filter;
 import com.wirehall.commandbuilder.mapper.UserCommandMapper;
 import com.wirehall.commandbuilder.model.EdgeType;
 import com.wirehall.commandbuilder.model.VertexType;

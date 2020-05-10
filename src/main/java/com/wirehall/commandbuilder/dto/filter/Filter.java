@@ -1,10 +1,12 @@
-package com.wirehall.commandbuilder.dto;
+package com.wirehall.commandbuilder.dto.filter;
 
 public class Filter {
 
   private String key;
   private String value;
   private Operator operator;
+
+  private Pageable pageable;
 
   public String getKey() {
     return key;
@@ -30,18 +32,22 @@ public class Filter {
     this.operator = operator;
   }
 
+  public Pageable getPageable() {
+    return pageable;
+  }
+
+  public void setPageable(Pageable pageable) {
+    this.pageable = pageable;
+  }
+
   @Override
   public String toString() {
-    return "Filter{"
-        + "key='"
-        + key
-        + '\''
-        + ", value='"
-        + value
-        + '\''
-        + ", Operator="
-        + operator
-        + '}';
+    return "Filter{" +
+        "key='" + key + '\'' +
+        ", value='" + value + '\'' +
+        ", operator=" + operator +
+        ", pageable=" + pageable +
+        '}';
   }
 
   public enum Operator {
