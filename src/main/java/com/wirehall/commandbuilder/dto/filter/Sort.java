@@ -1,5 +1,6 @@
 package com.wirehall.commandbuilder.dto.filter;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import javax.validation.constraints.NotBlank;
 
 public class Sort {
@@ -32,7 +33,12 @@ public class Sort {
 
   public enum Direction {
     ASC,
-    DESC
+    DESC;
+
+    @JsonValue
+    public String toLowerCase() {
+      return name().toLowerCase();
+    }
   }
 
 }

@@ -5,6 +5,7 @@ import com.wirehall.commandbuilder.dto.filter.Filter;
 import com.wirehall.commandbuilder.dto.filter.Page;
 import com.wirehall.commandbuilder.service.CommandService;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +33,7 @@ public class CommandController {
   }
 
   @PostMapping(value = "/command")
-  public Page<Command> getAllCommands(@RequestBody Filter filter) {
+  public Page<Command> getAllCommands(@RequestBody @Valid Filter filter) {
     return commandService.getAllCommands(filter);
   }
 

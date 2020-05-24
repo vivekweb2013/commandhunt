@@ -1,5 +1,6 @@
 package com.wirehall.commandbuilder.dto.filter;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 public class Filter {
@@ -8,6 +9,7 @@ public class Filter {
   private String value;
   private Operator operator;
 
+  @Valid
   @NotNull
   private Pageable pageable;
 

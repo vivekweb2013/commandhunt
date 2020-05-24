@@ -1,11 +1,10 @@
 package com.wirehall.commandbuilder.dto.filter;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 public class Pageable {
-
-  private long offset;
 
   @Min(1)
   @NotNull
@@ -15,15 +14,12 @@ public class Pageable {
   @NotNull
   private long pageSize;
 
+  @Valid
   @NotNull
   private Sort sort;
 
   public long getOffset() {
-    return offset;
-  }
-
-  public void setOffset(long offset) {
-    this.offset = offset;
+    return this.pageNumber * this.getPageSize();
   }
 
   public long getPageNumber() {
@@ -52,7 +48,7 @@ public class Pageable {
 
   @Override
   public String toString() {
-    return "Pageable{" + "offset=" + offset + ", pageNumber=" + pageNumber
+    return "Pageable{" + "pageNumber=" + pageNumber
         + ", pageSize=" + pageSize + ", sort=" + sort + '}';
   }
 }

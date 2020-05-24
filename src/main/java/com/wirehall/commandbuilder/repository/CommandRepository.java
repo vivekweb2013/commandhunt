@@ -5,6 +5,7 @@ import com.wirehall.commandbuilder.dto.Flag;
 import com.wirehall.commandbuilder.dto.Option;
 import com.wirehall.commandbuilder.dto.filter.Filter;
 import com.wirehall.commandbuilder.dto.filter.Page;
+import com.wirehall.commandbuilder.dto.filter.Pageable;
 import com.wirehall.commandbuilder.mapper.CommandMapper;
 import com.wirehall.commandbuilder.model.EdgeType;
 import com.wirehall.commandbuilder.model.VertexType;
@@ -68,11 +69,15 @@ public class CommandRepository {
     LOGGER.debug("Retrieving all commands from database.");
     LOGGER.debug("Applying the filter: {}", filter);
 
+    Pageable pageable = filter.getPageable();
     Page<Command> commandPage = new Page<>();
 
-    List<Vertex> vertices = gt.V().hasLabel(VertexType.COMMAND.toLowerCase()).order()
-        .by(filter.getPageable().getSort().getSortBy(),
-            Order.valueOf(filter.getPageable().getSort().getSortOrder().name().toLowerCase()))
+    Long totalSize = gt.V().hasLabel(VertexType.COMMAND.toLowerCase()).count().next();
+
+    List<Vertex> vertices = gt.V().hasLabel(VertexType.COMMAND.toLowerCase())
+        .range(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize()).order()
+        .by(pageable.getSort().getSortBy(),
+            Order.valueOf(pageable.getSort().getSortOrder().toLowerCase()))
         .toList();
     List<Command> commands = new ArrayList<>();
     for (Vertex commandVertex : vertices) {
@@ -80,6 +85,8 @@ public class CommandRepository {
       commands.add(command);
     }
 
+    commandPage.setTotalSize(totalSize);
+    commandPage.setPageSize(pageable.getPageSize());
     commandPage.setRecords(commands);
 
     return commandPage;
