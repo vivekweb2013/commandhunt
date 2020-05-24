@@ -19,7 +19,7 @@ public class Pageable {
   private Sort sort;
 
   public long getOffset() {
-    return this.pageNumber * this.getPageSize();
+    return (this.pageNumber - 1) * this.getPageSize();
   }
 
   public long getPageNumber() {

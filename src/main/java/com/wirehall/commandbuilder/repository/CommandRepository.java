@@ -63,7 +63,7 @@ public class CommandRepository {
    * Get all the commands.
    *
    * @param filter Filter criteria.
-   * @return List of command DTOs This will return the list of all command DTOs.
+   * @return Page of command DTOs.
    */
   public Page<Command> getAllCommands(Filter filter) {
     LOGGER.debug("Retrieving all commands from database.");
@@ -75,9 +75,9 @@ public class CommandRepository {
     Long totalSize = gt.V().hasLabel(VertexType.COMMAND.toLowerCase()).count().next();
 
     List<Vertex> vertices = gt.V().hasLabel(VertexType.COMMAND.toLowerCase())
-        .range(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize()).order()
-        .by(pageable.getSort().getSortBy(),
+        .order().by(pageable.getSort().getSortBy(),
             Order.valueOf(pageable.getSort().getSortOrder().toLowerCase()))
+        .range(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize())
         .toList();
     List<Command> commands = new ArrayList<>();
     for (Vertex commandVertex : vertices) {

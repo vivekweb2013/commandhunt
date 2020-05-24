@@ -28,12 +28,7 @@ public class CommandController {
   }
 
   @GetMapping(value = "/command")
-  public List<Command> getAllCommands() {
-    return commandService.getAllCommands();
-  }
-
-  @PostMapping(value = "/command")
-  public Page<Command> getAllCommands(@RequestBody @Valid Filter filter) {
+  public Page<Command> getAllCommands(@Valid Filter filter) {
     return commandService.getAllCommands(filter);
   }
 

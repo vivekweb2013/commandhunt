@@ -1,6 +1,8 @@
 package com.wirehall.commandbuilder.service;
 
 import com.wirehall.commandbuilder.dto.UserCommand;
+import com.wirehall.commandbuilder.dto.filter.Filter;
+import com.wirehall.commandbuilder.dto.filter.Page;
 import com.wirehall.commandbuilder.model.props.UserCommandProperty;
 import com.wirehall.commandbuilder.repository.UserCommandRepository;
 import java.util.List;
@@ -24,6 +26,16 @@ public class UserCommandService {
    */
   public List<UserCommand> getAllUserCommands() {
     return userCommandRepository.getAllUserCommands();
+  }
+
+  /**
+   * Retrieves all the user commands matching the filter criteria.
+   *
+   * @param filter Filter criteria.
+   * @return Page of user-command DTOs.
+   */
+  public Page<UserCommand> getAllUserCommands(Filter filter) {
+    return userCommandRepository.getAllUserCommands(filter);
   }
 
   /**

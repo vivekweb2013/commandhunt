@@ -1,8 +1,10 @@
 package com.wirehall.commandbuilder.controller;
 
 import com.wirehall.commandbuilder.dto.UserCommand;
+import com.wirehall.commandbuilder.dto.filter.Filter;
+import com.wirehall.commandbuilder.dto.filter.Page;
 import com.wirehall.commandbuilder.service.UserCommandService;
-import java.util.List;
+import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +32,9 @@ public class UserCommandController {
   }
 
   @GetMapping(value = "/user-command")
-  public List<UserCommand> getAllUserCommands() {
+  public Page<UserCommand> getAllUserCommands(@Valid Filter filter) {
     LOGGER.info("Retrieving all the user-commands");
-    return userCommandService.getAllUserCommands();
+    return userCommandService.getAllUserCommands(filter);
   }
 
   @GetMapping(value = "/user-command/{id}")

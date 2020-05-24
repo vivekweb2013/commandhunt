@@ -3,6 +3,8 @@ package com.wirehall.commandbuilder.repository;
 
 import com.wirehall.commandbuilder.dto.UserCommand;
 import com.wirehall.commandbuilder.dto.filter.Filter;
+import com.wirehall.commandbuilder.dto.filter.Page;
+import com.wirehall.commandbuilder.dto.filter.Pageable;
 import com.wirehall.commandbuilder.mapper.UserCommandMapper;
 import com.wirehall.commandbuilder.model.EdgeType;
 import com.wirehall.commandbuilder.model.VertexType;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import org.apache.tinkerpop.gremlin.process.traversal.Order;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
@@ -51,6 +54,40 @@ public class UserCommandRepository {
       userCommands.add(userCommand);
     }
     return userCommands;
+  }
+
+  /**
+   * Get all the user-commands.
+   *
+   * @param filter Filter criteria.
+   * @return Page of user-command DTOs.
+   */
+  public Page<UserCommand> getAllUserCommands(Filter filter) {
+    LOGGER.debug("Retrieving all user-commands");
+    LOGGER.debug("Applying the filter: {}", filter);
+
+    Pageable pageable = filter.getPageable();
+    Page<UserCommand> userCommandPage = new Page<>();
+
+    Long totalSize = gt.V().hasLabel(VertexType.USERCOMMAND.toLowerCase()).count().next();
+
+    List<Vertex> vertices = gt.V().hasLabel(VertexType.USERCOMMAND.toLowerCase())
+        .order().by(pageable.getSort().getSortBy(),
+            Order.valueOf(pageable.getSort().getSortOrder().toLowerCase()))
+        .range(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize())
+        .toList();
+
+    List<UserCommand> userCommands = new ArrayList<>();
+    for (Vertex userCommandsVertex : vertices) {
+      UserCommand userCommand = mapper.mapToUserCommand(userCommandsVertex);
+      userCommands.add(userCommand);
+    }
+
+    userCommandPage.setTotalSize(totalSize);
+    userCommandPage.setPageSize(pageable.getPageSize());
+    userCommandPage.setRecords(userCommands);
+
+    return userCommandPage;
   }
 
   /**
