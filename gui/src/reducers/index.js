@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
 import {
     GET_ALL_COMMANDS, GET_MATCHING_COMMANDS, GET_COMMAND,
-    GET_USER_COMMANDS, DELETE_USER_COMMAND, SET_PAGINATION, SET_FILTERS,
+    GET_USER_COMMANDS, GET_MATCHING_USER_COMMANDS,
     USER_LOGIN, USER_LOGOUT
 } from '../actions';
 
 const commandReducer = (state = {}, action) => {
-    const { commands, command, userCommands, userCommand, pagination } = action;
+    const { commands, command } = action;
     switch (action.type) {
         case GET_ALL_COMMANDS:
             return {
@@ -23,48 +23,23 @@ const commandReducer = (state = {}, action) => {
                 ...state,
                 command
             };
-        case GET_USER_COMMANDS:
-            return {
-                ...state,
-                userCommands
-            };
-        case DELETE_USER_COMMAND:
-            return {
-                ...state,
-                userCommands: state.userCommands.filter(c => c.id !== userCommand.id)
-            };
-        case SET_PAGINATION:
-            return {
-                ...state,
-                pagination: { ...state.pagination, ...pagination }
-            };
         default:
             return state;
     }
 };
 
 const userCommandReducer = (state = {}, action) => {
-    const { userCommands, userCommand, filters, pagination } = action;
+    const { userCommands } = action;
     switch (action.type) {
         case GET_USER_COMMANDS:
             return {
                 ...state,
                 userCommands
             };
-        case DELETE_USER_COMMAND:
+        case GET_MATCHING_USER_COMMANDS:
             return {
                 ...state,
-                userCommands: state.userCommands.filter(c => c.id !== userCommand.id)
-            };
-        case SET_FILTERS:
-            return {
-                ...state,
-                filters: { ...state.filters, ...filters }
-            }
-        case SET_PAGINATION:
-            return {
-                ...state,
-                pagination: { ...state.pagination, ...pagination }
+                userCommands
             };
         default:
             return state;

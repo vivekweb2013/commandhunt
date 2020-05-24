@@ -1,0 +1,56 @@
+@import "../../styles/shared";
+
+.items-per-page {
+    position: relative;
+    display: flex;
+    width: 5rem;
+    line-height: 1.48rem;
+    overflow: hidden;
+
+    span.icon-pagesize {
+        background: url(../../styles/icons/pagesize.svg) no-repeat center left;
+        height: 25px;
+        width: 25px;
+        float: right;
+    }
+
+    &::after {
+        border-radius: 0 0.25rem 0.25rem 0;
+        content: "\25BC";
+        position: absolute;
+        right: 0px;
+        padding: 0 0.5rem;
+        background: lighten($color-primary, 10%);
+        cursor: pointer;
+        pointer-events: none;
+        transition: 0.25s all ease;
+    }
+    /* Transition */
+    &:hover::after {
+        color: white;
+    }
+    select {
+        appearance: none;
+        border-radius: 0.25rem;
+        outline: 0;
+        box-shadow: none;
+        border: 0 !important;
+        background: lighten($color-primary, 15%);
+        background-image: none;
+        flex: 1;
+        padding: 0 0.5rem;
+        color: #fff;
+        cursor: pointer;
+        line-height: inherit;
+
+        /* Remove IE arrow */
+        &::-ms-expand {
+            display: none;
+        }
+
+        option {
+            background: #f1f1f1;
+            color: black;
+        }
+    }
+}

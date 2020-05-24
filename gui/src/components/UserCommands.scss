@@ -1,6 +1,10 @@
 @import "../styles/shared";
+
 $table-bg-color: white;
 $table-row-hover-bg-color: lighten($color-primary, 60%);
+
+$search-input-height: 25px;
+$search-field-font-size: ($search-input-height/30px * 1rem);
 
 .user-commands {
   padding: 1%;
@@ -8,11 +12,38 @@ $table-row-hover-bg-color: lighten($color-primary, 60%);
   .no-data-msg {
     text-align: center;
   }
+  .heading {
+    font-size: 1.5rem;
+  }
 
   .toolbar {
     padding: 6px 0;
-    .heading {
-      font-size: 1.5rem;
+    overflow: hidden;
+    .search-input {
+      display: inline-block;
+      width: 18rem;
+      height: $search-input-height;
+      .field {
+        padding: 5px $search-input-height 5px 10px;
+        font-size: $search-field-font-size;
+      }
+      .icons-container {
+        width: $search-input-height;
+        .icon-search {
+          border-width: 2px;
+          &::after {
+            bottom: -50%;
+            width: 2px;
+          }
+        }
+        .icon-close,
+        .icon-search {
+          left: 4px;
+        }
+      }
+    }
+    .items-per-page {
+      float: right;
     }
   }
 

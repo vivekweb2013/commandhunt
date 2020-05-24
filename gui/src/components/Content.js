@@ -5,6 +5,7 @@ import Builder from './Builder';
 import Login from './Login';
 import UserCommands from './UserCommands';
 import './Content.scss';
+import { withRouter } from 'react-router';
 import SignUp from './SignUp';
 
 class Content extends Component {
@@ -12,15 +13,15 @@ class Content extends Component {
         return (
             <div className="main-content">
                 <Switch>
-                    <Route exact path="/" component={Finder} />
+                    <Route exact path="/" key={this.props.history.location.search} component={Finder} />
                     <Route path="/login" component={Login} />
                     <Route path="/signup" component={SignUp} />
-                    <Route path="/command/build/:commandName" component={Builder} />
-                    <Route path="/command/user-commands" component={UserCommands} />
+                    <Route path="/command/build/:commandName" key={this.props.history.location.search} component={Builder} />
+                    <Route path="/command/user-commands" key={this.props.history.location.search} component={UserCommands} />
                 </Switch>
             </div>
         )
     }
 }
 
-export default Content;
+export default withRouter(Content);

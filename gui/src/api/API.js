@@ -1,3 +1,4 @@
+import { getQueryParamsFromFilter } from '../Utils';
 import auth from '../components/auth/FirebaseAuth';
 import Firestore from 'firebase-firestore-lite';
 
@@ -69,7 +70,8 @@ export const getUserProfile = (token) => {
     }).catch(catchError);
 }
 
-export const getAllCommands = () => fetch(`${API_URL}/command`, { headers }).then(handleErrors).then(res => res.json()).catch(catchError);
+export const getAllCommands = (filter) => fetch(`${API_URL}/command` + getQueryParamsFromFilter(filter),
+    { headers }).then(handleErrors).then(res => res.json()).catch(catchError);
 
 export const getMatchingCommands = query => {
     query = encodeURIComponent(query);
@@ -81,7 +83,13 @@ export const getCommand = commandName => {
     return fetch(`${API_URL}/command/search?name=${commandName}`, { headers }).then(handleErrors).then(res => res.json()).catch(catchError);
 };
 
-export const getUserCommands = () => fetch(`${API_URL}/user/user-command`, { headers }).then(handleErrors).then(res => res.json()).catch(catchError);
+export const getUserCommands = (filter) => fetch(`${API_URL}/user/user-command` + getQueryParamsFromFilter(filter),
+    { headers }).then(handleErrors).then(res => res.json()).catch(catchError);
+
+export const getMatchingUserCommands = query => {
+    query = encodeURIComponent(query);
+    return fetch(`${API_URL}/user/user-command/search?query=${query}`, { headers }).then(handleErrors).then(res => res.json()).catch(catchError);
+};
 
 export const getUserCommand = (userCommandId) =>
     fetch(`${API_URL}/user/user-command/${userCommandId}`, { headers }).then(handleErrors).then(res => res.json()).catch(catchError);

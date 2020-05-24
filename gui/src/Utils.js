@@ -10,6 +10,15 @@ export const getQueryParamByName = (name, url) => {
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
+export const getQueryParamsFromFilter = (filter) => {
+    const queryParamStr = `?pageable.pageNumber=${filter.pageable.pageNumber}`
+        + `&pageable.pageSize=${filter.pageable.pageSize}`
+        + `&pageable.sort.sortBy=${filter.pageable.sort.sortBy}`
+        + `&pageable.sort.sortOrder=${filter.pageable.sort.sortOrder}`;
+
+    return queryParamStr;
+}
+
 export const formatDate = (date) => {
     const stamp = tinydate('{DD} {MMMM} {YYYY}', {
         MMMM: d => date.toLocaleString('default', { month: 'long' }),
@@ -43,7 +52,7 @@ export function deepCompare() {
             return true;
         }
 
-        // Compare primitives and functions.     
+        // Compare primitives and functions.
         // Check if both arguments link to the same object.
         // Especially useful on the step where we compare prototypes
         if (x === y) {

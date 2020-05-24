@@ -1,68 +1,103 @@
 import React, { Component } from 'react';
 import './Finder.scss';
+import SearchInput from './common/SearchInput';
+import Pagination from './common/Pagination';
+import ItemsPerPage from './common/ItemsPerPage';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as API from '../api/API';
+import { getQueryParamByName, getQueryParamsFromFilter } from '../Utils';
 import { getAllCommands, getMatchingCommands } from '../actions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class Finder extends Component {
-    constructor(props) {
-        super(props);
-        this.handleQueryUpdate = this.debounce(this.handleQueryUpdate.bind(this), 1000);
-    }
-
     state = {
-        query: ''
+        filter: {
+            pageable: {
+                pageNumber: Number(getQueryParamByName('pageable.pageNumber')) || 1,
+                pageSize: Number(getQueryParamByName('pageable.pageSize')) || 10,
+                sort: {
+                    sortBy: getQueryParamByName('pageable.sort.sortBy') || 'name',
+                    sortOrder: getQueryParamByName('pageable.sort.sortOrder') || 'ASC'
+                }
+            }
+        }
     }
 
     componentDidMount() {
-        this.props.getAllCommands();
+        this.props.getAllCommands(this.state.filter);
+    }
+
+    getSortIcon(column) {
+        const { filter } = this.state;
+        return filter.pageable.sort.sortBy === column ? (filter.pageable.sort.sortOrder === 'DESC' ? 'sort-down' : 'sort-up') : '';
+    }
+
+    sort(column) {
+        const { history } = this.props;
+        const { filter } = this.state;
+        this.setState({
+            filter: {
+                ...filter, pageable: {
+                    ...filter.pageable, sort: {
+                        sortBy: column,
+                        sortOrder: filter.pageable.sort.sortBy === column && filter.pageable.sort.sortOrder === 'ASC' ? 'DESC' : 'ASC'
+                    }
+                }
+            }
+        }, () => {
+            const { filter } = this.state;
+            history.push(getQueryParamsFromFilter(filter))
+        });
     }
 
     handleQueryUpdate = (textValue) => {
-        textValue ? this.props.getMatchingCommands(textValue) : this.props.getAllCommands();
+        textValue ? this.props.getMatchingCommands(textValue) : this.props.getAllCommands(this.state.filter);
     }
 
-    handleInputReset = () => {
-        this.setState({ query: '' });
-        this.handleQueryUpdate('');
+    handlePageChange(pageNumber) {
+        const { history } = this.props;
+        this.setState({ filter: { ...this.state.filter, pageable: { ...this.state.filter.pageable, pageNumber } } }, () => {
+            history.push(getQueryParamsFromFilter(this.state.filter))
+        });
     }
 
-    debounce = (fn, time) => {
-        let timeout;
-        return (...args) => {
-            const functionCall = () => fn.apply(this, args);
-            clearTimeout(timeout);
-            timeout = setTimeout(functionCall, time);
-        }
+    handlePageSizeChange(e) {
+        e.preventDefault();
+        const { history } = this.props;
+        const pageSize = Number(e.target.value);
+        this.setState({ filter: { ...this.state.filter, pageable: { ...this.state.filter.pageable, pageSize } } }, () => {
+            history.push(getQueryParamsFromFilter(this.state.filter))
+        });
     }
 
     render() {
         const { commands, history } = this.props;
+        const { filter } = this.state;
+
         return (
             <div className="finder">
-                <fieldset className="search-box-container">
-                    <input type="text" onChange={event => {
-                        this.setState({ query: event.target.value });
-                        this.handleQueryUpdate(event.target.value)
-                    }} placeholder="Search..." value={this.state.query} className="field" />
-                    <div className={'icons-container ' + (this.state.query ? 'icons-container-flip' : '')}>
-                        <div className="icon-search"></div>
-                        <div className="icon-close" onClick={event => this.handleInputReset()}> </div>
-                    </div>
-                </fieldset>
+                <SearchInput onChange={this.handleQueryUpdate.bind(this)} />
 
-                {commands && commands.length > 0 ?
+                {commands && commands.totalSize > 0 ? <div>
+                    <div className="toolbar">
+                        <ItemsPerPage pageSize={filter.pageable.pageSize} handlePageSizeChange={this.handlePageSizeChange.bind(this)} />
+                    </div>
                     <table>
                         <thead>
                             <tr>
-                                <th className="name-column">COMMAND</th>
-                                <th className="syntax-column">SYNTAX</th>
+                                <th className="name-column" onClick={(e) => this.sort('name')}>
+                                    COMMAND {this.getSortIcon('name') && <FontAwesomeIcon icon={this.getSortIcon('name')} />}
+                                </th>
+                                <th className="syntax-column" onClick={(e) => this.sort('syntax')}>
+                                    SYNTAX {this.getSortIcon('syntax') && <FontAwesomeIcon icon={this.getSortIcon('syntax')} />}
+                                </th>
                                 <th className="desc-column">DESCRIPTION</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {commands.map(command => <tr key={command.id} onClick={e => { e.preventDefault(); history.push(`/command/build/${command.properties.name}`) }}>
+                            {commands.records.map(command => <tr key={command.id}
+                                onClick={e => { e.preventDefault(); history.push(`/command/build/${command.properties.name}`) }}>
                                 <td className="name">{command.properties.name} </td>
                                 <td className="syntax">
                                     <code>{command.properties.syntax.replace(/\.\.\./g, '···') /* replacing dots to avoid confusion with ellipsis */}</code>
@@ -73,8 +108,11 @@ class Finder extends Component {
                                 </td>
                             </tr>)}
                         </tbody>
+
                     </table>
-                    : <div className="no-data-msg">No Commands Found!</div>
+                    <Pagination pageNumber={filter.pageable.pageNumber} totalSize={commands.totalSize}
+                        totalPages={commands.totalPages} maxPagesToShow={5} handlePageChange={this.handlePageChange.bind(this)} />
+                </div> : <div className="no-data-msg">No Commands Found!</div>
                 }
             </div>
         )
@@ -89,8 +127,8 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        getAllCommands: () => {
-            API.getAllCommands().then(commands => {
+        getAllCommands: (filter) => {
+            API.getAllCommands(filter).then(commands => {
                 dispatch(getAllCommands(commands));
             });
         },

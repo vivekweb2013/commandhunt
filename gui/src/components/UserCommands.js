@@ -2,65 +2,117 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as API from '../api/API';
-import { setFilters, getUserCommands, deleteUserCommand } from '../actions';
+import { getUserCommands, getMatchingUserCommands } from '../actions';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { formatDate, formatTime } from '../Utils';
 import Pagination from './common/Pagination';
-import { deepCompare } from '../Utils';
+import ItemsPerPage from './common/ItemsPerPage';
+import SearchInput from './common/SearchInput';
+import { getQueryParamByName, getQueryParamsFromFilter } from '../Utils';
 import './UserCommands.scss';
 
 class UserCommands extends Component {
-
-    componentDidMount() {
-        window.scrollTo(0, 0);
-        this.getUserCommands();
-    }
-
-    componentDidUpdate(prevProps) {
-        if (!deepCompare(prevProps.filters, this.props.filters)) {
-            this.getUserCommands();
+    state = {
+        filter: {
+            pageable: {
+                pageNumber: Number(getQueryParamByName('pageable.pageNumber')) || 1,
+                pageSize: Number(getQueryParamByName('pageable.pageSize')) || 10,
+                sort: {
+                    sortBy: getQueryParamByName('pageable.sort.sortBy') || 'command_text',
+                    sortOrder: getQueryParamByName('pageable.sort.sortOrder') || 'ASC'
+                }
+            }
         }
     }
 
+    componentDidMount() {
+        window.scrollTo(0, 0);
+        this.getUserCommands(this.state.filter);
+    }
+
+    handleQueryUpdate = (textValue) => {
+        textValue ? this.props.getMatchingUserCommands(textValue) : this.props.getUserCommands(this.state.filter);
+    }
+
     getUserCommands() {
-        const { sortBy, sortOrder } = this.props.filters || {};
-        this.props.getUserCommands({
-            select: ['text', 'name', 'timestamp'],
-            orderBy: { field: sortBy || 'text', direction: sortOrder ? 'desc' : 'asc' }
+        const { history } = this.props;
+
+        this.props.getUserCommands(this.state.filter).then(() => {
+            const { userCommands } = this.props;
+            const { filter } = this.state;
+
+            if (filter.pageable.pageNumber > userCommands.totalPages) {
+                this.setState({ filter: { ...filter, pageable: { ...filter.pageable, pageNumber: userCommands.totalPages } } }, () => {
+                    const { filter } = this.state;
+                    history.push(getQueryParamsFromFilter(filter))
+                });
+            }
         });
     }
 
     getSortIcon(column) {
-        const { filters } = this.props;
-        return filters && filters.sortBy === column ? (this.props.filters.sortOrder ? 'sort-down' : 'sort-up') : '';
+        const { filter } = this.state;
+        return filter.pageable.sort.sortBy === column ? (filter.pageable.sort.sortOrder === 'DESC' ? 'sort-down' : 'sort-up') : '';
     }
 
     sort(column) {
-        const { sortOrder } = this.props.filters || {};
-        this.props.setFilters({ sortBy: column, sortOrder: sortOrder ? 0 : 1 });
+        const { history } = this.props;
+        const { filter } = this.state;
+        this.setState({
+            filter: {
+                ...filter, pageable: {
+                    ...filter.pageable, sort: {
+                        sortBy: column,
+                        sortOrder: filter.pageable.sort.sortBy === column && filter.pageable.sort.sortOrder === 'ASC' ? 'DESC' : 'ASC'
+                    }
+                }
+            }
+        }, () => {
+            const { filter } = this.state;
+            history.push(getQueryParamsFromFilter(filter))
+        });
     }
 
     handleDelete(e, userCommand) {
         e.preventDefault();
-        this.props.deleteUserCommand(userCommand);
+        this.props.deleteUserCommand(userCommand).then(() => this.getUserCommands(this.state.filter));
+    }
+
+    handlePageChange(pageNumber) {
+        const { history } = this.props;
+        this.setState({ filter: { ...this.state.filter, pageable: { ...this.state.filter.pageable, pageNumber } } }, () => {
+            history.push(getQueryParamsFromFilter(this.state.filter))
+        });
+    }
+
+    handlePageSizeChange(e) {
+        e.preventDefault();
+        const { history } = this.props;
+        const pageSize = Number(e.target.value);
+        this.setState({ filter: { ...this.state.filter, pageable: { ...this.state.filter.pageable, pageSize } } }, () => {
+            history.push(getQueryParamsFromFilter(this.state.filter))
+        });
     }
 
     render() {
-        const { userCommands, filteredUserCommands, history } = this.props;
+        const { userCommands, history } = this.props;
+        const { filter } = this.state;
 
         return (
             <div className="user-commands">
+                <span className="heading">User Commands</span>
                 <div className="toolbar">
-                    <span className="heading">User Commands</span>
+                    <SearchInput onChange={this.handleQueryUpdate.bind(this)} />
+                    <ItemsPerPage pageSize={filter.pageable.pageSize} handlePageSizeChange={this.handlePageSizeChange.bind(this)} />
                 </div>
                 <table>
                     <thead><tr>
-                        <th className="command-column" onClick={(e) => this.sort('text')}>
-                            COMMAND {this.getSortIcon('text') && <FontAwesomeIcon icon={this.getSortIcon('text')} />}
+                        <th className="command-column" onClick={(e) => this.sort('command_text')}>
+                            COMMAND {this.getSortIcon('command_text') && <FontAwesomeIcon icon={this.getSortIcon('command_text')} />}
                         </th>
-                        <th className="type-column" onClick={(e) => this.sort('name')}>
-                            TYPE {this.getSortIcon('name') && <FontAwesomeIcon icon={this.getSortIcon('name')} />}
+                        <th className="type-column" onClick={(e) => this.sort('command_name')}>
+                            TYPE {this.getSortIcon('command_name') && <FontAwesomeIcon icon={this.getSortIcon('command_name')} />}
                         </th>
                         <th className="date-column" onClick={(e) => this.sort('timestamp')}>
                             DATE {this.getSortIcon('timestamp') && <FontAwesomeIcon icon={this.getSortIcon('timestamp')} />}
@@ -69,7 +121,7 @@ class UserCommands extends Component {
                     </tr></thead>
 
                     <tbody>
-                        {filteredUserCommands && filteredUserCommands.length > 0 ? filteredUserCommands.map(userCommand =>
+                        {userCommands && userCommands.totalSize > 0 ? userCommands.records.map(userCommand =>
                             <tr key={userCommand.id} >
                                 <td className="command"><code>{userCommand.properties.command_text}</code></td>
                                 <td className="type">
@@ -97,44 +149,25 @@ class UserCommands extends Component {
                             </tr>) : <tr><td colSpan="4"><div className="no-data-msg">No Commands Found!</div></td></tr>}
                     </tbody>
                 </table>
-                <Pagination
-                    totalItems={userCommands ? userCommands.length : 0} itemsPerPage={10}
-                    maxPagesToShow={5} />
+                {userCommands && <Pagination pageNumber={filter.pageable.pageNumber} totalSize={userCommands.totalSize}
+                    totalPages={userCommands.totalPages} maxPagesToShow={5} handlePageChange={this.handlePageChange.bind(this)} />}
             </div>
         )
     }
 }
 
 const mapStateToProps = (state, props) => {
-    const { userCommands, filters, pagination } = state.userCommandReducer;
-    const { user } = state.authReducer;
-    let filteredUserCommands = [];
-    if (pagination && userCommands) {
-        const { itemsPerPage } = pagination;
-        const currentPage = pagination.currentPage || 1;
-        const startPos = (currentPage - 1) * itemsPerPage;
-        filteredUserCommands = userCommands.slice(startPos, startPos + itemsPerPage)
-    }
-
     return {
-        user,
-        userCommands,
-        filters,
-        filteredUserCommands
+        user: state.authReducer.user,
+        userCommands: state.userCommandReducer.userCommands
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        setFilters: (filters) => {
-            dispatch(setFilters(filters));
-        },
-        getUserCommands: (filters) => {
-            API.getUserCommands(filters).then(userCommands => dispatch(getUserCommands(userCommands)));
-        },
-        deleteUserCommand: (userCommand) => {
-            API.deleteUserCommand(userCommand).then(() => dispatch(deleteUserCommand(userCommand)));
-        }
+        getUserCommands: (filters) => API.getUserCommands(filters).then(userCommands => dispatch(getUserCommands(userCommands))),
+        getMatchingUserCommands: (query) => API.getMatchingUserCommands(query).then(userCommands => dispatch(getMatchingUserCommands(userCommands))),
+        deleteUserCommand: (userCommand) => API.deleteUserCommand(userCommand)
     }
 }
 
