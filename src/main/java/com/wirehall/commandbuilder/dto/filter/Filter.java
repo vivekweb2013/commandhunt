@@ -1,40 +1,24 @@
 package com.wirehall.commandbuilder.dto.filter;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 public class Filter {
 
-  private String key;
-  private String value;
-  private Operator operator;
+  private List<Condition> conditions = new ArrayList<>();
 
   @Valid
   @NotNull
   private Pageable pageable;
 
-  public String getKey() {
-    return key;
+  public List<Condition> getConditions() {
+    return conditions;
   }
 
-  public void setKey(String key) {
-    this.key = key;
-  }
-
-  public String getValue() {
-    return value;
-  }
-
-  public void setValue(String value) {
-    this.value = value;
-  }
-
-  public Operator getOperator() {
-    return operator;
-  }
-
-  public void setOperator(Operator operator) {
-    this.operator = operator;
+  public void setConditions(List<Condition> conditions) {
+    this.conditions = conditions;
   }
 
   public Pageable getPageable() {
@@ -47,16 +31,6 @@ public class Filter {
 
   @Override
   public String toString() {
-    return "Filter{" + "key='" + key + '\'' + ", value='" + value + '\''
-        + ", operator=" + operator + ", pageable=" + pageable + '}';
-  }
-
-  public enum Operator {
-    EQUALS,
-    CONTAINS,
-    STARTS_WITH,
-    ENDS_WITH,
-    LESS_THAN,
-    GREATER_THAN
+    return "Filter{" + "conditions=" + conditions + ", pageable=" + pageable + '}';
   }
 }

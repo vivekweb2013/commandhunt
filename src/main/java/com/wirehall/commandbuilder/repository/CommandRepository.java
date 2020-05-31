@@ -3,6 +3,8 @@ package com.wirehall.commandbuilder.repository;
 import com.wirehall.commandbuilder.dto.Command;
 import com.wirehall.commandbuilder.dto.Flag;
 import com.wirehall.commandbuilder.dto.Option;
+import com.wirehall.commandbuilder.dto.filter.Condition;
+import com.wirehall.commandbuilder.dto.filter.Condition.Operator;
 import com.wirehall.commandbuilder.dto.filter.Filter;
 import com.wirehall.commandbuilder.dto.filter.Page;
 import com.wirehall.commandbuilder.dto.filter.Pageable;
@@ -74,9 +76,10 @@ public class CommandRepository {
 
     Long totalSize = gt.V().hasLabel(VertexType.COMMAND.toLowerCase()).count().next();
 
-    List<Vertex> vertices = gt.V().hasLabel(VertexType.COMMAND.toLowerCase())
-        .order().by(pageable.getSort().getSortBy(),
-            Order.valueOf(pageable.getSort().getSortOrder().toLowerCase()))
+    GraphTraversal<Vertex, Vertex> commandGT = gt.V().hasLabel(VertexType.COMMAND.toLowerCase());
+    GraphTraversal<Vertex, Vertex> conditionGT = applyConditions(commandGT, filter.getConditions());
+    List<Vertex> vertices = conditionGT.order().by(pageable.getSort().getSortBy(),
+        Order.valueOf(pageable.getSort().getSortOrder().toLowerCase()))
         .range(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize())
         .toList();
     List<Command> commands = new ArrayList<>();
@@ -256,5 +259,17 @@ public class CommandRepository {
     }
     vertexGraphTraversal.next();
     edgeGraphTraversal.from("a").next();
+  }
+
+  private GraphTraversal<Vertex, Vertex> applyConditions(GraphTraversal<Vertex, Vertex> gt,
+      List<Condition> conditions) {
+    conditions.forEach(c -> {
+      if (c.getOperator().equals(Operator.CONTAINS)) {
+        gt.or(__.has(CommandProperty.NAME.toLowerCase(), Text.textContainsFuzzy(c.getValue())),
+            __.has(CommandProperty.DESC.toLowerCase(), Text.textContainsFuzzy(c.getValue())),
+            __.has(CommandProperty.LONG_DESC.toLowerCase(), Text.textContainsFuzzy(c.getValue())));
+      }
+    });
+    return gt;
   }
 }
