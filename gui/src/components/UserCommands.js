@@ -33,17 +33,6 @@ class UserCommands extends Component {
         this.getUserCommands(this.state.filter);
     }
 
-    handleQueryUpdate = (value) => {
-        const { history } = this.props;
-
-        this.setState({
-            filter: {
-                ...this.state.filter,
-                conditions: value ? [{ key: 'name', value, operator: 'CONTAINS' }] : []
-            }
-        }, () => history.push(getQueryParamsFromFilter(this.state.filter)));
-    }
-
     getUserCommands() {
         const { history } = this.props;
 
@@ -58,6 +47,38 @@ class UserCommands extends Component {
                 });
             }
         });
+    }
+
+    handleQueryUpdate = (value) => {
+        const { history } = this.props;
+
+        this.setState({
+            filter: {
+                ...this.state.filter,
+                conditions: value ? [{ key: 'name', value, operator: 'CONTAINS' }] : []
+            }
+        }, () => history.push(getQueryParamsFromFilter(this.state.filter)));
+    }
+
+    handlePageChange(pageNumber) {
+        const { history } = this.props;
+        this.setState({ filter: { ...this.state.filter, pageable: { ...this.state.filter.pageable, pageNumber } } }, () => {
+            history.push(getQueryParamsFromFilter(this.state.filter))
+        });
+    }
+
+    handlePageSizeChange(e) {
+        e.preventDefault();
+        const { history } = this.props;
+        const pageSize = Number(e.target.value);
+        this.setState({ filter: { ...this.state.filter, pageable: { ...this.state.filter.pageable, pageSize } } }, () => {
+            history.push(getQueryParamsFromFilter(this.state.filter))
+        });
+    }
+
+    handleDelete(e, userCommand) {
+        e.preventDefault();
+        this.props.deleteUserCommand(userCommand).then(() => this.getUserCommands(this.state.filter));
     }
 
     getSortIcon(column) {
@@ -80,27 +101,6 @@ class UserCommands extends Component {
         }, () => {
             const { filter } = this.state;
             history.push(getQueryParamsFromFilter(filter))
-        });
-    }
-
-    handleDelete(e, userCommand) {
-        e.preventDefault();
-        this.props.deleteUserCommand(userCommand).then(() => this.getUserCommands(this.state.filter));
-    }
-
-    handlePageChange(pageNumber) {
-        const { history } = this.props;
-        this.setState({ filter: { ...this.state.filter, pageable: { ...this.state.filter.pageable, pageNumber } } }, () => {
-            history.push(getQueryParamsFromFilter(this.state.filter))
-        });
-    }
-
-    handlePageSizeChange(e) {
-        e.preventDefault();
-        const { history } = this.props;
-        const pageSize = Number(e.target.value);
-        this.setState({ filter: { ...this.state.filter, pageable: { ...this.state.filter.pageable, pageSize } } }, () => {
-            history.push(getQueryParamsFromFilter(this.state.filter))
         });
     }
 

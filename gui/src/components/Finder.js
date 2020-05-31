@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as API from '../api/API';
 import { getQueryParamByName, getArrayQueryParamByName, getQueryParamsFromFilter } from '../Utils';
-import { getAllCommands } from '../actions';
+import { getCommands } from '../actions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class Finder extends Component {
@@ -27,29 +27,22 @@ class Finder extends Component {
     }
 
     componentDidMount() {
-        this.props.getAllCommands(this.state.filter);
+        this.getCommands(this.state.filter);
     }
 
-    getSortIcon(column) {
-        const { filter } = this.state;
-        return filter.pageable.sort.sortBy === column ? (filter.pageable.sort.sortOrder === 'DESC' ? 'sort-down' : 'sort-up') : '';
-    }
-
-    sort(column) {
+    getCommands() {
         const { history } = this.props;
-        const { filter } = this.state;
-        this.setState({
-            filter: {
-                ...filter, pageable: {
-                    ...filter.pageable, sort: {
-                        sortBy: column,
-                        sortOrder: filter.pageable.sort.sortBy === column && filter.pageable.sort.sortOrder === 'ASC' ? 'DESC' : 'ASC'
-                    }
-                }
-            }
-        }, () => {
+
+        this.props.getCommands(this.state.filter).then(() => {
+            const { commands } = this.props;
             const { filter } = this.state;
-            history.push(getQueryParamsFromFilter(filter))
+
+            if (filter.pageable.pageNumber > commands.totalPages) {
+                this.setState({ filter: { ...filter, pageable: { ...filter.pageable, pageNumber: commands.totalPages } } }, () => {
+                    const { filter } = this.state;
+                    history.push(getQueryParamsFromFilter(filter))
+                });
+            }
         });
     }
 
@@ -77,6 +70,29 @@ class Finder extends Component {
         const pageSize = Number(e.target.value);
         this.setState({ filter: { ...this.state.filter, pageable: { ...this.state.filter.pageable, pageSize } } }, () => {
             history.push(getQueryParamsFromFilter(this.state.filter))
+        });
+    }
+
+    getSortIcon(column) {
+        const { filter } = this.state;
+        return filter.pageable.sort.sortBy === column ? (filter.pageable.sort.sortOrder === 'DESC' ? 'sort-down' : 'sort-up') : '';
+    }
+
+    sort(column) {
+        const { history } = this.props;
+        const { filter } = this.state;
+        this.setState({
+            filter: {
+                ...filter, pageable: {
+                    ...filter.pageable, sort: {
+                        sortBy: column,
+                        sortOrder: filter.pageable.sort.sortBy === column && filter.pageable.sort.sortOrder === 'ASC' ? 'DESC' : 'ASC'
+                    }
+                }
+            }
+        }, () => {
+            const { filter } = this.state;
+            history.push(getQueryParamsFromFilter(filter))
         });
     }
 
@@ -137,11 +153,9 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        getAllCommands: (filter) => {
-            API.getAllCommands(filter).then(commands => {
-                dispatch(getAllCommands(commands));
-            });
-        }
+        getCommands: (filter) => API.getCommands(filter).then(commands => {
+            dispatch(getCommands(commands));
+        })
     }
 }
 

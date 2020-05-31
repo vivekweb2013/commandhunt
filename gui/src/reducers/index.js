@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import {
-    GET_ALL_COMMANDS, GET_COMMAND,
+    GET_COMMANDS, GET_COMMAND,
     GET_USER_COMMANDS,
     USER_LOGIN, USER_LOGOUT
 } from '../actions';
@@ -8,7 +8,7 @@ import {
 const commandReducer = (state = {}, action) => {
     const { commands, command } = action;
     switch (action.type) {
-        case GET_ALL_COMMANDS:
+        case GET_COMMANDS:
             return {
                 ...state,
                 commands

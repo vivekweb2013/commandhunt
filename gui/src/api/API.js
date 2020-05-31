@@ -70,7 +70,7 @@ export const getUserProfile = (token) => {
     }).catch(catchError);
 }
 
-export const getAllCommands = (filter) => fetch(`${API_URL}/command` + getQueryParamsFromFilter(filter),
+export const getCommands = (filter) => fetch(`${API_URL}/command` + getQueryParamsFromFilter(filter),
     { headers }).then(handleErrors).then(res => res.json()).catch(catchError);
 
 export const getCommand = commandName => {
