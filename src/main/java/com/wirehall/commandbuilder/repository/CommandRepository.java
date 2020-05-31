@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.apache.tinkerpop.gremlin.process.traversal.Order;
+import org.apache.tinkerpop.gremlin.process.traversal.Scope;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
@@ -74,14 +75,22 @@ public class CommandRepository {
     Pageable pageable = filter.getPageable();
     Page<Command> commandPage = new Page<>();
 
-    Long totalSize = gt.V().hasLabel(VertexType.COMMAND.toLowerCase()).count().next();
-
     GraphTraversal<Vertex, Vertex> commandGT = gt.V().hasLabel(VertexType.COMMAND.toLowerCase());
-    GraphTraversal<Vertex, Vertex> conditionGT = applyConditions(commandGT, filter.getConditions());
-    List<Vertex> vertices = conditionGT.order().by(pageable.getSort().getSortBy(),
+    applyConditions(commandGT, filter.getConditions());
+
+    final String listKey = "list";
+    final String countKey = "count";
+    Map<String, Object> result = commandGT.order().by(pageable.getSort().getSortBy(),
         Order.valueOf(pageable.getSort().getSortOrder().toLowerCase()))
-        .range(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize())
-        .toList();
+        .fold().as(listKey, countKey).select(listKey, countKey)
+        .by(__.range(Scope.local, pageable.getOffset(),
+            pageable.getOffset() + pageable.getPageSize()))
+        .by(__.count(Scope.local)).next();
+
+    @SuppressWarnings("unchecked")
+    List<Vertex> vertices = (List<Vertex>) result.get(listKey);
+    Long totalSize = (Long) result.get(countKey);
+
     List<Command> commands = new ArrayList<>();
     for (Vertex commandVertex : vertices) {
       Command command = mapper.mapToCommand(commandVertex);
@@ -261,7 +270,7 @@ public class CommandRepository {
     edgeGraphTraversal.from("a").next();
   }
 
-  private GraphTraversal<Vertex, Vertex> applyConditions(GraphTraversal<Vertex, Vertex> gt,
+  private void applyConditions(GraphTraversal<Vertex, Vertex> gt,
       List<Condition> conditions) {
     conditions.forEach(c -> {
       if (c.getOperator().equals(Operator.CONTAINS)) {
@@ -270,6 +279,5 @@ public class CommandRepository {
             __.has(CommandProperty.LONG_DESC.toLowerCase(), Text.textContainsFuzzy(c.getValue())));
       }
     });
-    return gt;
   }
 }

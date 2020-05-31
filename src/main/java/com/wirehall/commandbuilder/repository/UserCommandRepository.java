@@ -2,6 +2,8 @@ package com.wirehall.commandbuilder.repository;
 
 
 import com.wirehall.commandbuilder.dto.UserCommand;
+import com.wirehall.commandbuilder.dto.filter.Condition;
+import com.wirehall.commandbuilder.dto.filter.Condition.Operator;
 import com.wirehall.commandbuilder.dto.filter.Filter;
 import com.wirehall.commandbuilder.dto.filter.Page;
 import com.wirehall.commandbuilder.dto.filter.Pageable;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.apache.tinkerpop.gremlin.process.traversal.Order;
+import org.apache.tinkerpop.gremlin.process.traversal.Scope;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
@@ -57,7 +60,7 @@ public class UserCommandRepository {
   }
 
   /**
-   * Get all the user-commands.
+   * Get all user-commands.
    *
    * @param filter Filter criteria.
    * @return Page of user-command DTOs.
@@ -69,13 +72,21 @@ public class UserCommandRepository {
     Pageable pageable = filter.getPageable();
     Page<UserCommand> userCommandPage = new Page<>();
 
-    Long totalSize = gt.V().hasLabel(VertexType.USERCOMMAND.toLowerCase()).count().next();
+    GraphTraversal<Vertex, Vertex> ucGT = gt.V().hasLabel(VertexType.USERCOMMAND.toLowerCase());
+    applyConditions(ucGT, filter.getConditions());
 
-    List<Vertex> vertices = gt.V().hasLabel(VertexType.USERCOMMAND.toLowerCase())
-        .order().by(pageable.getSort().getSortBy(),
-            Order.valueOf(pageable.getSort().getSortOrder().toLowerCase()))
-        .range(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize())
-        .toList();
+    final String listKey = "list";
+    final String countKey = "count";
+    Map<String, Object> result = ucGT.order().by(pageable.getSort().getSortBy(),
+        Order.valueOf(pageable.getSort().getSortOrder().toLowerCase()))
+        .fold().as(listKey, countKey).select(listKey, countKey)
+        .by(__.range(Scope.local, pageable.getOffset(),
+            pageable.getOffset() + pageable.getPageSize()))
+        .by(__.count(Scope.local)).next();
+
+    @SuppressWarnings("unchecked")
+    List<Vertex> vertices = (List<Vertex>) result.get(listKey);
+    Long totalSize = (Long) result.get(countKey);
 
     List<UserCommand> userCommands = new ArrayList<>();
     for (Vertex userCommandsVertex : vertices) {
@@ -274,5 +285,17 @@ public class UserCommandRepository {
     gt.tx().rollback();
     gt.V(userCommandId).next().remove();
     gt.tx().commit();
+  }
+
+  private void applyConditions(GraphTraversal<Vertex, Vertex> gt,
+      List<Condition> conditions) {
+    conditions.forEach(c -> {
+      if (c.getOperator().equals(Operator.CONTAINS)) {
+        gt.or(__.has(UserCommandProperty.COMMAND_NAME.toLowerCase(),
+            Text.textContainsFuzzy(c.getValue())),
+            __.has(UserCommandProperty.COMMAND_TEXT.toLowerCase(),
+                Text.textContainsFuzzy(c.getValue())));
+      }
+    });
   }
 }
