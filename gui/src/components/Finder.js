@@ -6,13 +6,15 @@ import ItemsPerPage from './common/ItemsPerPage';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as API from '../api/API';
-import { getQueryParamByName, getQueryParamsFromFilter } from '../Utils';
-import { getAllCommands, getMatchingCommands } from '../actions';
+import { getQueryParamByName, getArrayQueryParamByName, getQueryParamsFromFilter } from '../Utils';
+import { getAllCommands } from '../actions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class Finder extends Component {
     state = {
         filter: {
+            conditions: getArrayQueryParamByName('conditions'),
+
             pageable: {
                 pageNumber: Number(getQueryParamByName('pageable.pageNumber')) || 1,
                 pageSize: Number(getQueryParamByName('pageable.pageSize')) || 10,
@@ -51,8 +53,15 @@ class Finder extends Component {
         });
     }
 
-    handleQueryUpdate = (textValue) => {
-        textValue ? this.props.getMatchingCommands(textValue) : this.props.getAllCommands(this.state.filter);
+    handleQueryUpdate = (value) => {
+        const { history } = this.props;
+
+        this.setState({
+            filter: {
+                ...this.state.filter,
+                conditions: value ? [{ key: 'name', value, operator: 'CONTAINS' }] : []
+            }
+        }, () => history.push(getQueryParamsFromFilter(this.state.filter)));
     }
 
     handlePageChange(pageNumber) {
@@ -77,7 +86,8 @@ class Finder extends Component {
 
         return (
             <div className="finder">
-                <SearchInput onChange={this.handleQueryUpdate.bind(this)} />
+                <SearchInput defaultValue={filter.conditions[0] ? filter.conditions[0].value : ''}
+                    onChange={this.handleQueryUpdate.bind(this)} />
 
                 {commands && commands.totalSize > 0 ? <div>
                     <div className="toolbar">
@@ -130,11 +140,6 @@ const mapDispatchToProps = dispatch => {
         getAllCommands: (filter) => {
             API.getAllCommands(filter).then(commands => {
                 dispatch(getAllCommands(commands));
-            });
-        },
-        getMatchingCommands: (query) => {
-            API.getMatchingCommands(query).then(commands => {
-                dispatch(getMatchingCommands(commands));
             });
         }
     }

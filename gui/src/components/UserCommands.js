@@ -2,19 +2,21 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as API from '../api/API';
-import { getUserCommands, getMatchingUserCommands } from '../actions';
+import { getUserCommands } from '../actions';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { formatDate, formatTime } from '../Utils';
 import Pagination from './common/Pagination';
 import ItemsPerPage from './common/ItemsPerPage';
 import SearchInput from './common/SearchInput';
-import { getQueryParamByName, getQueryParamsFromFilter } from '../Utils';
+import { getQueryParamByName, getArrayQueryParamByName, getQueryParamsFromFilter } from '../Utils';
 import './UserCommands.scss';
 
 class UserCommands extends Component {
     state = {
         filter: {
+            conditions: getArrayQueryParamByName('conditions'),
+
             pageable: {
                 pageNumber: Number(getQueryParamByName('pageable.pageNumber')) || 1,
                 pageSize: Number(getQueryParamByName('pageable.pageSize')) || 10,
@@ -31,8 +33,15 @@ class UserCommands extends Component {
         this.getUserCommands(this.state.filter);
     }
 
-    handleQueryUpdate = (textValue) => {
-        textValue ? this.props.getMatchingUserCommands(textValue) : this.props.getUserCommands(this.state.filter);
+    handleQueryUpdate = (value) => {
+        const { history } = this.props;
+
+        this.setState({
+            filter: {
+                ...this.state.filter,
+                conditions: value ? [{ key: 'name', value, operator: 'CONTAINS' }] : []
+            }
+        }, () => history.push(getQueryParamsFromFilter(this.state.filter)));
     }
 
     getUserCommands() {
@@ -103,7 +112,8 @@ class UserCommands extends Component {
             <div className="user-commands">
                 <span className="heading">User Commands</span>
                 <div className="toolbar">
-                    <SearchInput onChange={this.handleQueryUpdate.bind(this)} />
+                    <SearchInput defaultValue={filter.conditions[0] ? filter.conditions[0].value : ''}
+                        onChange={this.handleQueryUpdate.bind(this)} />
                     <ItemsPerPage pageSize={filter.pageable.pageSize} handlePageSizeChange={this.handlePageSizeChange.bind(this)} />
                 </div>
                 <table>
@@ -166,7 +176,6 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = dispatch => {
     return {
         getUserCommands: (filters) => API.getUserCommands(filters).then(userCommands => dispatch(getUserCommands(userCommands))),
-        getMatchingUserCommands: (query) => API.getMatchingUserCommands(query).then(userCommands => dispatch(getMatchingUserCommands(userCommands))),
         deleteUserCommand: (userCommand) => API.deleteUserCommand(userCommand)
     }
 }

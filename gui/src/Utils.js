@@ -3,18 +3,33 @@ import tinydate from 'tinydate';
 export const getQueryParamByName = (name, url) => {
     if (!url) url = window.location.href;
     name = name.replace(/[[\]]/g, '\\$&');
-    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-        results = regex.exec(url);
+    const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+    const results = regex.exec(url);
     if (!results) return null;
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+export const getArrayQueryParamByName = (name, url) => {
+    if (!url) url = decodeURIComponent(window.location.search);
+    name = name.replace(/[[\]]/g, "\\$&");
+    const regex = new RegExp(`[?|&](${name})\\[(\\d+)\\]\\.(\\w+)=(\\w+)`, 'gm');
+
+    let match, result = [];
+    while ((match = regex.exec(url)) !== null) {
+        result[match[2]] = result[match[2]] || {};
+        result[match[2]][match[3]] = match[4];
+    }
+    return result;
 }
 
 export const getQueryParamsFromFilter = (filter) => {
     const queryParamStr = `?pageable.pageNumber=${filter.pageable.pageNumber}`
         + `&pageable.pageSize=${filter.pageable.pageSize}`
         + `&pageable.sort.sortBy=${filter.pageable.sort.sortBy}`
-        + `&pageable.sort.sortOrder=${filter.pageable.sort.sortOrder}`;
+        + `&pageable.sort.sortOrder=${filter.pageable.sort.sortOrder}&`
+        + filter.conditions.reduce((a, c, i) => a +
+            `conditions%5B${i}%5D.key=${c.key}&conditions%5B${i}%5D.operator=${c.operator}&conditions%5B${i}%5D.value=${c.value}`, '');
 
     return queryParamStr;
 }

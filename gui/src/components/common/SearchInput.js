@@ -7,10 +7,6 @@ export class SearchInput extends Component {
         this.delayedOnChange = this.debounce(this.delayedOnChange.bind(this), 1000);
     }
 
-    state = {
-        query: ''
-    }
-
     debounce = (fn, time) => {
         let timeout;
         return (...args) => {
@@ -22,9 +18,7 @@ export class SearchInput extends Component {
 
     handleOnChange = (e) => {
         e.preventDefault();
-        this.setState({ query: e.target.value }, () => {
-            this.delayedOnChange(this.state.query);
-        });
+        this.delayedOnChange(e.target.value);
     }
 
     delayedOnChange(value) {
@@ -33,16 +27,16 @@ export class SearchInput extends Component {
 
     handleInputReset = (e) => {
         e.preventDefault();
-        this.setState({ query: '' }, () => {
-            this.props.onChange('');
-        });
+        this.props.onChange('');
     }
 
     render() {
+        const { defaultValue } = this.props;
         return (
             <fieldset className="search-input">
-                <input type="text" onChange={e => this.handleOnChange(e)} placeholder="Search..." value={this.state.query} className="field" />
-                <div className={'icons-container ' + (this.state.query ? 'icons-container-flip' : '')}>
+                <input type="text" onChange={e => this.handleOnChange(e)} placeholder="Search..."
+                    defaultValue={defaultValue} className="field" />
+                <div className={'icons-container ' + (defaultValue ? 'icons-container-flip' : '')}>
                     <div className="icon-search"></div>
                     <div className="icon-close" onClick={e => this.handleInputReset(e)}> </div>
                 </div>
