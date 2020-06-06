@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import Spinner from './common/Spinner';
 import * as API from '../api/API';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './SignUp.scss';
 
 class SignUp extends Component {

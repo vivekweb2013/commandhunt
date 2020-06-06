@@ -1,11 +1,6 @@
 import { getQueryParamsFromFilter } from '../Utils';
-import auth from '../components/auth/FirebaseAuth';
-import Firestore from 'firebase-firestore-lite';
 
 export const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8080/api";
-
-const projectId = 'command-builder';
-const db = new Firestore({ projectId, auth });
 
 const headers = {
     Accept: "application/json",

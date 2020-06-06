@@ -3,7 +3,6 @@ import Header from './components/Header';
 import Content from './components/Content';
 import Footer from './components/Footer';
 import Spinner from './components/common/Spinner';
-import FirebaseAuth from './components/auth/FirebaseAuth';
 import * as API from './api/API';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
