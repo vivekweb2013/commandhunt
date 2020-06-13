@@ -83,13 +83,13 @@ export const saveUserCommand = (userCommand) => fetch(`${API_URL}/user/user-comm
     method: 'POST',
     body: JSON.stringify(userCommand),
     headers
-}).then(handleErrors).then(res => res.json()).catch(catchError);
+}).then(handleErrors).then(res => res.text()).catch(catchError);
 
 export const updateUserCommand = (userCommand) => fetch(`${API_URL}/user/user-command/${userCommand.id}`, {
     method: 'PUT',
     body: JSON.stringify(userCommand),
     headers
-}).then(handleErrors).then(res => res.json()).catch(catchError);
+}).then(handleErrors).then(res => res.text()).catch(catchError);
 
 export const deleteUserCommand = (userCommand) => fetch(`${API_URL}/user/user-command/${userCommand.id}`, {
     method: 'DELETE',
