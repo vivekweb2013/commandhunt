@@ -3,6 +3,7 @@
 $builder-header-min-height: 50px;
 $header-padding-vertical: 5px;
 $checkbox-size: 30px;
+$form-bottom-button-spacing: 15px;
 
 .builder {
   > .header {
@@ -155,7 +156,8 @@ $checkbox-size: 30px;
       .form-buttons {
         border-top: 1px solid #ddd;
         margin: 20px 0;
-        text-align: center;
+        padding: $form-bottom-button-spacing 0;
+        text-align: right;
 
         /* Ripple effect */
         .ripple:not([disabled]) {
@@ -185,7 +187,7 @@ $checkbox-size: 30px;
           background-color: $color-primary;
           box-shadow: 0 0 4px #999;
           outline: none;
-          margin: 20px;
+          margin-left: $form-bottom-button-spacing;
 
           &:disabled {
             background-color: $color-disabled;
@@ -193,7 +195,7 @@ $checkbox-size: 30px;
         }
       }
 
-      /* Responsive layout - when the screen is less than 600px wide, 
+      /* Responsive layout - when the screen is less than 600px wide,
       make the two columns stack on top of each other instead of next to each other */
       @media screen and (max-width: 600px) {
         .label-col {
