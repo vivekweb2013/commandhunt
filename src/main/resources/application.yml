@@ -1,6 +1,14 @@
 app:
   graph:
     config: jg-inmemory.properties
+    export:
+      cronExpression: 0 0 12 * * ?
+      enable: true
+      path: ./graph
+    import:
+      enable: false
+      path: ./graph/app.graphml
+
   jwt:
     secret: ${APP_JWT_SECRET}
   oauth2:

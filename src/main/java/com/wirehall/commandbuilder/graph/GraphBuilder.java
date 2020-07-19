@@ -23,6 +23,10 @@ public class GraphBuilder {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GraphBuilder.class);
   private final CommandRepository commandRepository;
+  @Autowired
+  private GraphIO graphIO;
+  @Value("${app.graph.import.enable}")
+  private boolean importEnable;
   @Value("classpath*:/data/**/*.json")
   private Resource[] jsonDataResources;
   private JanusGraph graph;
@@ -49,7 +53,11 @@ public class GraphBuilder {
   public void initialize() {
     try {
       SchemaManager.createSchema(graph);
-      fillData(commandRepository);
+      if (importEnable) {
+        graphIO.importGraphMl();
+      } else {
+        fillData(commandRepository);
+      }
       readElements();
     } catch (Exception e) {
       LOGGER.error(e.getMessage(), e);
