@@ -9,6 +9,8 @@ import { formatDate, formatTime } from '../Utils';
 import Pagination from './common/Pagination';
 import ItemsPerPage from './common/ItemsPerPage';
 import SearchInput from './common/SearchInput';
+import ToastMaker from 'toastmaker';
+import "toastmaker/dist/toastmaker.css";
 import { getQueryParamByName, getArrayQueryParamByName, getQueryParamsFromFilter } from '../Utils';
 import './UserCommands.scss';
 
@@ -78,7 +80,10 @@ class UserCommands extends Component {
 
     handleDelete(e, userCommand) {
         e.preventDefault();
-        this.props.deleteUserCommand(userCommand).then(() => this.getUserCommands(this.state.filter));
+        this.props.deleteUserCommand(userCommand).then(() => {
+            ToastMaker('Deleted!');
+            this.getUserCommands(this.state.filter);
+        });
     }
 
     getSortIcon(column) {
@@ -143,8 +148,8 @@ class UserCommands extends Component {
                                 </td>
                                 <td className="actions">
                                     <CopyToClipboard text={userCommand.properties.command_text}>
-                                        <span className="copy-icon" title="copy">
-                                            <FontAwesomeIcon icon="clipboard" color="slateblue" size="lg" />
+                                        <span className="copy-icon" title="copy" onClick={(e) => ToastMaker("Copied!")}>
+                                            <FontAwesomeIcon icon="copy" color="slateblue" size="lg" />
                                         </span>
                                     </CopyToClipboard>
                                     <span title="edit" onClick={() =>
