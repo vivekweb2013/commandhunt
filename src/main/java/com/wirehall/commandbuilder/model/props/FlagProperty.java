@@ -9,7 +9,8 @@ public enum FlagProperty {
   DESC("V", true),
   LONG_DESC("V", false),
   SEQUENCE("E", true),
-  IS_GROUPING_ALLOWED("V", false);
+  IS_GROUPING_ALLOWED("V", false),
+  IS_SOLITARY("V", false);
 
   private final String propertyOf;
   private final boolean isMandatory;

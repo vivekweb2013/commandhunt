@@ -81,6 +81,10 @@ public class SchemaManager {
         .makePropertyKey(FlagProperty.IS_GROUPING_ALLOWED.toLowerCase())
         .dataType(String.class)
         .make();
+    management
+        .makePropertyKey(FlagProperty.IS_SOLITARY.toLowerCase())
+        .dataType(String.class)
+        .make();
     management.makePropertyKey(FlagProperty.SEQUENCE.toLowerCase()).dataType(Byte.class).make();
 
     management.makePropertyKey(OptionProperty.DATA_TYPE.toLowerCase()).dataType(String.class)

@@ -61,6 +61,23 @@ class Builder extends Component {
         this.setState({ userCommand });
     }
 
+    hasSolitarySituation(currentSolitaryFlag) {
+        // Solitary situation
+        // - one of the solitary flag is enabled, because of which no other option or flag(other than selected solitary flag) can be used
+        // - non solitary flag or option is used, because of which all the solitary flags should be disabled
+
+        const { userCommand } = this.state;
+        const { command } = this.props;
+
+        if (currentSolitaryFlag) {
+            return userCommand.flags[currentSolitaryFlag.properties.name] !== true &&
+                (Object.keys(userCommand.options).filter(k => userCommand.options[k]).length > 0
+                    || Object.keys(userCommand.flags).filter(k => userCommand.flags[k]).length > 0)
+        }
+        return command.flags.filter(cf => cf.properties.is_solitary).map(cf => cf.properties.name)
+            .includes(Object.keys(userCommand.flags).filter(k => userCommand.flags[k])[0]);
+    }
+
     getGeneratedFlags(command) {
         let flagsStr = '';
         let hyphenPrefixedFlags = '';
@@ -109,7 +126,7 @@ class Builder extends Component {
         const userCommand = {
             ...this.state.userCommand,
             id: this.state.userCommandId,
-            properties :{
+            properties: {
                 command_name: this.props.command.properties.name,
                 command_text: this.getGeneratedCommand(this.props.command),
                 user_email: this.props.user.email
@@ -161,6 +178,7 @@ class Builder extends Component {
                                                 <div className="input-col">
                                                     <input id={option.id} type="text" name={option.properties.name}
                                                         onChange={(e) => this.handleOptionChange(e)}
+                                                        disabled={this.hasSolitarySituation()}
                                                         value={userCommand.options[option.properties.name] || ''} />
                                                 </div>
                                             </div>
@@ -181,6 +199,7 @@ class Builder extends Component {
                                                 <div className="input-col">
                                                     <input id={flag.id} type="checkbox" name={flag.properties.name}
                                                         onChange={(e) => this.handleFlagChange(e)}
+                                                        disabled={flag.properties.is_solitary === 'true' ? this.hasSolitarySituation(flag) : this.hasSolitarySituation()}
                                                         checked={!!userCommand.flags[flag.properties.name]} />
                                                     <label htmlFor={flag.id}>
                                                         <svg viewBox="0,0,50,50"><path d="M5 30 L 20 45 L 45 5"></path></svg>
