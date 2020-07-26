@@ -4,9 +4,9 @@ import com.wirehall.commandbuilder.dto.User;
 import com.wirehall.commandbuilder.model.auth.CustomUserPrincipal;
 import com.wirehall.commandbuilder.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -27,7 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String email) {
     User user = userRepository.findByEmail(email)
-        .orElseThrow(() -> new UsernameNotFoundException("User not found with email : " + email));
+        .orElseThrow(() -> new BadCredentialsException("No user exists with email : " + email));
 
     return CustomUserPrincipal.create(user);
   }
