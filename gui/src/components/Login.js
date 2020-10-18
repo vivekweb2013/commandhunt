@@ -45,8 +45,8 @@ class Login extends Component {
         this.props.history.push('/signup');
     }
     render() {
-        const { user } = this.props;
-        if (user) this.props.history.goBack();
+        const { user, history } = this.props;
+        if (user) history.replace('/');
 
         const { loginInProgress } = this.state;
         const isRedirected = window.location.href.match(/[&?]token=/);
