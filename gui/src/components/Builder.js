@@ -180,6 +180,7 @@ class Builder extends Component {
                                                         onChange={(e) => this.handleOptionChange(e)}
                                                         pattern={getValidationRegex(option.properties.data_type)}
                                                         disabled={this.hasSolitarySituation()}
+                                                        required={option.properties.is_mandatory}
                                                         value={userCommand.options[option.properties.name] || ''} />
                                                 </div>
                                             </div>
