@@ -1,5 +1,15 @@
 import tinydate from 'tinydate';
 
+export const getValidationRegex = (dataType) => {
+    // Note that HTML5 engines wraps the whole pattern inside ^(?: and )$ constructs
+    switch (dataType) {
+        case 'PATH':
+            return '(((.{0,2}/)(.?[a-zA-Z0-9_\\-\\*])*)+)';
+        default:
+            return '';
+    }
+}
+
 export const getQueryParamByName = (name, url) => {
     if (!url) url = window.location.href;
     name = name.replace(/[[\]]/g, '\\$&');

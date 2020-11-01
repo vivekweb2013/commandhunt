@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as API from '../api/API';
 import { getCommand } from '../actions';
-import { getQueryParamByName } from '../Utils';
+import { getQueryParamByName, getValidationRegex } from '../Utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Builder.scss';
 
@@ -178,6 +178,7 @@ class Builder extends Component {
                                                 <div className="input-col">
                                                     <input id={option.id} type="text" name={option.properties.name}
                                                         onChange={(e) => this.handleOptionChange(e)}
+                                                        pattern={getValidationRegex(option.properties.data_type)}
                                                         disabled={this.hasSolitarySituation()}
                                                         value={userCommand.options[option.properties.name] || ''} />
                                                 </div>
