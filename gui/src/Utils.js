@@ -4,9 +4,11 @@ export const getValidationRegex = (dataType) => {
     // Note that HTML5 engines wraps the whole pattern inside ^(?: and )$ constructs
     switch (dataType) {
         case 'PATH':
-            return '(((.{0,2}/)(.?[a-zA-Z0-9_\\-\\*])*)+)';
+            return '((\\.{0,2}/(?!/))(\\.?[a-zA-Z0-9_*-])*)+|"((\\.{0,2}/(?!/))(\\.?[ ]*[a-zA-Z0-9_*-])*)+"';
+        case 'NUMBER':
+            return '[0-9]*';
         default:
-            return '';
+            return '*';
     }
 }
 
