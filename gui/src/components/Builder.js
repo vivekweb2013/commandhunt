@@ -212,8 +212,8 @@ class Builder extends Component {
                                 </div>
                             )}
                         </div>
-                        <div className="form-buttons">
-                            <button className="ripple" type="button">PRINT</button>
+                        <div className="form-buttons no-print">
+                            <button className="ripple" onClick={e => window.print()} type="button">PRINT</button>
                             <button className="ripple tooltip-t"
                                 {...(!user ? { 'data-tooltip': 'Login to Save' } : {})} type="submit"
                                 disabled={!user || this.state.saveInProgress}>

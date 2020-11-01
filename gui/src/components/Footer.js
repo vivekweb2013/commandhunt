@@ -4,7 +4,7 @@ import './Footer.scss';
 class Footer extends Component {
     render() {
         return (
-            <footer className="site-footer">
+            <footer className="site-footer no-print">
                 &copy; Copyright 2020
             </footer>
         )

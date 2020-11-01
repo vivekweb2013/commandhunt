@@ -34,7 +34,7 @@ class Header extends Component {
         const photoUrl = user && user.photoUrl ? user.photoUrl : userSVG;
 
         return (
-            <header className="site-header">
+            <header className="site-header no-print">
                 <div className="logo">
                     <a href="/" onClick={(e) => this.handleRootNavigation(e)}>
                         <FontAwesomeIcon icon="home" />&nbsp;Command Builder</a>
