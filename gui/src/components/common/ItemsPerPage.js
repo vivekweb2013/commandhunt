@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './ItemsPerPage.scss';
 
-export class ItemsPerPage extends Component {
+class ItemsPerPage extends Component {
     render() {
         const pageSizeOptions = [5, 10, 25];
 

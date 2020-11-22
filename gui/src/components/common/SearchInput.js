@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './SearchInput.scss';
 
-export class SearchInput extends Component {
+class SearchInput extends Component {
     constructor(props) {
         super(props);
         this.delayedOnChange = this.debounce(this.delayedOnChange.bind(this), 1000);

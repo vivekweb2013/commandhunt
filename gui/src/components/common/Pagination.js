@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Pagination.scss';
 
-export class Pagination extends Component {
+class Pagination extends Component {
 
     render() {
         const { totalSize, totalPages, pageNumber, maxPagesToShow } = this.props;
