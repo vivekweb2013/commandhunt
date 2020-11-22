@@ -170,7 +170,7 @@ class Builder extends Component {
                                 <div className="options">
                                     <div className="category"><span>OPTIONS</span></div>
                                     <div className="fields">
-                                        {command.options.map((option, i) => (
+                                        {command.options.sort((a, b) => a.properties.sequence - b.properties.sequence).map((option, i) => (
                                             <div key={i} className="row">
                                                 <div className="label-col">
                                                     <label htmlFor={option.id}>{option.properties.desc}</label>
@@ -193,7 +193,7 @@ class Builder extends Component {
                                 <div className="flags">
                                     <div className="category"><span>FLAGS</span></div>
                                     <div className="fields">
-                                        {command.flags.map((flag, i) => (
+                                        {command.flags.sort((a, b) => a.properties.sequence - b.properties.sequence).map((flag, i) => (
                                             <div key={i} className="row">
                                                 <div className="label-col">
                                                     <label htmlFor={flag.id}>{flag.properties.desc}</label>
