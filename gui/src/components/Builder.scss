@@ -67,6 +67,10 @@ $form-bottom-button-spacing: 15px;
           input[type="text"],
           select,
           textarea {
+            &:disabled {
+              background-color: $color-disabled;
+            }
+
             width: 100%;
             padding: 6px 10px;
             border: 1px solid #ccc;
@@ -80,6 +84,10 @@ $form-bottom-button-spacing: 15px;
           input[type="checkbox"] {
             position: absolute;
             display: none;
+
+            &:disabled + label {
+              background-color: $color-disabled;
+            }
 
             &:checked + label svg path {
               stroke-dashoffset: 0;
