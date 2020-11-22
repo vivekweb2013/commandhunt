@@ -6,6 +6,7 @@ import { getCommand } from '../actions';
 import { getQueryParamByName, getValidationRegex } from '../Utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Builder.scss';
+import DynamicTextInput from './common/DynamicTextInput';
 
 class Builder extends Component {
     state = {
@@ -31,8 +32,7 @@ class Builder extends Component {
         }
     }
 
-    handleOptionChange(event) {
-        const { name, value } = event.target;
+    handleOptionChange(name, value) {
         const userCommand = {
             flags: {
                 ...this.state.userCommand.flags,
@@ -71,7 +71,7 @@ class Builder extends Component {
 
         if (currentSolitaryFlag) {
             return userCommand.flags[currentSolitaryFlag.properties.name] !== true &&
-                (Object.keys(userCommand.options).filter(k => userCommand.options[k]).length > 0
+                (Object.keys(userCommand.options).filter(k => userCommand.options[k].filter(val => !!val).length > 0).length > 0
                     || Object.keys(userCommand.flags).filter(k => userCommand.flags[k]).length > 0)
         }
         return command.flags.filter(cf => cf.properties.is_solitary).map(cf => cf.properties.name)
@@ -102,11 +102,13 @@ class Builder extends Component {
     }
 
     getGeneratedOptions(command) {
+        const { userCommand } = this.state;
         let optionsStr = '';
-        command.options.filter(o => this.state.userCommand.options[o.properties.name]).forEach(o => {
-            const prefix = !o.properties.prefix.endsWith('=') ? `${o.properties.prefix} ` : o.properties.prefix;
-            optionsStr += ` ${prefix}${this.state.userCommand.options[o.properties.name]}`;
-        });
+        command.options.filter(o => (userCommand.options[o.properties.name] != null)
+            && (userCommand.options[o.properties.name].filter(val => !!val).length > 0)).forEach(o => {
+                const prefix = !o.properties.prefix.endsWith('=') ? `${o.properties.prefix} ` : o.properties.prefix;
+                optionsStr += ` ${prefix}${userCommand.options[o.properties.name].join(' ')}`;
+            });
 
         return optionsStr.trim();
     }
@@ -176,12 +178,13 @@ class Builder extends Component {
                                                     <label htmlFor={option.id}>{option.properties.desc}</label>
                                                 </div>
                                                 <div className="input-col">
-                                                    <input id={option.id} type="text" name={option.properties.name}
-                                                        onChange={(e) => this.handleOptionChange(e)}
+                                                    <DynamicTextInput id={option.id} name={option.properties.name}
+                                                        handleChange={this.handleOptionChange.bind(this)}
                                                         pattern={getValidationRegex(option.properties.data_type)}
                                                         disabled={this.hasSolitarySituation()}
                                                         required={option.properties.is_mandatory === 'true'}
-                                                        value={userCommand.options[option.properties.name] || ''} />
+                                                        isRepeatable={option.properties.is_repeatable === 'true'}
+                                                        values={userCommand.options[option.properties.name] || ['']} />
                                                 </div>
                                             </div>
                                         ))}

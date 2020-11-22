@@ -147,7 +147,7 @@ public class UserCommandRepository {
                 .unfold()
                 .group()
                 .by(Column.keys)
-                .by(__.select(Column.values).unfold()))
+                .by(__.select(Column.values)))
             .next();
 
     Map<String, Object> options = mapper.mapToUserCommandOptions(optionValueProps);
@@ -236,7 +236,11 @@ public class UserCommandRepository {
         .V(optionValueVertex).addE(EdgeType.HAS_OPTION_VALUE.toLowerCase());
 
     for (Entry<String, Object> entry : options.entrySet()) {
-      vertexGraphTraversal.property(entry.getKey(), entry.getValue());
+      String key = entry.getKey();
+      List<String> values = (List<String>) entry.getValue();
+      for (String value : values) {
+        vertexGraphTraversal.property(key, value);
+      }
     }
 
     vertexGraphTraversal.next();
@@ -247,8 +251,14 @@ public class UserCommandRepository {
     GraphTraversal<Vertex, Vertex> graphTraversal = gt.V(userCommandVertex).outE()
         .hasLabel(EdgeType.HAS_OPTION_VALUE.toLowerCase()).inV();
 
+    graphTraversal.sideEffect(__.properties().drop());
+
     for (Entry<String, Object> entry : options.entrySet()) {
-      graphTraversal.property(entry.getKey(), entry.getValue());
+      String key = entry.getKey();
+      List<String> values = (List<String>) entry.getValue();
+      for (String value : values) {
+        graphTraversal.property(key, value);
+      }
     }
 
     graphTraversal.next();

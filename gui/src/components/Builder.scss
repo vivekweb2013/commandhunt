@@ -64,6 +64,10 @@ $form-bottom-button-spacing: 15px;
           align-items: center;
           break-inside: avoid-column; /* avoid column break for this element */
 
+          .dynamic-text-ip-wrapper {
+            display: inline-flex;
+          }
+
           input[type="text"],
           select,
           textarea {

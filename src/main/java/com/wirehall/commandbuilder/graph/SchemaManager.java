@@ -6,6 +6,7 @@ import com.wirehall.commandbuilder.model.props.CommandProperty;
 import com.wirehall.commandbuilder.model.props.FlagProperty;
 import com.wirehall.commandbuilder.model.props.OptionProperty;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
+import org.janusgraph.core.Cardinality;
 import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.Multiplicity;
 import org.janusgraph.core.RelationType;
@@ -97,6 +98,9 @@ public class SchemaManager {
         .makePropertyKey(OptionProperty.IS_MANDATORY.toLowerCase())
         .dataType(String.class)
         .make();
+
+    // Properties which supports multiple values
+    management.makePropertyKey("FILE").dataType(String.class).cardinality(Cardinality.SET).make();
   }
 
   private static void createCompositeIndexes(final JanusGraphManagement management) {
