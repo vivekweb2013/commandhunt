@@ -66,6 +66,36 @@ $form-bottom-button-spacing: 15px;
 
           .dynamic-text-ip-wrapper {
             display: inline-flex;
+
+            input[type="button"] {
+              border: 1px solid #767676;
+              border-radius: 2px;
+              background-color: #efefef;
+              outline: none;
+            }
+          }
+
+          .permission-ip-wrapper {
+            font-size: smaller;
+            input[type="checkbox"] + label {
+              height: 20px;
+              width: 20px;
+              border-width: 2px;
+            }
+            .assignee {
+              float: left;
+              font-weight: 500;
+            }
+            .permissions {
+              float: right;
+            }
+            .permission-row {
+              margin: 6px 1px;
+              overflow: hidden;
+            }
+            .permission-type {
+              margin-left: 8px;
+            }
           }
 
           input[type="text"],
@@ -81,8 +111,8 @@ $form-bottom-button-spacing: 15px;
             border-radius: 3px;
             resize: vertical;
             font-size: 1.4rem;
-            height: 100%;
             background-color: lighten($color-primary, 66%);
+            outline: none;
           }
 
           input[type="checkbox"] {
@@ -109,6 +139,7 @@ $form-bottom-button-spacing: 15px;
               border-radius: ($checkbox-size/8);
               cursor: pointer;
               transition: all 0.2s ease;
+              vertical-align: middle;
 
               &:active {
                 transform: scale(1.05);

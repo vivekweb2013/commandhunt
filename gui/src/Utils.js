@@ -7,6 +7,8 @@ export const getValidationRegex = (dataType) => {
             return '((\\.{0,2}/(?!/))(\\.?[a-zA-Z0-9_*-])*)+|"((\\.{0,2}/(?!/))(\\.?[ ]*[a-zA-Z0-9_*-])*)+"';
         case 'NUMBER':
             return '[0-9]*';
+        case 'PERMISSION':
+            return '[0-9]{3}';
         default:
             return '*';
     }
