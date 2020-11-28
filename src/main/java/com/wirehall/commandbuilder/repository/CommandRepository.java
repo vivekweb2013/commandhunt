@@ -15,6 +15,8 @@ import com.wirehall.commandbuilder.model.props.CommandProperty;
 import com.wirehall.commandbuilder.model.props.FlagProperty;
 import com.wirehall.commandbuilder.model.props.OptionProperty;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.apache.tinkerpop.gremlin.process.traversal.Order;
@@ -177,6 +179,8 @@ public class CommandRepository {
       Option option = mapper.mapToOption(optionVertexProps, optionEdgeProps);
       command.addOption(option);
     }
+    Collections.sort(command.getFlags());
+    Collections.sort(command.getOptions());
     return command;
   }
 

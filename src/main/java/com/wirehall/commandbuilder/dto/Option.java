@@ -4,7 +4,7 @@ import com.wirehall.commandbuilder.model.props.OptionProperty;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class Option extends Node<OptionProperty> {
+public class Option extends Node<OptionProperty> implements Comparable<Option> {
 
   public Option() {
     super(OptionProperty.class);
@@ -16,5 +16,12 @@ public class Option extends Node<OptionProperty> {
       properties = new EnumMap<>(OptionProperty.class);
     }
     return properties;
+  }
+
+  @Override
+  public int compareTo(Option o) {
+    byte i = (byte) this.properties.get(OptionProperty.SEQUENCE);
+    byte j = (byte) o.properties.get(OptionProperty.SEQUENCE);
+    return i - j;
   }
 }
