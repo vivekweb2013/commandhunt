@@ -24,13 +24,19 @@
     <description>Command Builder</description>
 
     <properties>
-        <frontend.maven.plugin.version>1.9.1</frontend.maven.plugin.version>
+        <assembly.plugin.version>3.3.0</assembly.plugin.version>
+        <frontend.maven.plugin.version>1.10.4</frontend.maven.plugin.version>
         <docker.plugin.version>0.34.1</docker.plugin.version>
+        <docker.image.prefix>ghcr.io/vivekweb2013/commandhunt</docker.image.prefix>
     </properties>
 
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>${assembly.plugin.version}</version>
+                </plugin>
                 <plugin>
                     <groupId>io.fabric8</groupId>
                     <artifactId>docker-maven-plugin</artifactId>
@@ -45,5 +51,13 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/vivekweb2013/commandhunt</url>
+        </repository>
+    </distributionManagement>
 
 </project>
