@@ -19,7 +19,7 @@
         <janusgraph.version>0.4.0</janusgraph.version>
         <jjwt.vrsion>0.9.1</jjwt.vrsion>
         <frontend.src.dir>${project.basedir}/gui</frontend.src.dir>
-        <node.version>v12.14.0</node.version>
+        <node.version>v13.11.0</node.version>
         <frontend.maven.plugin.version>1.9.1</frontend.maven.plugin.version>
         <heroku.maven.plugin.version>2.0.16</heroku.maven.plugin.version>
         <heroku.app.name>${project.artifactId}</heroku.app.name>
