@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: command-builder-backend-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: command-builder-backend
+  template:
+    metadata:
+      labels:
+        app: command-builder-backend
+    spec:
+      containers:
+        - name: command-builder-backend
+          image: ghcr.io/vivekweb2013/command-builder/command-builder-backend:1.0.0-SNAPSHOT
+          ports:
+            - containerPort: 8080
+      imagePullSecrets:
+        - name: regcred
