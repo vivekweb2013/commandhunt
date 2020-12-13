@@ -1,6 +1,6 @@
 app:
   graph:
-    config: jg-inmemory.properties
+    config: jg-cassandra.properties
     export:
       cronExpression: 0 0 12 * * ?
       enable: true

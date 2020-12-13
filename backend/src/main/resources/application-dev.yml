@@ -1,0 +1,4 @@
+# This property file values will override values from application.yml
+app:
+  graph:
+    config: jg-inmemory.properties
