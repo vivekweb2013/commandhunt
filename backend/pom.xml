@@ -16,7 +16,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <janusgraph.version>0.4.0</janusgraph.version>
+        <janusgraph.version>0.5.2</janusgraph.version>
         <jjwt.vrsion>0.9.1</jjwt.vrsion>
     </properties>
 
@@ -37,6 +37,12 @@
             <groupId>org.janusgraph</groupId>
             <artifactId>janusgraph-core</artifactId>
             <version>${janusgraph.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.janusgraph</groupId>
+            <artifactId>janusgraph-inmemory</artifactId>
+            <version>${janusgraph.version}</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.janusgraph</groupId>
