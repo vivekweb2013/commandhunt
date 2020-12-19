@@ -6,11 +6,17 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.env.Environment;
+
+import java.util.Arrays;
 
 @SpringBootApplication
 public class CommandBuilderApplication {
 
   private final GraphBuilder graphBuilder;
+
+  @Autowired
+  private Environment env;
 
   @Autowired
   public CommandBuilderApplication(GraphBuilder graphBuilder) {
@@ -23,6 +29,8 @@ public class CommandBuilderApplication {
 
   @EventListener(ApplicationReadyEvent.class)
   public void init() {
-    graphBuilder.initialize();
+    if (Arrays.asList(env.getActiveProfiles()).contains("dev")) {
+      graphBuilder.initialize();
+    }
   }
 }
