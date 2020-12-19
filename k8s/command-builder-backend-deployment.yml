@@ -14,8 +14,12 @@ spec:
     spec:
       containers:
         - name: command-builder-backend
+          imagePullPolicy: Always
           image: ghcr.io/vivekweb2013/command-builder/command-builder-backend:1.0.0-SNAPSHOT
           ports:
             - containerPort: 8080
+          env:
+            - name: CASSANDRA_STORAGE_HOST
+              value: cassandra-0.cassandra.default.svc.cluster.local
       imagePullSecrets:
         - name: regcred

@@ -14,6 +14,7 @@ spec:
     spec:
       containers:
         - name: command-builder-frontend
+          imagePullPolicy: Always
           image: ghcr.io/vivekweb2013/command-builder/command-builder-frontend:1.0.0-SNAPSHOT
           ports:
             - containerPort: 3000

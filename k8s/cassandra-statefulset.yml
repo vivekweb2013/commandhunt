@@ -18,7 +18,7 @@ spec:
       terminationGracePeriodSeconds: 1800
       containers:
         - name: cassandra
-          image: cassandra:3
+          image: cassandra:4.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 7000
@@ -29,6 +29,13 @@ spec:
               name: jmx
             - containerPort: 9042
               name: cql
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - nodetool drain
           env:
             - name: CASSANDRA_SEEDS
               value: cassandra-0.cassandra.default.svc.cluster.local
@@ -46,7 +53,7 @@ spec:
               value: GossipingPropertyFileSnitch
           volumeMounts:
             - name: cassandra-data
-              mountPath: /var/lib/cassandra/data
+              mountPath: /var/lib/cassandra
   volumeClaimTemplates:
     - metadata:
         name: cassandra-data

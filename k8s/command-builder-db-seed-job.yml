@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: command-builder-db-seed-job
+spec:
+  backoffLimit: 5
+  template:
+    spec:
+      containers:
+        - name: command-builder-db-seed-job
+          imagePullPolicy: Always
+          image: ghcr.io/vivekweb2013/command-builder/command-builder-backend:1.0.0-SNAPSHOT
+          command: ["java",  "-jar", "-Dapp.seed-only=true", "app.jar"]
+          env:
+            - name: CASSANDRA_STORAGE_HOST
+              value: cassandra-0.cassandra.default.svc.cluster.local
+      restartPolicy: Never
+      imagePullSecrets:
+        - name: regcred
