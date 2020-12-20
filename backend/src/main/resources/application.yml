@@ -18,6 +18,11 @@ app:
     # We're not using cookies because they won't work well in mobile clients.
     authorizedRedirectUris: http://localhost:3000/oauth2/redirect,commandbuilder://oauth2/redirect
 
+management:
+  health:
+    probes:
+      enabled: true
+
 spring:
   jackson:
     mapper:

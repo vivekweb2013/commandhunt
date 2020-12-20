@@ -2,10 +2,8 @@ package com.wirehall.commandbuilder.graph;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wirehall.commandbuilder.dto.Command;
+import com.wirehall.commandbuilder.model.VertexType;
 import com.wirehall.commandbuilder.repository.CommandRepository;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.process.traversal.step.util.WithOptions;
 import org.janusgraph.core.JanusGraph;
@@ -17,6 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Component
 public class GraphBuilder {
@@ -50,24 +52,20 @@ public class GraphBuilder {
   /**
    * Creates the schema and imports the data.
    */
-  public void initialize() {
-    try {
-      SchemaManager.createSchema(graph);
-      if (importEnable) {
-        graphIO.importGraphMl();
-      } else {
-        fillData(commandRepository);
-      }
-      readElements();
-    } catch (Exception e) {
-      LOGGER.error(e.getMessage(), e);
+  public void initialize() throws InterruptedException {
+    SchemaManager.createSchema(graph);
+    if (importEnable) {
+      graphIO.importGraphMl();
+    } else {
+      fillData(commandRepository);
     }
+    readElements();
   }
 
   private void fillData(CommandRepository commandRepository) {
     try {
       // naive check if the graph was previously created
-      if (gt.V().has("name", "command").hasNext()) {
+      if (gt.V().hasLabel(VertexType.COMMAND.toLowerCase()).hasNext()) {
         LOGGER.info("Skip Data Creation. Data Already Exist!!!");
         gt.tx().rollback();
         return;
