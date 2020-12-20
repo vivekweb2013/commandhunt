@@ -12,8 +12,10 @@ spec:
           image: ghcr.io/vivekweb2013/command-builder/command-builder-backend:1.0.0-SNAPSHOT
           command: ["java",  "-jar", "-Dapp.seed-only=true", "app.jar"]
           env:
-            - name: CASSANDRA_STORAGE_HOST
-              value: cassandra-0.cassandra.default.svc.cluster.local
+            - name: STORAGE_HOSTNAME
+              value: cassandra
+            - name: INDEX_SEARCH_HOSTNAME
+              value: elasticsearch
       restartPolicy: Never
       imagePullSecrets:
         - name: regcred

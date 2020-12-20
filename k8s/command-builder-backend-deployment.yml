@@ -19,7 +19,9 @@ spec:
           ports:
             - containerPort: 8080
           env:
-            - name: CASSANDRA_STORAGE_HOST
-              value: cassandra-0.cassandra.default.svc.cluster.local
+            - name: STORAGE_HOSTNAME
+              value: cassandra
+            - name: INDEX_SEARCH_HOSTNAME
+              value: elasticsearch
       imagePullSecrets:
         - name: regcred
