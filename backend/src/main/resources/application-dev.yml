@@ -1,4 +1,4 @@
-# This property file values will override values from application.yml
+# This property file values will override values from application.yml file when using dev profile
 app:
   graph:
     config: jg-inmemory.properties

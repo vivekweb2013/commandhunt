@@ -23,5 +23,11 @@ spec:
               value: cassandra
             - name: INDEX_SEARCH_HOSTNAME
               value: elasticsearch
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 5
       imagePullSecrets:
         - name: regcred
