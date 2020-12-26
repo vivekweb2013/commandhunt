@@ -2,10 +2,7 @@ package com.wirehall.commandbuilder.graph;
 
 import com.wirehall.commandbuilder.model.EdgeType;
 import com.wirehall.commandbuilder.model.VertexType;
-import com.wirehall.commandbuilder.model.props.CommandProperty;
-import com.wirehall.commandbuilder.model.props.FlagProperty;
-import com.wirehall.commandbuilder.model.props.OptionProperty;
-import com.wirehall.commandbuilder.model.props.UserCommandProperty;
+import com.wirehall.commandbuilder.model.props.*;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.janusgraph.core.Cardinality;
 import org.janusgraph.core.JanusGraph;
@@ -56,8 +53,12 @@ public class SchemaManager {
 
   private static void createVertexLabels(final JanusGraphManagement management) {
     management.makeVertexLabel(VertexType.COMMAND.toLowerCase()).make();
+    management.makeVertexLabel(VertexType.USERCOMMAND.toLowerCase()).make();
     management.makeVertexLabel(VertexType.OPTION.toLowerCase()).make();
+    management.makeVertexLabel(VertexType.OPTIONVALUE.toLowerCase()).make();
     management.makeVertexLabel(VertexType.FLAG.toLowerCase()).make();
+    management.makeVertexLabel(VertexType.FLAGVALUE.toLowerCase()).make();
+    management.makeVertexLabel(VertexType.USER.toLowerCase()).make();
   }
 
   private static void createEdgeLabels(final JanusGraphManagement management) {
@@ -75,8 +76,6 @@ public class SchemaManager {
     management.makePropertyKey(CommandProperty.LONG_DESC.toLowerCase()).dataType(String.class).make();
     management.makePropertyKey(CommandProperty.SYNTAX.toLowerCase()).dataType(String.class).make();
     management.makePropertyKey(CommandProperty.MAN_PAGE_URL.toLowerCase()).dataType(String.class).make();
-
-    management.makePropertyKey(UserCommandProperty.COMMAND_NAME.toLowerCase()).dataType(String.class).make();
 
     management.makePropertyKey(FlagProperty.PREFIX.toLowerCase()).dataType(String.class).make();
     management.makePropertyKey(FlagProperty.ALIAS.toLowerCase()).dataType(String.class).make();
@@ -101,6 +100,18 @@ public class SchemaManager {
             .dataType(String.class)
             .make();
 
+    management.makePropertyKey(UserCommandProperty.USER_EMAIL.toLowerCase()).dataType(String.class).make();
+    management.makePropertyKey(UserCommandProperty.COMMAND_NAME.toLowerCase()).dataType(String.class).make();
+    management.makePropertyKey(UserCommandProperty.COMMAND_TEXT.toLowerCase()).dataType(String.class).make();
+    management.makePropertyKey(UserCommandProperty.TIMESTAMP.toLowerCase()).dataType(String.class).make();
+
+    management.makePropertyKey(UserProperty.EMAIL.toLowerCase()).dataType(String.class).make();
+    management.makePropertyKey(UserProperty.EMAIL_VERIFIED.toLowerCase()).dataType(String.class).make();
+    management.makePropertyKey(UserProperty.PASSWORD.toLowerCase()).dataType(String.class).make();
+    management.makePropertyKey(UserProperty.PROVIDER.toLowerCase()).dataType(String.class).make();
+    management.makePropertyKey(UserProperty.PROVIDER_ID.toLowerCase()).dataType(String.class).make();
+    management.makePropertyKey(UserProperty.IMAGE_URL.toLowerCase()).dataType(String.class).make();
+
     // Properties which supports multiple values
     management.makePropertyKey("FILE").dataType(String.class).cardinality(Cardinality.SET).make();
   }
@@ -108,35 +119,30 @@ public class SchemaManager {
   private static void createCompositeIndexes(JanusGraph graph) throws InterruptedException {
     JanusGraphManagement mgmt = graph.openManagement();
     mgmt
-            .buildIndex("CommandNameIndex", Vertex.class)
+            .buildIndex("commandnameindex", Vertex.class)
             .addKey(mgmt.getPropertyKey(CommandProperty.NAME.toLowerCase()))
+            .indexOnly(mgmt.getVertexLabel("command"))
             .buildCompositeIndex();
 
     mgmt
-            .buildIndex("CommandDescIndex", Vertex.class)
-            .addKey(mgmt.getPropertyKey(CommandProperty.DESC.toLowerCase()))
-            .buildCompositeIndex();
-
-    mgmt
-            .buildIndex("UserCommandNameIndex", Vertex.class)
+            .buildIndex("usercommandnameindex", Vertex.class)
             .addKey(mgmt.getPropertyKey(UserCommandProperty.COMMAND_NAME.toLowerCase()))
             .buildCompositeIndex();
-    mgmt.commit();
 
     // Wait for the index to become available
-    ManagementSystem.awaitGraphIndexStatus(graph, "CommandNameIndex").call();
-    ManagementSystem.awaitGraphIndexStatus(graph, "CommandDescIndex").call();
-    ManagementSystem.awaitGraphIndexStatus(graph, "UserCommandNameIndex").call();
+    ManagementSystem.awaitGraphIndexStatus(graph, "commandnameindex").call();
+    ManagementSystem.awaitGraphIndexStatus(graph, "usercommandnameindex").call();
   }
 
   private static void createMixedIndexes(JanusGraph graph) throws InterruptedException {
     JanusGraphManagement mgmt = graph.openManagement();
     mgmt
-            .buildIndex("CommandNameMixedIndex", Vertex.class)
+            .buildIndex("commandnamemixedindex", Vertex.class)
             .addKey(mgmt.getPropertyKey(CommandProperty.NAME.toLowerCase()))
+            .indexOnly(mgmt.getVertexLabel("command"))
             .buildMixedIndex("search");
     mgmt
-            .buildIndex("CommandNameDescMixedIndex", Vertex.class)
+            .buildIndex("commandnamedescmixedindex", Vertex.class)
             .addKey(mgmt.getPropertyKey(CommandProperty.NAME.toLowerCase()))
             .addKey(mgmt.getPropertyKey(CommandProperty.DESC.toLowerCase()))
             .addKey(mgmt.getPropertyKey(CommandProperty.LONG_DESC.toLowerCase()))
@@ -144,7 +150,7 @@ public class SchemaManager {
     mgmt.commit();
 
     // Wait for the index to become available
-    ManagementSystem.awaitGraphIndexStatus(graph, "CommandNameMixedIndex").call();
-    ManagementSystem.awaitGraphIndexStatus(graph, "CommandNameDescMixedIndex").call();
+    ManagementSystem.awaitGraphIndexStatus(graph, "commandnamemixedindex").call();
+    ManagementSystem.awaitGraphIndexStatus(graph, "commandnamedescmixedindex").call();
   }
 }
