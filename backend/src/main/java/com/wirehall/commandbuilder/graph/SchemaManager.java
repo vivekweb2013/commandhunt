@@ -128,6 +128,7 @@ public class SchemaManager {
             .buildIndex("usercommandnameindex", Vertex.class)
             .addKey(mgmt.getPropertyKey(UserCommandProperty.COMMAND_NAME.toLowerCase()))
             .buildCompositeIndex();
+    mgmt.commit();
 
     // Wait for the index to become available
     ManagementSystem.awaitGraphIndexStatus(graph, "commandnameindex").call();
