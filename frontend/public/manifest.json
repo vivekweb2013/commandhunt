@@ -1,6 +1,6 @@
 {
-  "short_name": "Command Builder",
-  "name": "Command Builder App",
+  "short_name": "CommandHunt",
+  "name": "CommandHunt",
   "icons": [
     {
       "src": "favicon.ico",

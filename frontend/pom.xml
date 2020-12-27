@@ -4,15 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>command-builder</artifactId>
+        <artifactId>commandhunt</artifactId>
         <groupId>com.wirehall</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>command-builder-frontend</artifactId>
+    <artifactId>commandhunt-frontend</artifactId>
 
-    <name>command-builder-frontend</name>
-    <description>Command Builder Frontend</description>
+    <name>commandhunt-frontend</name>
+    <description>CommandHunt Frontend</description>
 
     <properties>
         <node.version>v13.11.0</node.version>

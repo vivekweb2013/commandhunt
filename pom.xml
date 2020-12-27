@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>com.wirehall</groupId>
-    <artifactId>command-builder</artifactId>
+    <artifactId>commandhunt</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <modules>
         <module>frontend</module>
@@ -20,8 +20,8 @@
 
     <packaging>pom</packaging>
 
-    <name>command-builder</name>
-    <description>Command Builder</description>
+    <name>commandhunt</name>
+    <description>CommandHunt</description>
 
     <properties>
         <assembly.plugin.version>3.3.0</assembly.plugin.version>

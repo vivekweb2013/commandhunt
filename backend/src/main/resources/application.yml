@@ -16,7 +16,7 @@ app:
     # we'll be generating an auth token for the user and sending the token to the
     # redirectUri mentioned by the client in the /oauth2/authorize request.
     # We're not using cookies because they won't work well in mobile clients.
-    authorizedRedirectUris: http://localhost:3000/oauth2/redirect,commandbuilder://oauth2/redirect
+    authorizedRedirectUris: http://localhost:3000/oauth2/redirect,commandhunt://oauth2/redirect
 
 # Enable actuator's health probes for using them in kubernetes for readiness and liveness
 management:

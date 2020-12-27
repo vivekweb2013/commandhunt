@@ -4,14 +4,14 @@
   <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
   <!-- Override Properties -->
-  <property name="LOG_FILE" value="./logs/cb.log"/>
+  <property name="LOG_FILE" value="./logs/commandhunt.log"/>
 
   <!-- Inherit Appender -->
   <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
   <include resource="org/springframework/boot/logging/logback/file-appender.xml"/>
 
   <!-- Loggers -->
-  <logger name="com.wirehall.commandbuilder" level="DEBUG"/>
+  <logger name="com.wirehall.commandhunt" level="DEBUG"/>
 
   <root level="INFO">
     <appender-ref ref="CONSOLE"/>

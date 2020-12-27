@@ -37,7 +37,7 @@ class Header extends Component {
             <header className="site-header no-print">
                 <div className="logo">
                     <a href="/" onClick={(e) => this.handleRootNavigation(e)}>
-                        <FontAwesomeIcon icon="home" />&nbsp;Command Builder</a>
+                        <FontAwesomeIcon icon="home" />&nbsp;CommandHunt</a>
                 </div>
 
                 <div className="dropdown">
