@@ -1,24 +1,26 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: elasticsearch
+  name: {{ include "commandhunt.fullname" . }}-elasticsearch
+  labels:
+    {{- include "commandhunt.labels" . | nindent 4 }}
 spec:
-  serviceName: elasticsearch
-  replicas: 2
+  serviceName: {{ include "commandhunt.fullname" . }}-elasticsearch
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: elasticsearch
+      {{- include "commandhunt.selectorLabels" . | nindent 6 }}-elasticsearch
   template:
     metadata:
       labels:
-        app: elasticsearch
+        {{- include "commandhunt.selectorLabels" . | nindent 8 }}-elasticsearch
     spec:
       containers:
-        - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+        - name: {{ .Chart.Name }}-elasticsearch
+          image: {{ .Values.statefulset.elasticsearch.image }}
           resources:
             requests:
-              cpu: 100m
+              cpu: 500m
           ports:
             - containerPort: 9200
               name: rest
@@ -37,9 +39,9 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: discovery.seed_hosts
-              value: "elasticsearch-0.elasticsearch,elasticsearch-1.elasticsearch"
+              value: "{{ .Chart.Name }}-elasticsearch-0.{{ .Chart.Name }}-elasticsearch,{{ .Chart.Name }}-elasticsearch-1.{{ .Chart.Name }}-elasticsearch"
             - name: cluster.initial_master_nodes
-              value: "elasticsearch-0,elasticsearch-1"
+              value: "{{ .Chart.Name }}-elasticsearch-0,{{ .Chart.Name }}-elasticsearch-1"
             - name: ES_JAVA_OPTS
               value: "-Xms256m -Xmx256m"
       initContainers:
@@ -65,10 +67,10 @@ spec:
     - metadata:
         name: es-data
         labels:
-          app: elasticsearch
+          {{- include "commandhunt.selectorLabels" . | nindent 10 }}-elasticsearch
       spec:
         accessModes: [ "ReadWriteOnce" ]
-        storageClassName: do-block-storage
+        storageClassName: {{ .Values.storageClassName }}
         resources:
           requests:
             storage: 1Gi

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "commandhunt.fullname" . }}-backend
+  labels:
+    {{- include "commandhunt.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.backend.type }}
+  ports:
+    - port: {{ .Values.service.backend.port }}
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "commandhunt.selectorLabels" . | nindent 4 }}-backend

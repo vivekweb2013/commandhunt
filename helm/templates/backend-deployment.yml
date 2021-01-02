@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "commandhunt.fullname" . }}-backend
+  labels:
+    {{- include "commandhunt.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "commandhunt.selectorLabels" . | nindent 6 }}-backend
+  template:
+    metadata:
+      labels:
+        {{- include "commandhunt.selectorLabels" . | nindent 8 }}-backend
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}-backend
+          image: "{{ .Values.image.repository }}/{{ .Chart.Name }}-backend:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: STORAGE_HOSTNAME
+              value: "{{ .Chart.Name }}-cassandra"
+            - name: INDEX_SEARCH_HOSTNAME
+              value: "{{ .Chart.Name }}-elasticsearch"
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 5

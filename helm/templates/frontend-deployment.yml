@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "commandhunt.fullname" . }}-frontend
+  labels:
+    {{- include "commandhunt.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "commandhunt.selectorLabels" . | nindent 6 }}-frontend
+  template:
+    metadata:
+      labels:
+        {{- include "commandhunt.selectorLabels" . | nindent 8 }}-frontend
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}-frontend
+          image: "{{ .Values.image.repository }}/{{ .Chart.Name }}-frontend:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
