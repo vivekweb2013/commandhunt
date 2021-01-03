@@ -28,6 +28,7 @@
         <frontend.maven.plugin.version>1.10.4</frontend.maven.plugin.version>
         <docker.plugin.version>0.34.1</docker.plugin.version>
         <docker.image.prefix>ghcr.io/vivekweb2013/commandhunt</docker.image.prefix>
+        <janusgraph.version>0.5.2</janusgraph.version>
     </properties>
 
     <build>
