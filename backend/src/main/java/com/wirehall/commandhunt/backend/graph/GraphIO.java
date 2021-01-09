@@ -1,9 +1,5 @@
 package com.wirehall.commandhunt.backend.graph;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import org.apache.tinkerpop.gremlin.process.traversal.IO;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.janusgraph.core.JanusGraph;
@@ -15,6 +11,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @Configuration
 @EnableScheduling
@@ -43,7 +44,6 @@ public class GraphIO {
    * Export the database in graphml format.
    */
   @Scheduled(cron = "${app.graph.export.cronExpression}")
-
   public void exportGraphMl() throws IOException {
     Files.createDirectories(Paths.get(exportPath));
     String outputFilePath = exportPath + File.separator + System.currentTimeMillis() + ".graphml";

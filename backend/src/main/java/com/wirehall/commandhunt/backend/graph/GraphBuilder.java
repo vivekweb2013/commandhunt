@@ -5,6 +5,8 @@ import com.wirehall.commandhunt.backend.dto.Command;
 import com.wirehall.commandhunt.backend.model.EdgeType;
 import com.wirehall.commandhunt.backend.model.VertexType;
 import com.wirehall.commandhunt.backend.repository.CommandRepository;
+import com.wirehall.commandhunt.initdb.MetadataManager;
+import com.wirehall.commandhunt.initdb.SchemaBuilder;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.process.traversal.step.util.WithOptions;
 import org.janusgraph.core.JanusGraph;
@@ -54,11 +56,11 @@ public class GraphBuilder {
    * Creates the schema and imports the data.
    */
   public void initialize() throws InterruptedException {
-    SchemaManager.createSchema(graph);
+    SchemaBuilder.load(graph);
     if (importEnable) {
       graphIO.importGraphMl();
     } else {
-      fillData(commandRepository);
+      MetadataManager.load(graph);
     }
     readElements();
   }

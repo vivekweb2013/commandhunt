@@ -82,6 +82,12 @@
             <optional>true</optional>
         </dependency>
         <dependency>
+            <groupId>com.wirehall.commandhunt</groupId>
+            <artifactId>commandhunt-initdb</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>

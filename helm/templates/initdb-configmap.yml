@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "commandhunt.fullname" . }}-initdb-config
+  labels:
+    {{- include "commandhunt.labels" . | nindent 4 }}
+data:
+  initdb.groovy: |
+    :remote connect tinkerpop.server conf/remote.yaml session
+    :remote console
+    :remote config timeout 300000
+    println "Start creating schema..."
+    com.wirehall.commandhunt.initdb.SchemaBuilder.load(graph)
+    println "Schema creation successful!"
+    println "Start importing metadata..."
+    com.wirehall.commandhunt.initdb.MetadataManager.load(graph)
+    println "Metadata import successful!"
+    :exit
