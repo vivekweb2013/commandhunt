@@ -31,7 +31,7 @@ class Header extends Component {
 
     render() {
         const { user } = this.props;
-        const photoUrl = user && user.photoUrl ? user.photoUrl : userSVG;
+        const imageUrl = user && user.imageUrl ? user.imageUrl : userSVG;
 
         return (
             <header className="site-header no-print">
@@ -43,7 +43,7 @@ class Header extends Component {
                 <div className="dropdown">
                     <button disabled={!!user} onClick={(e) => this.handleLogin(e)} className="dropdown-btn">
                         {user ?
-                            <><span alt="avatar" style={{ backgroundImage: `url(${photoUrl})` }} className="avatar" /><span>&nbsp;{user.displayName}</span></>
+                            <><span alt="avatar" style={{ backgroundImage: `url(${imageUrl})` }} className="avatar" /><span>&nbsp;{user.name}</span></>
                             : <>&nbsp;<FontAwesomeIcon icon="sign-in-alt" />&nbsp;&nbsp;Login</>
                         }
                     </button>

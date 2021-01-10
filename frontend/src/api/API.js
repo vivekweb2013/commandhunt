@@ -32,12 +32,7 @@ export const userLogin = (loginRequest) => {
         const payload = await res.json();
         const token = payload.token;
         localStorage.setItem('token', token);
-        const userPayload = payload.user;
-        //TODO: Rather than transforming, set the user as it is in redux store, update the views accordingly
-        const user = {
-            localId: userPayload.id, displayName: userPayload.properties.name, photoUrl: null,
-            email: userPayload.properties.email, emailVerified: userPayload.properties.emailVerified
-        }
+        const user = payload.user;
         return user;
     }).catch(catchError);
 };
@@ -53,13 +48,7 @@ export const getUserProfile = (token) => {
     }
 
     return fetch(`${API_URL}/auth/user/me`, { headers: getHeaders() }).then(handleErrors).then(async res => {
-        const payload = await res.json();
-        const userPayload = payload;
-        //TODO: Rather than transforming, set the user as it is in redux store, update the views accordingly
-        const user = {
-            localId: userPayload.id, displayName: userPayload.properties.name, photoUrl: userPayload.properties.imageUrl,
-            email: userPayload.properties.email, emailVerified: userPayload.properties.emailVerified
-        }
+        const user = await res.json();
         return user;
     }).catch(catchError);
 }
