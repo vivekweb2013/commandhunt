@@ -3,7 +3,7 @@ package com.wirehall.commandhunt.backend.security;
 import com.wirehall.commandhunt.backend.dto.User;
 import com.wirehall.commandhunt.backend.dto.User.OAuthProvider;
 import com.wirehall.commandhunt.backend.exception.OAuthException;
-import com.wirehall.commandhunt.backend.model.props.UserProperty;
+
 import java.util.Map;
 
 public class OAuthUserFactory {
@@ -20,27 +20,27 @@ public class OAuthUserFactory {
    * @return User DTO.
    */
   public static User getOAuth2UserInfo(String registrationId, Map<String, Object> attributes) {
-    User user = new User();
-    user.addProperty(UserProperty.PROVIDER, registrationId);
-    user.addProperty(UserProperty.NAME, attributes.get(UserProperty.NAME.toLowerCase()));
-    user.addProperty(UserProperty.EMAIL, attributes.get(UserProperty.EMAIL.toLowerCase()));
+      User user = new User();
+      user.setProvider(OAuthProvider.valueOf(registrationId));
+      user.setName((String) attributes.get("name"));
+      user.setEmail((String) attributes.get("email"));
 
-    if (registrationId.equalsIgnoreCase(OAuthProvider.google.toString())) {
-      user.addProperty(UserProperty.PROVIDER_ID, attributes.get("sub"));
-      user.addProperty(UserProperty.IMAGE_URL, attributes.get("picture"));
-      user.addProperty(UserProperty.EMAIL_VERIFIED, attributes.get("email_verified"));
-      return user;
-    } else if (registrationId.equalsIgnoreCase(OAuthProvider.facebook.toString())) {
-      user.addProperty(UserProperty.PROVIDER_ID, attributes.get("id"));
-      user.addProperty(UserProperty.IMAGE_URL, getFacebookImageUrl(attributes));
-      return user;
-    } else if (registrationId.equalsIgnoreCase(OAuthProvider.github.toString())) {
-      user.addProperty(UserProperty.PROVIDER_ID, attributes.get("id"));
-      user.addProperty(UserProperty.IMAGE_URL, attributes.get("avatar_url"));
-      return user;
-    } else {
-      throw new OAuthException("Sorry! Login with " + registrationId + " is not supported yet.");
-    }
+      if (registrationId.equalsIgnoreCase(OAuthProvider.google.toString())) {
+          user.setProviderId((String) attributes.get("sub"));
+          user.setImageUrl((String) attributes.get("picture"));
+          user.setEmailVerified((boolean) attributes.get("email_verified"));
+          return user;
+      } else if (registrationId.equalsIgnoreCase(OAuthProvider.facebook.toString())) {
+          user.setProviderId((String) attributes.get("id"));
+          user.setImageUrl(getFacebookImageUrl(attributes));
+          return user;
+      } else if (registrationId.equalsIgnoreCase(OAuthProvider.github.toString())) {
+          user.setProviderId((String) attributes.get("id"));
+          user.setImageUrl((String) attributes.get("avatar_url"));
+          return user;
+      } else {
+          throw new OAuthException("Sorry! Login with " + registrationId + " is not supported yet.");
+      }
   }
 
   private static String getFacebookImageUrl(Map<String, Object> attributes) {

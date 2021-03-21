@@ -4,10 +4,8 @@ package com.wirehall.commandhunt.backend.service.auth;
 import com.wirehall.commandhunt.backend.dto.User;
 import com.wirehall.commandhunt.backend.exception.OAuthException;
 import com.wirehall.commandhunt.backend.model.auth.CustomUserPrincipal;
-import com.wirehall.commandhunt.backend.model.props.UserProperty;
 import com.wirehall.commandhunt.backend.repository.UserRepository;
 import com.wirehall.commandhunt.backend.security.OAuthUserFactory;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
@@ -40,42 +38,41 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
 
   private OAuth2User processOAuth2User(OAuth2UserRequest oauth2UserRequest, OAuth2User oauth2User) {
     User oauthUser = OAuthUserFactory
-        .getOAuth2UserInfo(oauth2UserRequest.getClientRegistration().getRegistrationId(),
-            oauth2User.getAttributes());
+            .getOAuth2UserInfo(oauth2UserRequest.getClientRegistration().getRegistrationId(),
+                    oauth2User.getAttributes());
 
-    String email = (String) oauthUser.getProperty(UserProperty.EMAIL);
-    String provider = (String) oauthUser.getProperty(UserProperty.PROVIDER);
+    String email = (String) oauthUser.getEmail();
+    String provider = (String) oauthUser.getPassword();
     String regId = oauth2UserRequest.getClientRegistration().getRegistrationId();
-    if (StringUtils.isEmpty(email)) {
+    if (StringUtils.hasLength(email)) {
       throw new OAuthException("Email not found from OAuth2 provider");
     }
 
-    Optional<User> existingUserOptional = userRepository.findByEmail(email);
-    if (existingUserOptional.isPresent()) {
+    User existingUser = userRepository.findByEmail(email);
+    if (existingUser != null) {
       // User already exists with same email id.
-      User existingUser = existingUserOptional.get();
       if (!provider.equals(regId)) {
         throw new OAuthException("Looks like you're signed up with " + provider
-            + " account. Please use your " + provider + " account to login.");
+                + " account. Please use your " + provider + " account to login.");
       }
 
       // Check if user info is updated at provider
       boolean userUpdateRequired = userUpdateRequired(existingUser, oauthUser);
       if (userUpdateRequired) {
         // Update user in db
-        userRepository.updateUser(oauthUser);
+        userRepository.save(oauthUser);
       }
     } else {
       // User does not exist in db, so add the user to db.
-      userRepository.addUser(oauthUser);
+      userRepository.save(oauthUser);
     }
 
     return CustomUserPrincipal.create(oauthUser, oauth2User.getAttributes());
   }
 
   private boolean userUpdateRequired(User existingUser, User oauthUser) {
-    return !existingUser.getProperty(UserProperty.NAME)
-        .equals(oauthUser.getProperty(UserProperty.NAME)) || !existingUser
-        .getProperty(UserProperty.IMAGE_URL).equals(oauthUser.getProperty(UserProperty.IMAGE_URL));
+    return !existingUser.getName()
+            .equals(oauthUser.getName()) || !existingUser
+            .getImageUrl().equals(oauthUser.getImageUrl());
   }
 }

@@ -1,15 +1,15 @@
 package com.wirehall.commandhunt.backend.model.auth;
 
 import com.wirehall.commandhunt.backend.dto.User;
-import com.wirehall.commandhunt.backend.model.props.UserProperty;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class CustomUserPrincipal implements OAuth2User, UserDetails {
 
@@ -25,7 +25,7 @@ public class CustomUserPrincipal implements OAuth2User, UserDetails {
    * @param authorities Collection of authorities.
    */
   public CustomUserPrincipal(User user, Collection<? extends GrantedAuthority> authorities) {
-    this.password = (String) user.removeProperty(UserProperty.PASSWORD);
+    this.password = user.getPassword();
     this.user = user;
     this.authorities = authorities;
   }
@@ -64,7 +64,7 @@ public class CustomUserPrincipal implements OAuth2User, UserDetails {
   }
 
   public String getEmail() {
-    return (String) user.getProperty(UserProperty.EMAIL);
+    return (String) user.getEmail();
   }
 
   @Override
@@ -74,7 +74,7 @@ public class CustomUserPrincipal implements OAuth2User, UserDetails {
 
   @Override
   public String getUsername() {
-    return (String) user.getProperty(UserProperty.EMAIL);
+    return user.getEmail();
   }
 
   @Override

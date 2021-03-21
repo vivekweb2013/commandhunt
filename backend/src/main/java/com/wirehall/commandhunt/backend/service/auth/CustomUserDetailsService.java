@@ -21,14 +21,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-  @Autowired
-  private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-  @Override
-  public UserDetails loadUserByUsername(String email) {
-    User user = userRepository.findByEmail(email)
-        .orElseThrow(() -> new BadCredentialsException("No user exists with email : " + email));
+    @Override
+    public UserDetails loadUserByUsername(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new BadCredentialsException("No user exists with email : " + email);
+        }
 
-    return CustomUserPrincipal.create(user);
-  }
+        return CustomUserPrincipal.create(user);
+    }
 }
