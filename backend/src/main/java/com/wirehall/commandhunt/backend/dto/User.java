@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "USER")
+@Table(name = "USER_INFO") // 'User' is a reserved keyword in postgres
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @Column(nullable = false)
     private String name;
@@ -21,7 +21,6 @@ public class User {
     private String providerId;
     private String imageUrl;
     @JsonIgnore
-    @Column(nullable = false)
     private String password;
 
     public long getId() {
@@ -90,7 +89,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "UserDto{" +
+        return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +

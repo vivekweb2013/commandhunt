@@ -41,10 +41,10 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
             .getOAuth2UserInfo(oauth2UserRequest.getClientRegistration().getRegistrationId(),
                     oauth2User.getAttributes());
 
-    String email = (String) oauthUser.getEmail();
-    String provider = (String) oauthUser.getPassword();
+    String email = oauthUser.getEmail();
+    String provider = String.valueOf(oauthUser.getProvider());
     String regId = oauth2UserRequest.getClientRegistration().getRegistrationId();
-    if (StringUtils.hasLength(email)) {
+    if (!StringUtils.hasLength(email)) {
       throw new OAuthException("Email not found from OAuth2 provider");
     }
 

@@ -81,7 +81,7 @@ public class AuthController {
 
     LOGGER.debug("Signup requested: {}", signUpRequest);
 
-    User user = userService.addUser(signUpRequest);
+    User user = userService.registerUser(signUpRequest);
 
     URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/me")
         .buildAndExpand(user.getId()).toUri();

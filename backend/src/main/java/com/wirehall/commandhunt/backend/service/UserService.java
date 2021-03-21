@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 public class UserService {
@@ -32,7 +33,11 @@ public class UserService {
      * @param signUpRequest Sign up request payload.
      * @return User DTO.
      */
-    public User addUser(SignUp signUpRequest) {
+    public User registerUser(SignUp signUpRequest) {
+        if (!StringUtils.hasLength(signUpRequest.getPassword())) {
+            LOGGER.error("Empty password in sign up request: {}", signUpRequest.getEmail());
+            throw new BadRequestException("Password is empty in the sign up request");
+        }
         if (userRepository.findByEmail(signUpRequest.getEmail()) != null) {
             LOGGER.error("Email: {} is already in use", signUpRequest.getEmail());
             throw new BadRequestException("Email address already in use.");
