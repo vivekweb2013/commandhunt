@@ -3,7 +3,7 @@ package com.wirehall.commandhunt.backend.controller;
 import com.wirehall.commandhunt.backend.dto.UserCommand;
 import com.wirehall.commandhunt.backend.dto.filter.Filter;
 import com.wirehall.commandhunt.backend.service.UserCommandService;
-import com.wirehall.commandhunt.backend.dto.filter.Page;
+import com.wirehall.commandhunt.backend.dto.filter.PageResponse;
 
 import javax.validation.Valid;
 import org.slf4j.Logger;
@@ -33,13 +33,13 @@ public class UserCommandController {
   }
 
   @GetMapping(value = "/user-command")
-  public Page<UserCommand> getAllUserCommands(@Valid Filter filter) {
+  public PageResponse<UserCommand> getAllUserCommands(@Valid Filter filter) {
     LOGGER.info("Retrieving all the user-commands");
     return userCommandService.getAllUserCommands(filter);
   }
 
   @GetMapping(value = "/user-command/{id}")
-  public UserCommand getUserCommandById(@PathVariable(name = "id") String id) {
+  public UserCommand getUserCommandById(@PathVariable(name = "id") Long id) {
     LOGGER.info("Retrieving user-command with id: {}", id);
     return userCommandService.getUserCommandById(id);
   }
@@ -57,7 +57,7 @@ public class UserCommandController {
   }
 
   @DeleteMapping(value = "/user-command/{id}")
-  public void deleteUserCommand(@PathVariable(name = "id") String userCommandId) {
+  public void deleteUserCommand(@PathVariable(name = "id") Long userCommandId) {
     LOGGER.info("Deleting user-command with id: {}", userCommandId);
     userCommandService.deleteUserCommand(userCommandId);
   }

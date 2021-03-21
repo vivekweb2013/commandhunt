@@ -4,37 +4,37 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-public class Pageable {
+public class Pagination {
 
   @Min(1)
   @NotNull
-  private long pageNumber;
+  private int pageNumber;
 
   @Min(5)
   @NotNull
-  private long pageSize;
+  private int pageSize;
 
   @Valid
   @NotNull
   private Sort sort;
 
-  public long getOffset() {
+  public int getOffset() {
     return (this.pageNumber - 1) * this.getPageSize();
   }
 
-  public long getPageNumber() {
+  public int getPageNumber() {
     return pageNumber;
   }
 
-  public void setPageNumber(long pageNumber) {
+  public void setPageNumber(int pageNumber) {
     this.pageNumber = pageNumber;
   }
 
-  public long getPageSize() {
+  public int getPageSize() {
     return pageSize;
   }
 
-  public void setPageSize(long pageSize) {
+  public void setPageSize(int pageSize) {
     this.pageSize = pageSize;
   }
 
@@ -48,7 +48,7 @@ public class Pageable {
 
   @Override
   public String toString() {
-    return "Pageable{" + "pageNumber=" + pageNumber
+    return "Pagination{" + "pageNumber=" + pageNumber
         + ", pageSize=" + pageSize + ", sort=" + sort + '}';
   }
 }

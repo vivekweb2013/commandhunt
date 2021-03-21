@@ -2,16 +2,28 @@ package com.wirehall.commandhunt.backend.service;
 
 import com.wirehall.commandhunt.backend.dto.UserCommand;
 import com.wirehall.commandhunt.backend.dto.filter.Filter;
-import com.wirehall.commandhunt.backend.dto.filter.Page;
-import com.wirehall.commandhunt.backend.model.props.UserCommandProperty;
+import com.wirehall.commandhunt.backend.dto.filter.PageResponse;
+import com.wirehall.commandhunt.backend.mapper.PaginationMapper;
+import com.wirehall.commandhunt.backend.mapper.UserCommandMapper;
+import com.wirehall.commandhunt.backend.model.UserCommandEntity;
 import com.wirehall.commandhunt.backend.repository.UserCommandRepository;
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserCommandService {
+  private static final Logger LOGGER = LoggerFactory.getLogger(UserCommandService.class);
 
+  private final UserCommandMapper mapper = new UserCommandMapper();
+  private final PaginationMapper paginationMapper = new PaginationMapper();
   private final UserCommandRepository userCommandRepository;
 
   @Autowired
@@ -25,7 +37,9 @@ public class UserCommandService {
    * @return The list of user commands.
    */
   public List<UserCommand> getAllUserCommands() {
-    return userCommandRepository.getAllUserCommands();
+    LOGGER.debug("Retrieving all user-commands");
+    List<UserCommandEntity> userCommandEntity = userCommandRepository.findAll();
+    return userCommandEntity.stream().map(mapper::mapToUserCommand).collect(Collectors.toList());
   }
 
   /**
@@ -34,8 +48,13 @@ public class UserCommandService {
    * @param filter Filter criteria.
    * @return Page of user-command DTOs.
    */
-  public Page<UserCommand> getAllUserCommands(Filter filter) {
-    return userCommandRepository.getAllUserCommands(filter);
+  public PageResponse<UserCommand> getAllUserCommands(Filter filter) {
+    LOGGER.debug("Retrieving all user-commands");
+    LOGGER.debug("Applying the filter: {}", filter);
+
+    Pageable pageable = paginationMapper.mapToPageable(filter);
+    Page<UserCommandEntity> userCommandEntityPage = userCommandRepository.findAll(pageable);
+    return mapper.mapToPageResponse(userCommandEntityPage, filter);
   }
 
   /**
@@ -44,8 +63,11 @@ public class UserCommandService {
    * @param userCommandId The id of the user-command to retrieve.
    * @return The user-command dto.
    */
-  public UserCommand getUserCommandById(String userCommandId) {
-    return userCommandRepository.getUserCommandById(userCommandId);
+  public UserCommand getUserCommandById(Long userCommandId) {
+    LOGGER.debug("Retrieving user-command with id: {}", userCommandId);
+
+    UserCommandEntity userCommandEntity = userCommandRepository.getOne(userCommandId);
+    return mapper.mapToUserCommand(userCommandEntity);
   }
 
   /**
@@ -54,8 +76,11 @@ public class UserCommandService {
    * @param userCommand The user-command dto to be added.
    */
   public void addUserCommand(UserCommand userCommand) {
-    userCommand.addProperty(UserCommandProperty.TIMESTAMP, System.currentTimeMillis());
-    userCommandRepository.addUserCommand(userCommand);
+    LOGGER.info("Inserting user-command {}", userCommand);
+
+    userCommand.setTimestamp(new Timestamp(System.currentTimeMillis()));
+    UserCommandEntity userCommandEntity = mapper.mapToUserCommandEntity(userCommand);
+    userCommandRepository.save(userCommandEntity);
   }
 
   /**
@@ -64,8 +89,11 @@ public class UserCommandService {
    * @param userCommand The user-command dto to be updated.
    */
   public void updateUserCommand(UserCommand userCommand) {
-    userCommand.addProperty(UserCommandProperty.TIMESTAMP, System.currentTimeMillis());
-    userCommandRepository.updateUserCommand(userCommand);
+    LOGGER.info("Updating user-command {}", userCommand);
+
+    userCommand.setTimestamp(new Timestamp(System.currentTimeMillis()));
+    UserCommandEntity userCommandEntity = mapper.mapToUserCommandEntity(userCommand);
+    userCommandRepository.save(userCommandEntity);
   }
 
   /**
@@ -73,7 +101,9 @@ public class UserCommandService {
    *
    * @param userCommandId The id of user-command to be deleted.
    */
-  public void deleteUserCommand(String userCommandId) {
-    userCommandRepository.deleteUserCommand(userCommandId);
+  public void deleteUserCommand(Long userCommandId) {
+    LOGGER.info("Updating user-command with id {}", userCommandId);
+
+    userCommandRepository.deleteById(userCommandId);
   }
 }

@@ -2,6 +2,8 @@ package com.wirehall.commandhunt.backend.converter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.AttributeConverter;
 import org.slf4j.Logger;
@@ -34,7 +36,7 @@ public class OptionValueConverter implements AttributeConverter<List<String>, St
     ObjectMapper objectMapper = new ObjectMapper();
 
     if (jsonArrayString == null || jsonArrayString.isEmpty()) {
-      return null;
+      return new ArrayList<>();
     }
     try {
       values = objectMapper.readerForListOf(String.class).readValue(jsonArrayString);

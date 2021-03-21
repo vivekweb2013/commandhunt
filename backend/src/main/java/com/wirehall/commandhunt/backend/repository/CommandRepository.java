@@ -5,8 +5,8 @@ import com.wirehall.commandhunt.backend.dto.Flag;
 import com.wirehall.commandhunt.backend.dto.Option;
 import com.wirehall.commandhunt.backend.dto.filter.Condition;
 import com.wirehall.commandhunt.backend.dto.filter.Filter;
-import com.wirehall.commandhunt.backend.dto.filter.Page;
-import com.wirehall.commandhunt.backend.dto.filter.Pageable;
+import com.wirehall.commandhunt.backend.dto.filter.PageResponse;
+import com.wirehall.commandhunt.backend.dto.filter.Pagination;
 import com.wirehall.commandhunt.backend.mapper.CommandMapper;
 import com.wirehall.commandhunt.backend.model.EdgeType;
 import com.wirehall.commandhunt.backend.model.VertexType;
@@ -68,23 +68,23 @@ public class CommandRepository {
    * @param filter Filter criteria.
    * @return Page of command DTOs.
    */
-  public Page<Command> getAllCommands(Filter filter) {
+  public PageResponse<Command> getAllCommands(Filter filter) {
     LOGGER.debug("Retrieving all commands from database.");
     LOGGER.debug("Applying the filter: {}", filter);
 
-    Pageable pageable = filter.getPageable();
-    Page<Command> commandPage = new Page<>();
+    Pagination pagination = filter.getPagination();
+    PageResponse<Command> commandPage = new PageResponse<>();
 
     GraphTraversal<Vertex, Vertex> commandGT = gt.V().hasLabel(VertexType.COMMAND.toLowerCase());
     applyConditions(commandGT, filter.getConditions());
 
     final String listKey = "list";
     final String countKey = "count";
-    Map<String, Object> result = commandGT.order().by(pageable.getSort().getSortBy(),
-        Order.valueOf(pageable.getSort().getSortOrder().toLowerCase()))
+    Map<String, Object> result = commandGT.order().by(pagination.getSort().getSortBy(),
+        Order.valueOf(pagination.getSort().getSortOrder().toLowerCase()))
         .fold().as(listKey, countKey).select(listKey, countKey)
-        .by(__.range(Scope.local, pageable.getOffset(),
-            pageable.getOffset() + pageable.getPageSize()))
+        .by(__.range(Scope.local, pagination.getOffset(),
+            pagination.getOffset() + pagination.getPageSize()))
         .by(__.count(Scope.local)).next();
 
     @SuppressWarnings("unchecked")
@@ -98,7 +98,7 @@ public class CommandRepository {
     }
 
     commandPage.setTotalSize(totalSize);
-    commandPage.setPageSize(pageable.getPageSize());
+    commandPage.setPageSize(pagination.getPageSize());
     commandPage.setRecords(commands);
 
     return commandPage;

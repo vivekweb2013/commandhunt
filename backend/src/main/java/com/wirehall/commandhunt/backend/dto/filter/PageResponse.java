@@ -3,7 +3,7 @@ package com.wirehall.commandhunt.backend.dto.filter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Page<T> {
+public class PageResponse<T> {
 
   private long pageNumber = 1L;
   private long totalSize = 0L;
@@ -53,7 +53,7 @@ public class Page<T> {
 
   @Override
   public String toString() {
-    return "Page{" + "pageNumber=" + pageNumber + ", totalSize=" + totalSize
+    return "PageResponse{" + "pageNumber=" + pageNumber + ", totalSize=" + totalSize
         + ", pageSize=" + pageSize + ", records=" + records + '}';
   }
 }

@@ -1,6 +1,6 @@
 package com.wirehall.commandhunt.backend.repository;
 
-import com.wirehall.commandhunt.backend.model.UserCommand;
+import com.wirehall.commandhunt.backend.model.UserCommandEntity;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,16 +18,16 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @EnableTransactionManagement
 @ActiveProfiles("dev")
-public class UserCommandRepositoryJpaTest {
+public class UserCommandRepositoryTest {
 
   @Autowired
-  private UserCommandRepositoryJpa userCommandRepository;
+  private UserCommandRepository userCommandRepository;
 
   @Test
   @Transactional
   //@Rollback(false)
   public void testCreateUserCommand() {
-    UserCommand userCommand = new UserCommand();
+    UserCommandEntity userCommand = new UserCommandEntity();
     userCommand.setCommandName("ls");
     userCommand.setCommandText("ls -alt");
     userCommand.setUserEmail("adsf@gsdfs.cc");

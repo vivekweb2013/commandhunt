@@ -1,9 +1,9 @@
 package com.wirehall.commandhunt.backend.dto.filter;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Filter {
 
@@ -11,7 +11,7 @@ public class Filter {
 
   @Valid
   @NotNull
-  private Pageable pageable;
+  private Pagination pagination;
 
   public List<Condition> getConditions() {
     return conditions;
@@ -21,16 +21,16 @@ public class Filter {
     this.conditions = conditions;
   }
 
-  public Pageable getPageable() {
-    return pageable;
+  public Pagination getPagination() {
+    return pagination;
   }
 
-  public void setPageable(Pageable pageable) {
-    this.pageable = pageable;
+  public void setPagination(Pagination pagination) {
+    this.pagination = pagination;
   }
 
   @Override
   public String toString() {
-    return "Filter{" + "conditions=" + conditions + ", pageable=" + pageable + '}';
+    return "Filter{" + "conditions=" + conditions + ", pagination=" + pagination + '}';
   }
 }

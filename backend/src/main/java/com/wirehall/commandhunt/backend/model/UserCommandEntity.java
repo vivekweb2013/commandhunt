@@ -19,7 +19,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "usercommand")
-public class UserCommand {
+public class UserCommandEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;

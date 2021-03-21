@@ -15,12 +15,12 @@ class Finder extends Component {
         filter: {
             conditions: getArrayQueryParamByName('conditions'),
 
-            pageable: {
-                pageNumber: Number(getQueryParamByName('pageable.pageNumber')) || 1,
-                pageSize: Number(getQueryParamByName('pageable.pageSize')) || 10,
+            pagination: {
+                pageNumber: Number(getQueryParamByName('pagination.pageNumber')) || 1,
+                pageSize: Number(getQueryParamByName('pagination.pageSize')) || 10,
                 sort: {
-                    sortBy: getQueryParamByName('pageable.sort.sortBy') || 'name',
-                    sortOrder: getQueryParamByName('pageable.sort.sortOrder') || 'ASC'
+                    sortBy: getQueryParamByName('pagination.sort.sortBy') || 'name',
+                    sortOrder: getQueryParamByName('pagination.sort.sortOrder') || 'ASC'
                 }
             }
         }
@@ -37,8 +37,8 @@ class Finder extends Component {
             const { commands } = this.props;
             const { filter } = this.state;
 
-            if (filter.pageable.pageNumber > commands.totalPages) {
-                this.setState({ filter: { ...filter, pageable: { ...filter.pageable, pageNumber: commands.totalPages } } }, () => {
+            if (filter.pagination.pageNumber > commands.totalPages) {
+                this.setState({ filter: { ...filter, pagination: { ...filter.pagination, pageNumber: commands.totalPages } } }, () => {
                     const { filter } = this.state;
                     history.push(getQueryParamsFromFilter(filter))
                 });
@@ -59,7 +59,7 @@ class Finder extends Component {
 
     handlePageChange(pageNumber) {
         const { history } = this.props;
-        this.setState({ filter: { ...this.state.filter, pageable: { ...this.state.filter.pageable, pageNumber } } }, () => {
+        this.setState({ filter: { ...this.state.filter, pagination: { ...this.state.filter.pagination, pageNumber } } }, () => {
             history.push(getQueryParamsFromFilter(this.state.filter))
         });
     }
@@ -68,14 +68,14 @@ class Finder extends Component {
         e.preventDefault();
         const { history } = this.props;
         const pageSize = Number(e.target.value);
-        this.setState({ filter: { ...this.state.filter, pageable: { ...this.state.filter.pageable, pageSize } } }, () => {
+        this.setState({ filter: { ...this.state.filter, pagination: { ...this.state.filter.pagination, pageSize } } }, () => {
             history.push(getQueryParamsFromFilter(this.state.filter))
         });
     }
 
     getSortIcon(column) {
         const { filter } = this.state;
-        return filter.pageable.sort.sortBy === column ? (filter.pageable.sort.sortOrder === 'DESC' ? 'sort-down' : 'sort-up') : '';
+        return filter.pagination.sort.sortBy === column ? (filter.pagination.sort.sortOrder === 'DESC' ? 'sort-down' : 'sort-up') : '';
     }
 
     sort(column) {
@@ -83,10 +83,10 @@ class Finder extends Component {
         const { filter } = this.state;
         this.setState({
             filter: {
-                ...filter, pageable: {
-                    ...filter.pageable, sort: {
+                ...filter, pagination: {
+                    ...filter.pagination, sort: {
                         sortBy: column,
-                        sortOrder: filter.pageable.sort.sortBy === column && filter.pageable.sort.sortOrder === 'ASC' ? 'DESC' : 'ASC'
+                        sortOrder: filter.pagination.sort.sortBy === column && filter.pagination.sort.sortOrder === 'ASC' ? 'DESC' : 'ASC'
                     }
                 }
             }
@@ -107,7 +107,7 @@ class Finder extends Component {
 
                 {commands && commands.totalSize > 0 ? <div>
                     <div className="toolbar">
-                        <ItemsPerPage pageSize={filter.pageable.pageSize} handlePageSizeChange={this.handlePageSizeChange.bind(this)} />
+                        <ItemsPerPage pageSize={filter.pagination.pageSize} handlePageSizeChange={this.handlePageSizeChange.bind(this)} />
                     </div>
                     <table>
                         <thead>
@@ -136,7 +136,7 @@ class Finder extends Component {
                         </tbody>
 
                     </table>
-                    <Pagination pageNumber={filter.pageable.pageNumber} totalSize={commands.totalSize}
+                    <Pagination pageNumber={filter.pagination.pageNumber} totalSize={commands.totalSize}
                         totalPages={commands.totalPages} maxPagesToShow={5} handlePageChange={this.handlePageChange.bind(this)} />
                 </div> : <div className="no-data-msg">No Commands Found!</div>
                 }

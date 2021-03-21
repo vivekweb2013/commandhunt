@@ -2,7 +2,7 @@ package com.wirehall.commandhunt.backend.service;
 
 import com.wirehall.commandhunt.backend.dto.Command;
 import com.wirehall.commandhunt.backend.dto.filter.Filter;
-import com.wirehall.commandhunt.backend.dto.filter.Page;
+import com.wirehall.commandhunt.backend.dto.filter.PageResponse;
 import com.wirehall.commandhunt.backend.repository.CommandRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class CommandService {
     return commandRepository.getAllCommands();
   }
 
-  public Page<Command> getAllCommands(Filter filter) {
+  public PageResponse<Command> getAllCommands(Filter filter) {
     return commandRepository.getAllCommands(filter);
   }
 

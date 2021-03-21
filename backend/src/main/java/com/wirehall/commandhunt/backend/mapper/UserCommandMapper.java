@@ -2,60 +2,51 @@ package com.wirehall.commandhunt.backend.mapper;
 
 
 import com.wirehall.commandhunt.backend.dto.UserCommand;
-import com.wirehall.commandhunt.backend.model.props.UserCommandProperty;
-import java.util.HashMap;
-import java.util.Map;
-import org.apache.tinkerpop.gremlin.structure.Vertex;
+import com.wirehall.commandhunt.backend.dto.filter.Filter;
+import com.wirehall.commandhunt.backend.dto.filter.PageResponse;
+import com.wirehall.commandhunt.backend.model.UserCommandEntity;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public final class UserCommandMapper extends BaseMapper {
 
-  /**
-   * Maps the vertex to UserCommand dto.
-   *
-   * @param userCommandVertex UserCommand vertex to be converted to UserCommand dto.
-   * @return The UserCommand dto is returned, Only the UserCommand details are available in the dto.
-   */
-  public UserCommand mapToUserCommand(Vertex userCommandVertex) {
-    UserCommand userCommand = new UserCommand();
-    userCommand.setId(userCommandVertex.id());
 
-    for (UserCommandProperty userCommandProperty : UserCommandProperty.values()) {
-      if (userCommandProperty.isMandatory()
-          || userCommandVertex.property(userCommandProperty.toLowerCase()).isPresent()) {
-        userCommand.addProperty(userCommandProperty,
-            userCommandVertex.property(userCommandProperty.toLowerCase()).value());
-      }
-    }
+  public UserCommand mapToUserCommand(UserCommandEntity userCommandEntity) {
+    UserCommand userCommand = new UserCommand();
+    userCommand.setId(userCommandEntity.getId());
+
+    userCommand.setFlags(userCommandEntity.getFlags());
+    userCommand.setOptions(userCommandEntity.getOptions());
+    userCommand.setUserEmail(userCommandEntity.getUserEmail());
+    userCommand.setCommandName(userCommandEntity.getCommandName());
+    userCommand.setCommandText(userCommandEntity.getCommandText());
+    userCommand.setTimestamp(userCommandEntity.getTimestamp());
     return userCommand;
   }
 
-  /**
-   * Maps vertex properties of flag-value vertex to key-value map.
-   *
-   * @param flagValueProps Vertex properties of flag-value vertex.
-   * @return Properties as key value pairs.
-   */
-  public Map<String, Object> mapToUserCommandFlags(Map<String, Object> flagValueProps) {
-    Map<String, Object> flags = new HashMap<>();
-    Map<String, Object> vertexProps = (Map<String, Object>) flagValueProps.get("V");
-    Map<String, Object> edgeProps = (Map<String, Object>) flagValueProps.get("E");
-    flags.putAll(vertexProps);
-    flags.putAll(edgeProps);
-    return flags;
+  public UserCommandEntity mapToUserCommandEntity(UserCommand userCommand) {
+    UserCommandEntity userCommandEntity = new UserCommandEntity();
+    userCommandEntity.setId(userCommand.getId());
+    userCommandEntity.setUserEmail(userCommand.getUserEmail());
+    userCommandEntity.setCommandName(userCommand.getCommandName());
+    userCommandEntity.setCommandText(userCommand.getCommandText());
+    userCommandEntity.setTimestamp(userCommand.getTimestamp());
+
+    userCommandEntity.setFlags(userCommand.getFlags());
+    userCommandEntity.setOptions(userCommand.getOptions());
+    return userCommandEntity;
   }
 
-  /**
-   * Maps vertex properties of flag-value vertex to key-value map.
-   *
-   * @param optionValueProps Vertex properties of option-value vertex.
-   * @return Properties as key value pairs.
-   */
-  public Map<String, Object> mapToUserCommandOptions(Map<String, Object> optionValueProps) {
-    Map<String, Object> options = new HashMap<>();
-    Map<String, Object> vertexProps = (Map<String, Object>) optionValueProps.get("V");
-    Map<String, Object> edgeProps = (Map<String, Object>) optionValueProps.get("E");
-    options.putAll(vertexProps);
-    options.putAll(edgeProps);
-    return options;
+  public PageResponse<UserCommand> mapToPageResponse(Page<UserCommandEntity> userCommandEntityPage, Filter filter) {
+    PageResponse<UserCommand> pageResponse = new PageResponse<>();
+    List<UserCommandEntity> userCommands = userCommandEntityPage.getContent();
+    List<UserCommand> userCommandList = userCommands.stream().map(this::mapToUserCommand).collect(Collectors.toList());
+    pageResponse.setRecords(userCommandList);
+    pageResponse.setPageNumber(userCommandEntityPage.getNumber());
+    pageResponse.setPageSize(filter.getPagination().getPageSize());
+    pageResponse.setTotalSize(userCommandEntityPage.getTotalElements());
+    return pageResponse;
   }
 }

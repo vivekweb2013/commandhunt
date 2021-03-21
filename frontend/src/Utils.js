@@ -38,10 +38,10 @@ export const getArrayQueryParamByName = (name, url) => {
 }
 
 export const getQueryParamsFromFilter = (filter) => {
-    const queryParamStr = `?pageable.pageNumber=${filter.pageable.pageNumber}`
-        + `&pageable.pageSize=${filter.pageable.pageSize}`
-        + `&pageable.sort.sortBy=${filter.pageable.sort.sortBy}`
-        + `&pageable.sort.sortOrder=${filter.pageable.sort.sortOrder}&`
+    const queryParamStr = `?pagination.pageNumber=${filter.pagination.pageNumber}`
+        + `&pagination.pageSize=${filter.pagination.pageSize}`
+        + `&pagination.sort.sortBy=${filter.pagination.sort.sortBy}`
+        + `&pagination.sort.sortOrder=${filter.pagination.sort.sortOrder}&`
         + filter.conditions.reduce((a, c, i) => a +
             `conditions%5B${i}%5D.key=${c.key}&conditions%5B${i}%5D.operator=${c.operator}&conditions%5B${i}%5D.value=${c.value}`, '');
 

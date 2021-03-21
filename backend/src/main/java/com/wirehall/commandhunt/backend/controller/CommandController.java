@@ -3,7 +3,7 @@ package com.wirehall.commandhunt.backend.controller;
 import com.wirehall.commandhunt.backend.dto.Command;
 import com.wirehall.commandhunt.backend.service.CommandService;
 import com.wirehall.commandhunt.backend.dto.filter.Filter;
-import com.wirehall.commandhunt.backend.dto.filter.Page;
+import com.wirehall.commandhunt.backend.dto.filter.PageResponse;
 
 import java.util.List;
 import javax.validation.Valid;
@@ -29,7 +29,7 @@ public class CommandController {
   }
 
   @GetMapping(value = "/command")
-  public Page<Command> getAllCommands(@Valid Filter filter) {
+  public PageResponse<Command> getAllCommands(@Valid Filter filter) {
     return commandService.getAllCommands(filter);
   }
 
