@@ -12,7 +12,6 @@ spring:
       settings:
         web-allow-others: true
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     generate-ddl: false
     show-sql: true
     hibernate:
