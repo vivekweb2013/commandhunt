@@ -71,24 +71,6 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>org.janusgraph</groupId>
-            <artifactId>janusgraph-cql</artifactId>
-            <version>${janusgraph.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.janusgraph</groupId>
-            <artifactId>janusgraph-es</artifactId>
-            <version>${janusgraph.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-core</artifactId>
-            <version>3.2.2</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>${jjwt.vrsion}</version>
@@ -98,12 +80,6 @@
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>com.wirehall.commandhunt</groupId>
-            <artifactId>commandhunt-initdb</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -120,22 +96,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cassandra-maven-plugin</artifactId>
-                <version>3.6</version>
-                <configuration>
-                    <startNativeTransport>true</startNativeTransport>
-                </configuration>
-                <!--                <executions>-->
-                <!--                    <execution>-->
-                <!--                        <phase>test-compile</phase>-->
-                <!--                        <goals>-->
-                <!--                            <goal>start</goal>-->
-                <!--                        </goals>-->
-                <!--                    </execution>-->
-                <!--                </executions>-->
-            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

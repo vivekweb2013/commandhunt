@@ -1,9 +1,9 @@
 app:
   graph:
-    config: jg-cql.properties
+    config: jg-inmemory.properties
     export:
       cronExpression: 0 0 12 * * ?
-      enable: true
+      enable: false
       path: ./graph
     import:
       enable: false

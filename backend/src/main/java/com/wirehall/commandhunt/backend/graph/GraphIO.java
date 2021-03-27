@@ -19,7 +19,7 @@ import java.nio.file.Paths;
 
 @Configuration
 @EnableScheduling
-@ConditionalOnProperty(name = "app.graph.export.enable", matchIfMissing = true)
+@ConditionalOnProperty(name = "app.graph.export.enable")
 public class GraphIO {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GraphIO.class);
@@ -60,6 +60,10 @@ public class GraphIO {
 
   /**
    * Import the database from graphml file.
+   * <p>
+   * This method can only import graph file from disk path.
+   * It will not support loading graph file from resources.
+   * Since the GraphTraversal.io() api does not support importing from classpath resources.
    */
   public void importGraphMl() {
     try {
