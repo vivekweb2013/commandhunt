@@ -57,7 +57,7 @@ class UserCommands extends Component {
         this.setState({
             filter: {
                 ...this.state.filter,
-                conditions: value ? [{ key: 'name', value, operator: 'CONTAINS' }] : []
+                conditions: value ? [{ key: 'commandText', value, operator: 'CONTAINS' }] : []
             }
         }, () => history.push(getQueryParamsFromFilter(this.state.filter)));
     }

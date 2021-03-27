@@ -6,7 +6,6 @@ import com.wirehall.commandhunt.backend.exception.BadRequestException;
 import com.wirehall.commandhunt.backend.mapper.UserMapper;
 import com.wirehall.commandhunt.backend.model.UserEntity;
 import com.wirehall.commandhunt.backend.repository.UserRepository;
-import java.sql.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.transaction.Transactional;
+import java.sql.Timestamp;
+
 @Service
+@Transactional
 public class UserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);

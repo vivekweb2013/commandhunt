@@ -1,5 +1,10 @@
 package com.wirehall.commandhunt.backend.dto.filter;
 
+/**
+ * This class is used to get the filter conditions for filtering entity based on the matching criteria.
+ * The key belongs to a field in the entity, operator specifies the type of match.
+ * The value will be matched against the field's value of the entity stored in database.
+ */
 public class Condition {
 
   private String key;
@@ -33,7 +38,7 @@ public class Condition {
   @Override
   public String toString() {
     return "Condition{" + "key='" + key + '\'' + ", value='" + value + '\''
-        + ", operator=" + operator + '}';
+            + ", operator=" + operator + '}';
   }
 
   public enum Operator {

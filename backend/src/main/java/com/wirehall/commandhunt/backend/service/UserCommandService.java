@@ -1,24 +1,29 @@
 package com.wirehall.commandhunt.backend.service;
 
 import com.wirehall.commandhunt.backend.dto.UserCommand;
+import com.wirehall.commandhunt.backend.dto.filter.Condition;
 import com.wirehall.commandhunt.backend.dto.filter.Filter;
 import com.wirehall.commandhunt.backend.dto.filter.PageResponse;
 import com.wirehall.commandhunt.backend.mapper.PaginationMapper;
 import com.wirehall.commandhunt.backend.mapper.UserCommandMapper;
 import com.wirehall.commandhunt.backend.model.UserCommandEntity;
 import com.wirehall.commandhunt.backend.repository.UserCommandRepository;
+import com.wirehall.commandhunt.backend.repository.UserCommandSpecification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class UserCommandService {
   private static final Logger LOGGER = LoggerFactory.getLogger(UserCommandService.class);
 
@@ -51,7 +56,23 @@ public class UserCommandService {
    */
   public PageResponse<UserCommand> getAllUserCommands(Filter filter, String userEmail) {
     Pageable pageable = paginationMapper.mapToPageable(filter);
-    Page<UserCommandEntity> userCommandEntityPage = userCommandRepository.findAllByUserEmail(userEmail, pageable);
+    List<Condition> conditions = filter.getConditions();
+    Specification<UserCommandEntity> specification = Specification.where(UserCommandSpecification.equalsUserEmail(userEmail));
+
+    Specification<UserCommandEntity> optionalSpecification = null;
+    for (Condition c : conditions) {
+
+      if (c.getKey().equalsIgnoreCase("commandName") && c.getOperator().name().equals("EQUALS")) {
+        Specification<UserCommandEntity> s = UserCommandSpecification.equalsCommandName(c.getValue());
+        optionalSpecification = optionalSpecification == null ? s : optionalSpecification.or(s);
+      } else if (c.getKey().equalsIgnoreCase("commandText") && c.getOperator().name().equals("CONTAINS")) {
+        Specification<UserCommandEntity> s = UserCommandSpecification.likeCommandText(c.getValue());
+        optionalSpecification = optionalSpecification == null ? s : optionalSpecification.or(s);
+      }
+    }
+
+    specification = specification.and(optionalSpecification);
+    Page<UserCommandEntity> userCommandEntityPage = userCommandRepository.findAll(specification, pageable);
     LOGGER.debug("Retrieved {} user-command entities", userCommandEntityPage.getTotalElements());
     return mapper.mapToPageResponse(userCommandEntityPage, filter);
   }
