@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "commandhunt.fullname" . }}-postgres
+  labels:
+    {{- include "commandhunt.labels" . | nindent 4 }}
+spec:
+  serviceName: {{ include "commandhunt.fullname" . }}-postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "commandhunt.selectorLabels" . | nindent 6 }}-postgres
+  template:
+    metadata:
+      labels:
+        {{- include "commandhunt.selectorLabels" . | nindent 8 }}-postgres
+    spec:
+      terminationGracePeriodSeconds: 1800
+      containers:
+        - name: {{ .Chart.Name }}-postgres
+          image: {{ .Values.statefulset.postgres.image }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5432
+              name: postgres
+          envFrom:
+            - secretRef:
+                name: postgres-secret
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+            - name: postgres-initdb
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: postgres-initdb
+          configMap:
+            name: postgres-initdb
+
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-data
+        labels:
+          {{- include "commandhunt.selectorLabels" . | nindent 10 }}-postgres
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: {{ .Values.storageClassName }}
+        resources:
+          requests:
+            storage: 1Gi

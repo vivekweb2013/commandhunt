@@ -26,11 +26,12 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+          envFrom:
+            - secretRef:
+                name: postgres-secret
           env:
-            - name: STORAGE_HOSTNAME
-              value: "{{ .Chart.Name }}-cassandra"
-            - name: INDEX_SEARCH_HOSTNAME
-              value: "{{ .Chart.Name }}-elasticsearch"
+            - name: POSTGRES_HOST
+              value: "{{ .Chart.Name }}-postgres"
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
