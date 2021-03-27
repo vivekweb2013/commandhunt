@@ -1,10 +1,10 @@
 package com.wirehall.commandhunt.backend.repository;
 
-import com.wirehall.commandhunt.backend.dto.User;
+import com.wirehall.commandhunt.backend.model.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    User findByEmail(String email);
+public interface UserRepository extends JpaRepository<UserEntity, String> {
+
 }

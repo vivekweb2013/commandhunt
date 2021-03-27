@@ -1,17 +1,18 @@
-package com.wirehall.commandhunt.backend.model.props;
+package com.wirehall.commandhunt.backend.model.graph.props;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum UserCommandProperty {
-  USER_EMAIL("V", true),
-  COMMAND_NAME("V", true),
-  COMMAND_TEXT("V", true),
-  TIMESTAMP("V", true);
+public enum CommandProperty {
+  NAME("V", true),
+  SYNTAX("V", true),
+  DESC("V", true),
+  LONG_DESC("V", false),
+  MAN_PAGE_URL("V", false);
 
   private final String propertyOf;
   private final boolean isMandatory;
 
-  UserCommandProperty(String propertyOf, boolean isMandatory) {
+  CommandProperty(String propertyOf, boolean isMandatory) {
     this.propertyOf = propertyOf;
     this.isMandatory = isMandatory;
   }

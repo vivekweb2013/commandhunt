@@ -1,4 +1,4 @@
-package com.wirehall.commandhunt.backend.model;
+package com.wirehall.commandhunt.backend.model.graph;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 

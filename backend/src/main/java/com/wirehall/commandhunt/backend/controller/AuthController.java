@@ -3,6 +3,8 @@ package com.wirehall.commandhunt.backend.controller;
 import com.wirehall.commandhunt.backend.dto.User;
 import com.wirehall.commandhunt.backend.dto.auth.Login;
 import com.wirehall.commandhunt.backend.dto.auth.SignUp;
+import com.wirehall.commandhunt.backend.mapper.UserMapper;
+import com.wirehall.commandhunt.backend.model.UserEntity;
 import com.wirehall.commandhunt.backend.model.auth.CustomUserPrincipal;
 import com.wirehall.commandhunt.backend.security.CurrentUser;
 import com.wirehall.commandhunt.backend.service.UserService;
@@ -32,6 +34,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class AuthController {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
+  private final UserMapper userMapper = new UserMapper();
 
   @Autowired
   private AuthenticationManager authenticationManager;
@@ -60,7 +63,8 @@ public class AuthController {
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
-    User user = ((CustomUserPrincipal) authentication.getPrincipal()).getUser();
+    UserEntity userEntity = ((CustomUserPrincipal) authentication.getPrincipal()).getUser();
+    User user = userMapper.mapToUser(userEntity);
     String token = jwtUtil.createToken(authentication, 864000000L);
 
     Map<String, Object> resp = new HashMap<>();
@@ -84,7 +88,7 @@ public class AuthController {
     User user = userService.registerUser(signUpRequest);
 
     URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/me")
-        .buildAndExpand(user.getId()).toUri();
+        .buildAndExpand().toUri();
 
     return ResponseEntity.created(location).body(user);
   }
@@ -98,6 +102,7 @@ public class AuthController {
   @GetMapping("/user/me")
   @PreAuthorize("hasRole('USER')")
   public User getCurrentUser(@CurrentUser CustomUserPrincipal customUserPrincipal) {
-    return customUserPrincipal.getUser();
+    UserEntity userEntity = customUserPrincipal.getUser();
+    return userMapper.mapToUser(userEntity);
   }
 }

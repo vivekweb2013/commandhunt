@@ -4,7 +4,9 @@ import com.wirehall.commandhunt.backend.dto.User;
 import com.wirehall.commandhunt.backend.dto.auth.SignUp;
 import com.wirehall.commandhunt.backend.exception.BadRequestException;
 import com.wirehall.commandhunt.backend.mapper.UserMapper;
+import com.wirehall.commandhunt.backend.model.UserEntity;
 import com.wirehall.commandhunt.backend.repository.UserRepository;
+import java.sql.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,13 +40,14 @@ public class UserService {
             LOGGER.error("Empty password in sign up request: {}", signUpRequest.getEmail());
             throw new BadRequestException("Password is empty in the sign up request");
         }
-        if (userRepository.findByEmail(signUpRequest.getEmail()) != null) {
+        if (userRepository.findById(signUpRequest.getEmail()).isPresent()) {
             LOGGER.error("Email: {} is already in use", signUpRequest.getEmail());
             throw new BadRequestException("Email address already in use.");
         }
 
-        User user = mapper.mapToUser(signUpRequest, passwordEncoder);
-        userRepository.saveAndFlush(user);
-        return user;
+        UserEntity userEntity = mapper.mapToUserEntity(signUpRequest, passwordEncoder);
+        userEntity.setJoinedOn(new Timestamp(System.currentTimeMillis()));
+        userRepository.save(userEntity);
+        return mapper.mapToUser(userEntity);
     }
 }

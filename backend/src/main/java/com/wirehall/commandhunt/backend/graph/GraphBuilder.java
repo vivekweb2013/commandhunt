@@ -2,11 +2,14 @@ package com.wirehall.commandhunt.backend.graph;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wirehall.commandhunt.backend.dto.Command;
-import com.wirehall.commandhunt.backend.model.EdgeType;
-import com.wirehall.commandhunt.backend.model.VertexType;
+import com.wirehall.commandhunt.backend.model.graph.EdgeType;
+import com.wirehall.commandhunt.backend.model.graph.VertexType;
 import com.wirehall.commandhunt.backend.repository.CommandRepository;
 import com.wirehall.commandhunt.initdb.MetadataManager;
 import com.wirehall.commandhunt.initdb.SchemaBuilder;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.process.traversal.step.util.WithOptions;
 import org.janusgraph.core.JanusGraph;
@@ -18,10 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Component
 public class GraphBuilder {
@@ -68,7 +67,8 @@ public class GraphBuilder {
   private void fillData(CommandRepository commandRepository) {
     try {
       // naive check if the graph was previously created
-      if (gt.V().hasLabel(VertexType.COMMAND.toLowerCase()).outE(EdgeType.HAS_FLAG.toLowerCase()).hasNext()) {
+      if (gt.V().hasLabel(VertexType.COMMAND.toLowerCase()).outE(EdgeType.HAS_FLAG.toLowerCase())
+          .hasNext()) {
         LOGGER.info("Skip Data Creation. Data Already Exist!!!");
         gt.tx().rollback();
         return;
@@ -98,7 +98,7 @@ public class GraphBuilder {
 
       // look up vertex by name
       final Optional<Map<Object, Object>> v = gt.V().hasLabel(VertexType.COMMAND.toLowerCase())
-              .has("name", "cp").valueMap().with(WithOptions.tokens).tryNext();
+          .has("name", "cp").valueMap().with(WithOptions.tokens).tryNext();
 
       if (v.isPresent()) {
         LOGGER.info("Vertex: {}", v.get());
@@ -108,15 +108,15 @@ public class GraphBuilder {
 
       // look up an incident edge
       final Optional<Map<Object, Object>> edge = gt.V()
-              .has("name", "cp")
-              .outE("has_flag")
-              .as("e")
-              .inV()
-              .has("name", "r")
-              .select("e")
-              .valueMap()
-              .with(WithOptions.tokens)
-              .tryNext();
+          .has("name", "cp")
+          .outE("has_flag")
+          .as("e")
+          .inV()
+          .has("name", "r")
+          .select("e")
+          .valueMap()
+          .with(WithOptions.tokens)
+          .tryNext();
       if (edge.isPresent()) {
         LOGGER.info("Edge {}", edge.get());
       } else {

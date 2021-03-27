@@ -1,21 +1,22 @@
-package com.wirehall.commandhunt.backend.model.props;
+package com.wirehall.commandhunt.backend.model.graph.props;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum FlagProperty {
+public enum OptionProperty {
   NAME("V", true),
   ALIAS("V", false),
-  PREFIX("V", true),
+  PREFIX("V", false),
   DESC("V", true),
   LONG_DESC("V", false),
-  SEQUENCE("E", true),
-  IS_GROUPING_ALLOWED("V", false),
-  IS_SOLITARY("V", false);
+  DATA_TYPE("V", true),
+  IS_MANDATORY("E", true),
+  IS_REPEATABLE("E", true),
+  SEQUENCE("E", true);
 
   private final String propertyOf;
   private final boolean isMandatory;
 
-  FlagProperty(String propertyOf, boolean isMandatory) {
+  OptionProperty(String propertyOf, boolean isMandatory) {
     this.propertyOf = propertyOf;
     this.isMandatory = isMandatory;
   }

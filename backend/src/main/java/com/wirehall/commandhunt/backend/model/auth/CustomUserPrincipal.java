@@ -1,70 +1,70 @@
 package com.wirehall.commandhunt.backend.model.auth;
 
-import com.wirehall.commandhunt.backend.dto.User;
+import com.wirehall.commandhunt.backend.model.UserEntity;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
 public class CustomUserPrincipal implements OAuth2User, UserDetails {
 
   private final Collection<? extends GrantedAuthority> authorities;
-  private final transient User user;
+  private final transient UserEntity userEntity;
   private final transient String password;
   private transient Map<String, Object> attributes;
 
   /**
    * Custom User Principal.
    *
-   * @param user        User DTO.
+   * @param userEntity  User DTO.
    * @param authorities Collection of authorities.
    */
-  public CustomUserPrincipal(User user, Collection<? extends GrantedAuthority> authorities) {
-    this.password = user.getPassword();
-    this.user = user;
+  public CustomUserPrincipal(UserEntity userEntity,
+      Collection<? extends GrantedAuthority> authorities) {
+    this.password = userEntity.getPassword();
+    this.userEntity = userEntity;
     this.authorities = authorities;
   }
 
   /**
    * Generates the principal from specified user instance.
    *
-   * @param user User DTO.
+   * @param userEntity User entity.
    * @return Custom User Principal instance.
    */
-  public static CustomUserPrincipal create(User user) {
+  public static CustomUserPrincipal create(UserEntity userEntity) {
     List<GrantedAuthority> authorities =
         Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
-    return new CustomUserPrincipal(user, authorities);
+    return new CustomUserPrincipal(userEntity, authorities);
   }
 
   /**
    * Generates the principal from specified user instance and attributes.
    *
-   * @param user       The user DTO.
+   * @param userEntity The user entity.
    * @param attributes Map containing attributes to be set for principal.
    * @return Custom User Principal instance.
    */
-  public static CustomUserPrincipal create(User user, Map<String, Object> attributes) {
-    CustomUserPrincipal customUserPrincipal = CustomUserPrincipal.create(user);
+  public static CustomUserPrincipal create(UserEntity userEntity, Map<String, Object> attributes) {
+    CustomUserPrincipal customUserPrincipal = CustomUserPrincipal.create(userEntity);
     customUserPrincipal.setAttributes(attributes);
     return customUserPrincipal;
   }
 
-  public User getUser() {
-    return this.user;
+  public UserEntity getUser() {
+    return this.userEntity;
   }
 
-  public Object getId() {
-    return user.getId();
+  public String getId() {
+    return userEntity.getEmail();
   }
 
   public String getEmail() {
-    return (String) user.getEmail();
+    return userEntity.getEmail();
   }
 
   @Override
@@ -74,7 +74,7 @@ public class CustomUserPrincipal implements OAuth2User, UserDetails {
 
   @Override
   public String getUsername() {
-    return user.getEmail();
+    return userEntity.getEmail();
   }
 
   @Override
@@ -113,6 +113,6 @@ public class CustomUserPrincipal implements OAuth2User, UserDetails {
 
   @Override
   public String getName() {
-    return String.valueOf(this.user.getId());
+    return String.valueOf(this.userEntity.getEmail());
   }
 }

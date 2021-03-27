@@ -1,8 +1,9 @@
 package com.wirehall.commandhunt.backend.service.auth;
 
-import com.wirehall.commandhunt.backend.dto.User;
+import com.wirehall.commandhunt.backend.model.UserEntity;
 import com.wirehall.commandhunt.backend.model.auth.CustomUserPrincipal;
 import com.wirehall.commandhunt.backend.repository.UserRepository;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,16 +22,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+  @Autowired
+  private UserRepository userRepository;
 
-    @Override
-    public UserDetails loadUserByUsername(String email) {
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            throw new BadCredentialsException("No user exists with email : " + email);
-        }
-
-        return CustomUserPrincipal.create(user);
+  @Override
+  public UserDetails loadUserByUsername(String email) {
+    Optional<UserEntity> userEntity = userRepository.findById(email);
+    if (!userEntity.isPresent()) {
+      throw new BadCredentialsException("No user exists with email : " + email);
     }
+
+    return CustomUserPrincipal.create(userEntity.get());
+  }
 }

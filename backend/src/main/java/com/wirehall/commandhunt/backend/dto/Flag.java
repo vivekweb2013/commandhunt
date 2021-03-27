@@ -1,6 +1,6 @@
 package com.wirehall.commandhunt.backend.dto;
 
-import com.wirehall.commandhunt.backend.model.props.FlagProperty;
+import com.wirehall.commandhunt.backend.model.graph.props.FlagProperty;
 
 import java.util.EnumMap;
 import java.util.Map;

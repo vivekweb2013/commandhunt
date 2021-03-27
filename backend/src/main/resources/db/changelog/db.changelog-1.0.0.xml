@@ -7,11 +7,8 @@
 
     <changeSet author="commandhunt-tbl" id="changelog-1.0.0">
         <createTable tableName="appuser">
-            <column name="id" type="bigint">
-                <constraints primaryKey="true"/>
-            </column>
             <column name="email" type="varchar(255)">
-                <constraints nullable="false" unique="true"/>
+                <constraints primaryKey="true"/>
             </column>
             <column name="email_verified" type="boolean"/>
             <column name="image_url" type="varchar(255)"/>
@@ -23,6 +20,9 @@
                 <constraints nullable="false"/>
             </column>
             <column name="provider_id" type="varchar(255)"/>
+            <column name="joined_on" type="datetime">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
         <createTable tableName="usercommand">
             <column name="id" type="bigint">

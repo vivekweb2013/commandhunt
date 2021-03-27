@@ -1,6 +1,6 @@
 package com.wirehall.commandhunt.backend.dto;
 
-import com.wirehall.commandhunt.backend.model.props.CommandProperty;
+import com.wirehall.commandhunt.backend.model.graph.props.CommandProperty;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
