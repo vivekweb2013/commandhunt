@@ -35,7 +35,8 @@
               <constraints nullable="false"/>
             </column>
             <column name="user_email" type="varchar(255)">
-              <constraints nullable="false"/>
+                <constraints foreignKeyName="fk_ucemail_auemail" referencedTableName="appuser"
+                             referencedColumnNames="email" nullable="false" deleteCascade="false"/>
             </column>
             <column name="timestamp" type="datetime">
               <constraints nullable="false"/>
@@ -44,7 +45,7 @@
         <createTable tableName="usercommand_flag">
             <column name="usercommand_id" type="bigint">
                 <constraints foreignKeyName="fk_ucflag_ucid" referencedTableName="usercommand"
-                  referencedColumnNames="id" deleteCascade="true"/>
+                  referencedColumnNames="id" nullable="false" deleteCascade="true"/>
             </column>
             <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
@@ -56,7 +57,7 @@
         <createTable tableName="usercommand_option">
             <column name="usercommand_id" type="bigint">
                 <constraints foreignKeyName="fk_ucoption_ucid" referencedTableName="usercommand"
-                  referencedColumnNames="id" deleteCascade="true"/>
+                  referencedColumnNames="id" nullable="false" deleteCascade="true"/>
             </column>
             <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>

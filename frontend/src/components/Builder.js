@@ -130,8 +130,7 @@ class Builder extends Component {
             ...this.state.userCommand,
             id: this.state.userCommandId,
             commandName: this.props.command.properties.name,
-            commandText: this.getGeneratedCommand(this.props.command),
-            userEmail: this.props.user.email
+            commandText: this.getGeneratedCommand(this.props.command)
         };
         this.setState({ saveInProgress: true });
         this.props.saveUserCommand(userCommand).then(() => {

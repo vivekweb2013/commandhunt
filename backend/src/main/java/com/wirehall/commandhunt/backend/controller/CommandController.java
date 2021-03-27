@@ -43,9 +43,7 @@ public class CommandController {
     return commandService.getCommandByName(name);
   }
 
-  @GetMapping(
-      value = "/command/search",
-      params = {"query"})
+  @GetMapping(value = "/command/search", params = {"query"})
   public List<Command> getMatchingCommands(@RequestParam(name = "query") String query) {
     return commandService.getMatchingCommands(query);
   }

@@ -37,8 +37,8 @@ public class UserCommandService {
    * @return The list of user commands.
    */
   public List<UserCommand> getAllUserCommands() {
-    LOGGER.debug("Retrieving all user-commands");
     List<UserCommandEntity> userCommandEntity = userCommandRepository.findAll();
+    LOGGER.debug("Retrieved {} user-command entities", userCommandEntity.size());
     return userCommandEntity.stream().map(mapper::mapToUserCommand).collect(Collectors.toList());
   }
 
@@ -46,14 +46,13 @@ public class UserCommandService {
    * Retrieves all the user commands matching the filter criteria.
    *
    * @param filter Filter criteria.
+   * @param userEmail Logged-in user's email id.
    * @return Page of user-command DTOs.
    */
-  public PageResponse<UserCommand> getAllUserCommands(Filter filter) {
-    LOGGER.debug("Retrieving all user-commands");
-    LOGGER.debug("Applying the filter: {}", filter);
-
+  public PageResponse<UserCommand> getAllUserCommands(Filter filter, String userEmail) {
     Pageable pageable = paginationMapper.mapToPageable(filter);
-    Page<UserCommandEntity> userCommandEntityPage = userCommandRepository.findAll(pageable);
+    Page<UserCommandEntity> userCommandEntityPage = userCommandRepository.findAllByUserEmail(userEmail, pageable);
+    LOGGER.debug("Retrieved {} user-command entities", userCommandEntityPage.getTotalElements());
     return mapper.mapToPageResponse(userCommandEntityPage, filter);
   }
 
@@ -61,12 +60,12 @@ public class UserCommandService {
    * Retrieves the user-command using id.
    *
    * @param userCommandId The id of the user-command to retrieve.
+   * @param userEmail Logged-in user's email id.
    * @return The user-command dto.
    */
-  public UserCommand getUserCommandById(Long userCommandId) {
-    LOGGER.debug("Retrieving user-command with id: {}", userCommandId);
-
-    UserCommandEntity userCommandEntity = userCommandRepository.getOne(userCommandId);
+  public UserCommand getUserCommandById(Long userCommandId, String userEmail) {
+    UserCommandEntity userCommandEntity = userCommandRepository.findOneByIdAndUserEmail(userCommandId, userEmail);
+    LOGGER.debug("Retrieved user-command entity: {}", userCommandEntity);
     return mapper.mapToUserCommand(userCommandEntity);
   }
 
@@ -74,36 +73,38 @@ public class UserCommandService {
    * Adds the new user-command.
    *
    * @param userCommand The user-command dto to be added.
+   * @param userEmail Logged-in user's email id.
    */
-  public void addUserCommand(UserCommand userCommand) {
-    LOGGER.info("Inserting user-command {}", userCommand);
-
+  public void addUserCommand(UserCommand userCommand, String userEmail) {
     userCommand.setTimestamp(new Timestamp(System.currentTimeMillis()));
-    UserCommandEntity userCommandEntity = mapper.mapToUserCommandEntity(userCommand);
+    UserCommandEntity userCommandEntity = mapper.mapToUserCommandEntity(userCommand, userEmail);
+    LOGGER.info("Inserting user-command entity: {}", userCommandEntity);
     userCommandRepository.save(userCommandEntity);
+    LOGGER.info("Inserted user-command entity with id: {}", userCommandEntity.getId());
   }
 
   /**
    * Updates the existing user-command.
    *
    * @param userCommand The user-command dto to be updated.
+   * @param userEmail Logged-in user's email id.
    */
-  public void updateUserCommand(UserCommand userCommand) {
-    LOGGER.info("Updating user-command {}", userCommand);
-
+  public void updateUserCommand(UserCommand userCommand, String userEmail) {
     userCommand.setTimestamp(new Timestamp(System.currentTimeMillis()));
-    UserCommandEntity userCommandEntity = mapper.mapToUserCommandEntity(userCommand);
+    UserCommandEntity userCommandEntity = mapper.mapToUserCommandEntity(userCommand, userEmail);
+    LOGGER.info("Updating user-command entity: {}", userCommandEntity);
     userCommandRepository.save(userCommandEntity);
+    LOGGER.info("Updated user-command entity having id: {}", userCommandEntity.getId());
   }
 
   /**
    * Deletes the user-command using id.
    *
    * @param userCommandId The id of user-command to be deleted.
+   * @param userEmail Logged-in user's email id.
    */
-  public void deleteUserCommand(Long userCommandId) {
-    LOGGER.info("Updating user-command with id {}", userCommandId);
-
-    userCommandRepository.deleteById(userCommandId);
+  public void deleteUserCommand(Long userCommandId, String userEmail) {
+    userCommandRepository.deleteByIdAndUserEmail(userCommandId, userEmail);
+    LOGGER.info("Deleted user-command entity having id: {}", userCommandId);
   }
 }

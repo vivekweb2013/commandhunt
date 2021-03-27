@@ -15,9 +15,6 @@ public class UserCommand {
   private String commandName;
   @NotNull
   private String commandText;
-  @NotNull
-  @Email
-  private String userEmail;
 
   private Timestamp timestamp;
 
@@ -46,14 +43,6 @@ public class UserCommand {
 
   public void setCommandText(String commandText) {
     this.commandText = commandText;
-  }
-
-  public String getUserEmail() {
-    return userEmail;
-  }
-
-  public void setUserEmail(String userEmail) {
-    this.userEmail = userEmail;
   }
 
   public Timestamp getTimestamp() {
@@ -106,7 +95,6 @@ public class UserCommand {
             "id=" + id +
             ", commandName='" + commandName + '\'' +
             ", commandText='" + commandText + '\'' +
-            ", userEmail='" + userEmail + '\'' +
             ", timestamp=" + timestamp +
             ", flags=" + flags +
             ", options=" + options +

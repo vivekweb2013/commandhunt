@@ -2,25 +2,21 @@ package com.wirehall.commandhunt.backend.controller;
 
 import com.wirehall.commandhunt.backend.dto.UserCommand;
 import com.wirehall.commandhunt.backend.dto.filter.Filter;
-import com.wirehall.commandhunt.backend.service.UserCommandService;
 import com.wirehall.commandhunt.backend.dto.filter.PageResponse;
-
-import javax.validation.Valid;
+import com.wirehall.commandhunt.backend.service.UserCommandService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.security.Principal;
 
 @RestController
 @RequestMapping(value = "api/user", produces = MediaType.APPLICATION_JSON_VALUE)
+@PreAuthorize("hasRole('ROLE_USER')")
 public class UserCommandController {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(UserCommandController.class);
@@ -33,32 +29,33 @@ public class UserCommandController {
   }
 
   @GetMapping(value = "/user-command")
-  public PageResponse<UserCommand> getAllUserCommands(@Valid Filter filter) {
-    LOGGER.info("Retrieving all the user-commands");
-    return userCommandService.getAllUserCommands(filter);
+  public PageResponse<UserCommand> getAllUserCommands(@Valid Filter filter, Principal principal) {
+    LOGGER.info("Request from user: {} for retrieving user-commands", principal.getName());
+    LOGGER.info("Received filters: {}", filter);
+    return userCommandService.getAllUserCommands(filter, principal.getName());
   }
 
   @GetMapping(value = "/user-command/{id}")
-  public UserCommand getUserCommandById(@PathVariable(name = "id") Long id) {
-    LOGGER.info("Retrieving user-command with id: {}", id);
-    return userCommandService.getUserCommandById(id);
+  public UserCommand getUserCommandById(@PathVariable(name = "id") Long id, Principal principal) {
+    LOGGER.info("Request from user: {} for retrieving user-command with id: {}", principal.getName(), id);
+    return userCommandService.getUserCommandById(id, principal.getName());
   }
 
   @PostMapping(value = "/user-command")
-  public void addUserCommand(@RequestBody UserCommand userCommand) {
-    LOGGER.info("Adding user-command: {}", userCommand);
-    userCommandService.addUserCommand(userCommand);
+  public void addUserCommand(@RequestBody UserCommand userCommand, Principal principal) {
+    LOGGER.info("Request from user: {} for adding user-command: {}", principal.getName(), userCommand);
+    userCommandService.addUserCommand(userCommand, principal.getName());
   }
 
   @PutMapping(value = "/user-command/{id}")
-  public void updateUserCommand(@RequestBody UserCommand userCommand) {
-    LOGGER.info("Updating user-command: {}", userCommand);
-    userCommandService.updateUserCommand(userCommand);
+  public void updateUserCommand(@RequestBody UserCommand userCommand, Principal principal) {
+    LOGGER.info("Request from user: {} for updating user-command: {}", principal.getName(), userCommand);
+    userCommandService.updateUserCommand(userCommand, principal.getName());
   }
 
   @DeleteMapping(value = "/user-command/{id}")
-  public void deleteUserCommand(@PathVariable(name = "id") Long userCommandId) {
-    LOGGER.info("Deleting user-command with id: {}", userCommandId);
-    userCommandService.deleteUserCommand(userCommandId);
+  public void deleteUserCommand(@PathVariable(name = "id") Long userCommandId, Principal principal) {
+    LOGGER.info("Request from user: {} for deleting user-command with id: {}", principal.getName(), userCommandId);
+    userCommandService.deleteUserCommand(userCommandId, principal.getName());
   }
 }

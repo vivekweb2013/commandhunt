@@ -19,17 +19,16 @@ public final class UserCommandMapper extends BaseMapper {
 
     userCommand.setFlags(userCommandEntity.getFlags());
     userCommand.setOptions(userCommandEntity.getOptions());
-    userCommand.setUserEmail(userCommandEntity.getUserEmail());
     userCommand.setCommandName(userCommandEntity.getCommandName());
     userCommand.setCommandText(userCommandEntity.getCommandText());
     userCommand.setTimestamp(userCommandEntity.getTimestamp());
     return userCommand;
   }
 
-  public UserCommandEntity mapToUserCommandEntity(UserCommand userCommand) {
+  public UserCommandEntity mapToUserCommandEntity(UserCommand userCommand, String userEmail) {
     UserCommandEntity userCommandEntity = new UserCommandEntity();
     userCommandEntity.setId(userCommand.getId());
-    userCommandEntity.setUserEmail(userCommand.getUserEmail());
+    userCommandEntity.setUserEmail(userEmail);
     userCommandEntity.setCommandName(userCommand.getCommandName());
     userCommandEntity.setCommandText(userCommand.getCommandText());
     userCommandEntity.setTimestamp(userCommand.getTimestamp());
