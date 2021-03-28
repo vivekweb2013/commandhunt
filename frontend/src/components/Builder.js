@@ -173,7 +173,8 @@ class Builder extends Component {
                                         {command.options.map((option, i) => (
                                             <div key={i} className="row">
                                                 <div className="label-col">
-                                                    <label htmlFor={option.id}>{option.properties.desc}</label>
+                                                    <label htmlFor={option.id} className={option.properties.is_mandatory === 'true' ?
+                                                        'required' : ''}>{option.properties.desc}</label>
                                                 </div>
                                                 <div className="input-col">{option.properties.data_type === 'PERMISSION' ?
                                                     <PermissionInput id={option.id} name={option.properties.name}

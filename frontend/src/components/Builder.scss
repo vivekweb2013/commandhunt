@@ -170,6 +170,12 @@ $form-bottom-button-spacing: 15px;
               display: inline-block;
               width: 100%;
               user-select: none;
+              &.required::after {
+                color: red;
+                content: " *";
+                font-size: larger;
+                font-weight: bold;
+              }
             }
           }
 
