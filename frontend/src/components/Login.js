@@ -53,8 +53,7 @@ class Login extends Component {
         return (
             loginInProgress || isRedirected ? <div className="app loading" ><Spinner size="50" /> <br />LOADING</div> :
                 <div className="login">
-                    <span className="icon-social-login"></span>
-                    <span className="login-text">Login with Social Media or Manually</span>
+                    <span className="icon-s-nw-login"></span>
                     <div className="box">
 
                         <form onSubmit={(e) => this.handleManualLogin(e)} className="manual-login">
@@ -71,10 +70,11 @@ class Login extends Component {
                             <span className="divide-text">or</span>
                         </div>
 
-                        <div className="social-buttons">
-                            <button className="google" onClick={(e) => this.handleOAuthLogin(e, 'google')}> <span className="icon-google"></span>Login with Google</button>
-                            <button className="facebook" onClick={(e) => this.handleOAuthLogin(e, 'facebook')}> <span className="icon-facebook"></span>Login with Facebook</button>
-                            <button className="github" onClick={(e) => this.handleOAuthLogin(e, 'github')}> <span className="icon-github" ></span>Login with GitHub</button>
+                        <div className="s-nw-buttons">
+                            <span className="s-nw-login-text">Login with Social Networks</span>
+                            <button className="ggl" onClick={(e) => this.handleOAuthLogin(e, 'google')}> <span className="icon-ggl"></span>Login with Google</button>
+                            <button className="fbk" onClick={(e) => this.handleOAuthLogin(e, 'facebook')}> <span className="icon-fbk"></span>Login with Facebook</button>
+                            <button className="gh" onClick={(e) => this.handleOAuthLogin(e, 'github')}> <span className="icon-gh" ></span>Login with GitHub</button>
                         </div>
 
                     </div>
