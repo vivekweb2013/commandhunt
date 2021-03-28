@@ -80,8 +80,8 @@ public class CommandRepository {
 
     final String listKey = "list";
     final String countKey = "count";
-    Map<String, Object> result = commandGT.order().by(pagination.getSort().getSortBy(),
-        Order.valueOf(pagination.getSort().getSortOrder().toLowerCase()))
+    Map<String, Object> result = commandGT.order().by(pagination.getSort().getBy(),
+        Order.valueOf(pagination.getSort().getOrder().toLowerCase()))
         .fold().as(listKey, countKey).select(listKey, countKey)
         .by(__.range(Scope.local, pagination.getOffset(),
                 (long) pagination.getPageSize() + pagination.getOffset()))

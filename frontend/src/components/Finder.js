@@ -19,8 +19,8 @@ class Finder extends Component {
                 pageNumber: Number(getQueryParamByName('pagination.pageNumber')) || 1,
                 pageSize: Number(getQueryParamByName('pagination.pageSize')) || 10,
                 sort: {
-                    sortBy: getQueryParamByName('pagination.sort.sortBy') || 'name',
-                    sortOrder: getQueryParamByName('pagination.sort.sortOrder') || 'ASC'
+                    by: getQueryParamByName('pagination.sort.by') || 'name',
+                    order: getQueryParamByName('pagination.sort.order') || 'ASC'
                 }
             }
         }
@@ -75,7 +75,7 @@ class Finder extends Component {
 
     getSortIcon(column) {
         const { filter } = this.state;
-        return filter.pagination.sort.sortBy === column ? (filter.pagination.sort.sortOrder === 'DESC' ? 'sort-down' : 'sort-up') : '';
+        return filter.pagination.sort.by === column ? (filter.pagination.sort.order === 'DESC' ? 'sort-down' : 'sort-up') : '';
     }
 
     sort(column) {
@@ -85,8 +85,8 @@ class Finder extends Component {
             filter: {
                 ...filter, pagination: {
                     ...filter.pagination, sort: {
-                        sortBy: column,
-                        sortOrder: filter.pagination.sort.sortBy === column && filter.pagination.sort.sortOrder === 'ASC' ? 'DESC' : 'ASC'
+                        by: column,
+                        order: filter.pagination.sort.by === column && filter.pagination.sort.order === 'ASC' ? 'DESC' : 'ASC'
                     }
                 }
             }

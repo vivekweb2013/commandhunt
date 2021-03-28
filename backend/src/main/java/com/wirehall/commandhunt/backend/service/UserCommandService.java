@@ -62,10 +62,10 @@ public class UserCommandService {
 
     Specification<UserCommandEntity> optionalSpec = null;
     for (Condition c : conditions) {
-      if (c.getKey().equals("commandName") && c.getOperator().name().equals("EQUALS")) {
+      if (c.getKey().equals("commandName") && c.getOperator().name().equals(Condition.Operator.EQUALS.name())) {
         Specification<UserCommandEntity> s = UserCommandSpecification.equalsCommandName(c.getValue());
         optionalSpec = optionalSpec == null ? s : optionalSpec.or(s);
-      } else if (c.getKey().equals("commandText") && c.getOperator().name().equals("CONTAINS")) {
+      } else if (c.getKey().equals("commandText") && c.getOperator().name().equals(Condition.Operator.CONTAINS.name())) {
         Specification<UserCommandEntity> s = UserCommandSpecification.likeCommandText(c.getValue());
         optionalSpec = optionalSpec == null ? s : optionalSpec.or(s);
       }
@@ -73,7 +73,7 @@ public class UserCommandService {
 
     spec = spec.and(optionalSpec);
     Page<UserCommandEntity> ucePage = userCommandRepository.findAll(spec, pageable);
-    LOGGER.debug("Retrieved {} user-command entities", ucePage.getTotalElements());
+    LOGGER.debug("Total {} user-command entities matching the filter", ucePage.getTotalElements());
 
     List<UserCommand> userCommands = ucePage.getContent().stream().map(uce ->
             mapper.mapToUserCommand(uce, false)).collect(Collectors.toList());

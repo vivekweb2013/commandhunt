@@ -6,7 +6,7 @@ import com.wirehall.commandhunt.backend.model.UserEntity;
 import com.wirehall.commandhunt.backend.model.UserEntity.OAuthProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-public class UserMapper extends BaseMapper {
+public class UserMapper {
 
   /**
    * Maps the sign up request to user entity.

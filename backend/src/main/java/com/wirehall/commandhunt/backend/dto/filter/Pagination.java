@@ -1,7 +1,10 @@
 package com.wirehall.commandhunt.backend.dto.filter;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class Pagination {
@@ -49,6 +52,46 @@ public class Pagination {
   @Override
   public String toString() {
     return "Pagination{" + "pageNumber=" + pageNumber
-        + ", pageSize=" + pageSize + ", sort=" + sort + '}';
+            + ", pageSize=" + pageSize + ", sort=" + sort + '}';
+  }
+
+  public static class Sort {
+
+    @NotBlank
+    private String by;
+
+    private SortOrder order = SortOrder.ASC;
+
+    public String getBy() {
+      return by;
+    }
+
+    public void setBy(String by) {
+      this.by = by;
+    }
+
+    public SortOrder getOrder() {
+      return order;
+    }
+
+    public void setOrder(SortOrder order) {
+      this.order = order;
+    }
+
+    @Override
+    public String toString() {
+      return "Sort{" + "by='" + by + '\'' + ", order=" + order + '}';
+    }
+
+    public enum SortOrder {
+      ASC,
+      DESC;
+
+      @JsonValue
+      public String toLowerCase() {
+        return name().toLowerCase();
+      }
+    }
+
   }
 }

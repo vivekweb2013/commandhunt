@@ -8,7 +8,7 @@ import org.springframework.data.domain.Sort;
 public class PaginationMapper {
     public Pageable mapToPageable(Filter filter) {
         return PageRequest.of(filter.getPagination().getPageNumber() -1, filter.getPagination().getPageSize(),
-                Sort.by(Sort.Direction.fromString(filter.getPagination().getSort().getSortOrder().toString()),
-                        filter.getPagination().getSort().getSortBy()));
+                Sort.by(Sort.Direction.fromString(filter.getPagination().getSort().getOrder().toString()),
+                        filter.getPagination().getSort().getBy()));
     }
 }
