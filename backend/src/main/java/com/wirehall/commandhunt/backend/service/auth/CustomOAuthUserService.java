@@ -23,15 +23,35 @@ import java.util.Optional;
 @Service
 public class CustomOAuthUserService extends DefaultOAuth2UserService {
 
+  private final UserRepository userRepository;
+
   @Autowired
-  private UserRepository userRepository;
+  public CustomOAuthUserService(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
 
   @Override
   public OAuth2User loadUser(OAuth2UserRequest oauthUserRequest) {
     OAuth2User oauthUser = super.loadUser(oauthUserRequest);
+    return processOAuth2User(oauthUserRequest, oauthUser);
+  }
 
+  private OAuth2User processOAuth2User(OAuth2UserRequest oauth2UserRequest, OAuth2User oauth2User) {
     try {
-      return processOAuth2User(oauthUserRequest, oauthUser);
+      String oAuthProviderString = oauth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase();
+      if (!EnumUtils.isValidEnum(UserEntity.OAuthProvider.class, oAuthProviderString)) {
+        throw new OAuthException("Sorry! Login with " + oAuthProviderString + " is not supported.");
+      }
+      OAuthProvider oAuthProvider = OAuthProvider.valueOf(oAuthProviderString);
+      UserEntity oAuthUserEntity = OAuthUserFactory.getOAuth2UserInfo(oAuthProvider, oauth2User.getAttributes());
+
+      String userEmail = oAuthUserEntity.getEmail();
+      if (!StringUtils.hasLength(userEmail)) {
+        throw new OAuthException("Can't retrieve email from " + oAuthProviderString + " OAuth provider");
+      }
+      syncUserWithDatabase(oAuthProvider, oAuthUserEntity, userEmail);
+
+      return CustomUserPrincipal.create(oAuthUserEntity, oauth2User.getAttributes());
     } catch (AuthenticationException ex) {
       throw ex;
     } catch (Exception ex) {
@@ -41,20 +61,8 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
     }
   }
 
-  private OAuth2User processOAuth2User(OAuth2UserRequest oauth2UserRequest, OAuth2User oauth2User) {
-    String oAuthProviderString = oauth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase();
-    if (!EnumUtils.isValidEnum(UserEntity.OAuthProvider.class, oAuthProviderString)) {
-      throw new OAuthException("Sorry! Login with " + oAuthProviderString + " is not supported.");
-    }
-    OAuthProvider oAuthProvider = OAuthProvider.valueOf(oAuthProviderString);
-    UserEntity oauthUser = OAuthUserFactory.getOAuth2UserInfo(oAuthProvider, oauth2User.getAttributes());
-
-    String email = oauthUser.getEmail();
-    if (!StringUtils.hasLength(email)) {
-      throw new OAuthException("Can't retrieve email from " + oAuthProviderString + " OAuth provider");
-    }
-
-    Optional<UserEntity> existingUserOptional = userRepository.findById(email);
+  private void syncUserWithDatabase(OAuthProvider oAuthProvider, UserEntity oAuthUserEntity, String userEmail) {
+    Optional<UserEntity> existingUserOptional = userRepository.findById(userEmail);
     if (existingUserOptional.isPresent()) {
       UserEntity existingUser = existingUserOptional.get();
       // User already exists with same email id.
@@ -64,19 +72,17 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
       }
 
       // Check if user info is updated at provider
-      boolean userUpdateRequired = userUpdateRequired(existingUser, oauthUser);
+      boolean userUpdateRequired = userUpdateRequired(existingUser, oAuthUserEntity);
       if (userUpdateRequired) {
-        oauthUser.setJoinedOn(existingUser.getJoinedOn());
+        oAuthUserEntity.setJoinedOn(existingUser.getJoinedOn());
         // Update user in db
-        userRepository.save(oauthUser);
+        userRepository.save(oAuthUserEntity);
       }
     } else {
       // User does not exist in db, so add the user to db.
-      oauthUser.setJoinedOn(new Timestamp(System.currentTimeMillis()));
-      userRepository.save(oauthUser);
+      oAuthUserEntity.setJoinedOn(new Timestamp(System.currentTimeMillis()));
+      userRepository.save(oAuthUserEntity);
     }
-
-    return CustomUserPrincipal.create(oauthUser, oauth2User.getAttributes());
   }
 
   private boolean userUpdateRequired(UserEntity existingUser, UserEntity oauthUser) {

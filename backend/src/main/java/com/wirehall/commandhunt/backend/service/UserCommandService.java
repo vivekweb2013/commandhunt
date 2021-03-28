@@ -4,6 +4,7 @@ import com.wirehall.commandhunt.backend.dto.UserCommand;
 import com.wirehall.commandhunt.backend.dto.filter.Condition;
 import com.wirehall.commandhunt.backend.dto.filter.Filter;
 import com.wirehall.commandhunt.backend.dto.filter.PageResponse;
+import com.wirehall.commandhunt.backend.exception.BadRequestException;
 import com.wirehall.commandhunt.backend.mapper.PaginationMapper;
 import com.wirehall.commandhunt.backend.mapper.UserCommandMapper;
 import com.wirehall.commandhunt.backend.model.UserCommandEntity;
@@ -101,6 +102,9 @@ public class UserCommandService {
    * @param userEmail Logged-in user's email id.
    */
   public void addUserCommand(UserCommand userCommand, String userEmail) {
+    if (userCommand.getId() != null) {
+      throw new BadRequestException("Invalid save operation. Not a new user-command.");
+    }
     userCommand.setTimestamp(new Timestamp(System.currentTimeMillis()));
     UserCommandEntity userCommandEntity = mapper.mapToUserCommandEntity(userCommand, userEmail);
     LOGGER.info("Inserting user-command entity: {}", userCommandEntity);
@@ -115,6 +119,9 @@ public class UserCommandService {
    * @param userEmail Logged-in user's email id.
    */
   public void updateUserCommand(UserCommand userCommand, String userEmail) {
+    if (userCommand.getId() == null) {
+      throw new BadRequestException("Invalid update operation. Save user-command before updating.");
+    }
     userCommand.setTimestamp(new Timestamp(System.currentTimeMillis()));
     UserCommandEntity userCommandEntity = mapper.mapToUserCommandEntity(userCommand, userEmail);
     LOGGER.info("Updating user-command entity: {}", userCommandEntity);

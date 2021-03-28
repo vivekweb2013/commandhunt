@@ -3,12 +3,13 @@ package com.wirehall.commandhunt.backend.service.auth;
 import com.wirehall.commandhunt.backend.model.UserEntity;
 import com.wirehall.commandhunt.backend.model.auth.CustomUserPrincipal;
 import com.wirehall.commandhunt.backend.repository.UserRepository;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 /**
  * The principal is always the result of the UserDetailsService that returned the object
@@ -22,9 +23,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-  @Autowired
-  private UserRepository userRepository;
+  private final UserRepository userRepository;
 
+  @Autowired
+  public CustomUserDetailsService(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
+
+  /**
+   * Returns the user instance by username (i.e. email).
+   * Email is used as the primary key for user entity so username will always refer to the email.
+   *
+   * @param email The email address of user.
+   * @return Returns the user.
+   */
   @Override
   public UserDetails loadUserByUsername(String email) {
     Optional<UserEntity> userEntity = userRepository.findById(email);

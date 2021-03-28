@@ -39,10 +39,6 @@ public class UserService {
      * @return User DTO.
      */
     public User registerUser(SignUp signUpRequest) {
-        if (!StringUtils.hasLength(signUpRequest.getPassword())) {
-            LOGGER.error("Empty password in sign up request: {}", signUpRequest.getEmail());
-            throw new BadRequestException("Password is empty in the sign up request");
-        }
         if (userRepository.findById(signUpRequest.getEmail()).isPresent()) {
             LOGGER.error("Email: {} is already in use", signUpRequest.getEmail());
             throw new BadRequestException("Email address already in use.");
