@@ -18,6 +18,16 @@ class Builder extends Component {
         saveInProgress: false
     }
 
+    headerDiv = React.createRef();
+    contentDiv = React.createRef();
+
+    componentDidUpdate() {
+        if (this.headerDiv.current) {
+            const headerHeight = this.headerDiv.current.offsetHeight;
+            this.contentDiv.current.style.paddingTop = `${headerHeight + 30}px`;
+        }
+    }
+
     componentDidMount() {
         window.scrollTo(0, 0);
         const { match, location } = this.props;
@@ -148,7 +158,7 @@ class Builder extends Component {
 
         return command ? (
             <div className="builder">
-                <div className="header">
+                <div className="header" ref={this.headerDiv}>
                     <div className="text">
                         <code>
                             {generatedCommand != null && (<span>{generatedCommand}</span>)}
@@ -156,7 +166,7 @@ class Builder extends Component {
                     </div>
                 </div>
 
-                <div className="content">
+                <div className="content" ref={this.contentDiv}>
                     <div className="title"><span>Build <span className="command-name">{command.properties.name}</span> Command</span></div>
                     <div className="category"><span>SYNTAX</span></div>
                     <div className="syntax"><code>
