@@ -84,7 +84,7 @@ public class CommandRepository {
         Order.valueOf(pagination.getSort().getSortOrder().toLowerCase()))
         .fold().as(listKey, countKey).select(listKey, countKey)
         .by(__.range(Scope.local, pagination.getOffset(),
-            pagination.getOffset() + pagination.getPageSize()))
+                (long) pagination.getPageSize() + pagination.getOffset()))
         .by(__.count(Scope.local)).next();
 
     @SuppressWarnings("unchecked")

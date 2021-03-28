@@ -1,6 +1,5 @@
 package com.wirehall.commandhunt.backend.dto;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.HashMap;

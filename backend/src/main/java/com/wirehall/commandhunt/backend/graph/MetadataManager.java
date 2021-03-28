@@ -1,13 +1,13 @@
 package com.wirehall.commandhunt.backend.graph;
 
-import java.io.InputStream;
-import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.io.IoCore;
 import org.janusgraph.core.JanusGraph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.io.InputStream;
 
 @Component
 public class MetadataManager {
@@ -41,8 +41,7 @@ public class MetadataManager {
       LOGGER.info("Graph import successful!");
     } catch (Exception e) {
       graph.tx().rollback();
-      LOGGER.info("Failed to import graph", e);
-      throw new Error(e.getMessage());
+      throw new Error("Failed to import graph", e);
     }
   }
 }

@@ -1,6 +1,8 @@
 package com.wirehall.commandhunt.backend.exception;
 
 import com.wirehall.commandhunt.backend.dto.ErrorResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class GlobalExceptionHandler {
+  private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
   @ExceptionHandler({BadCredentialsException.class})
   @ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -45,10 +48,23 @@ public class GlobalExceptionHandler {
     return new ErrorResponse(ex.getMessage());
   }
 
+  @ExceptionHandler(OAuthException.class)
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
+  @ResponseBody
+  private ErrorResponse handleOAuthException(Exception ex) {
+    return new ErrorResponse(ex.getMessage());
+  }
+
   @ExceptionHandler(Exception.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   @ResponseBody
   private ErrorResponse handleAll(Exception ex) {
-    return new ErrorResponse(ex.getMessage());
+    // Never pass error details of this unknown exception to client
+    // Since these exceptions are unknown, sending the details to client may leak sensitive info
+
+    // Logging the exception here, since this is an unknown exception & we are suppressing the details
+    LOGGER.error("Unknown error occurred,", ex);
+
+    return new ErrorResponse("Something went wrong. Contact Support.");
   }
 }

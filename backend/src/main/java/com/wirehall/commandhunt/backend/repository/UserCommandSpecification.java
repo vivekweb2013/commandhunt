@@ -7,6 +7,10 @@ import org.springframework.util.StringUtils;
 
 public class UserCommandSpecification {
 
+    private UserCommandSpecification() {
+        
+    }
+
     public static Specification<UserCommandEntity> equalsCommandName(String commandName) {
         if (!StringUtils.hasLength(commandName)) {
             return null;

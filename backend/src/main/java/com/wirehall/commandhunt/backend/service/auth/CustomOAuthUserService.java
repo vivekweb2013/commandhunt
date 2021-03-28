@@ -3,11 +3,11 @@ package com.wirehall.commandhunt.backend.service.auth;
 
 import com.wirehall.commandhunt.backend.exception.OAuthException;
 import com.wirehall.commandhunt.backend.model.UserEntity;
+import com.wirehall.commandhunt.backend.model.UserEntity.OAuthProvider;
 import com.wirehall.commandhunt.backend.model.auth.CustomUserPrincipal;
 import com.wirehall.commandhunt.backend.repository.UserRepository;
 import com.wirehall.commandhunt.backend.security.OAuthUserFactory;
-import java.sql.Timestamp;
-import java.util.Optional;
+import org.apache.commons.lang3.EnumUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
@@ -16,6 +16,9 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import java.sql.Timestamp;
+import java.util.Optional;
 
 @Service
 public class CustomOAuthUserService extends DefaultOAuth2UserService {
@@ -39,29 +42,31 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
   }
 
   private OAuth2User processOAuth2User(OAuth2UserRequest oauth2UserRequest, OAuth2User oauth2User) {
-    UserEntity oauthUser = OAuthUserFactory
-        .getOAuth2UserInfo(oauth2UserRequest.getClientRegistration().getRegistrationId(),
-            oauth2User.getAttributes());
+    String oAuthProviderString = oauth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase();
+    if (!EnumUtils.isValidEnum(UserEntity.OAuthProvider.class, oAuthProviderString)) {
+      throw new OAuthException("Sorry! Login with " + oAuthProviderString + " is not supported.");
+    }
+    OAuthProvider oAuthProvider = OAuthProvider.valueOf(oAuthProviderString);
+    UserEntity oauthUser = OAuthUserFactory.getOAuth2UserInfo(oAuthProvider, oauth2User.getAttributes());
 
     String email = oauthUser.getEmail();
-    String provider = String.valueOf(oauthUser.getProvider());
-    String regId = oauth2UserRequest.getClientRegistration().getRegistrationId();
     if (!StringUtils.hasLength(email)) {
-      throw new OAuthException("Email not found from OAuth2 provider");
+      throw new OAuthException("Can't retrieve email from " + oAuthProviderString + " OAuth provider");
     }
 
-    Optional<UserEntity> existingUser = userRepository.findById(email);
-    if (existingUser.isPresent()) {
+    Optional<UserEntity> existingUserOptional = userRepository.findById(email);
+    if (existingUserOptional.isPresent()) {
+      UserEntity existingUser = existingUserOptional.get();
       // User already exists with same email id.
-      if (!provider.equalsIgnoreCase(regId)) {
-        throw new OAuthException("Looks like you're signed up with " + provider
-            + " account. Please use your " + provider + " account to login.");
+      if (!oAuthProvider.equals(existingUser.getProvider())) {
+        throw new OAuthException("Looks like you've already signed up with " + existingUser.getProvider()
+                + " account. Please use your " + existingUser.getProvider() + " account to login.");
       }
 
       // Check if user info is updated at provider
-      boolean userUpdateRequired = userUpdateRequired(existingUser.get(), oauthUser);
+      boolean userUpdateRequired = userUpdateRequired(existingUser, oauthUser);
       if (userUpdateRequired) {
-        oauthUser.setJoinedOn(existingUser.get().getJoinedOn());
+        oauthUser.setJoinedOn(existingUser.getJoinedOn());
         // Update user in db
         userRepository.save(oauthUser);
       }

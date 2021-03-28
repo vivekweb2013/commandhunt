@@ -1,6 +1,5 @@
 package com.wirehall.commandhunt.backend.dto.filter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PageResponse<T> {
@@ -8,8 +7,7 @@ public class PageResponse<T> {
   private long pageNumber = 1L;
   private long totalSize = 0L;
   private long pageSize = 10L;
-
-  private List<T> records = new ArrayList<>();
+  private List<T> records;
 
   public PageResponse(long pageNumber, long pageSize, long totalSize, List<T> records) {
     this.pageNumber = pageNumber;

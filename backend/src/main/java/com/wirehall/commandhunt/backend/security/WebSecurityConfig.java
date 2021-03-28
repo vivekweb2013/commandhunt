@@ -74,20 +74,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .exceptionHandling()
             .authenticationEntryPoint(new RestAuthenticationEntryPoint())
             .and().headers().frameOptions().disable().and()
-        .authorizeRequests()
-        .antMatchers(
-            "/**", // TODO: Remove the ** later
-            "/error",
-            "/favicon.ico",
-            "/**/*.png",
-            "/**/*.gif",
-            "/**/*.svg",
-            "/**/*.jpg",
-            "/**/*.html",
-            "/**/*.css",
-            "/**/*.js")
-        .permitAll()
-        .antMatchers("/api/auth/**", "/api/oauth2/**")
+            .authorizeRequests()
+            .antMatchers("/actuator/**", "/api/**")
         .permitAll()
         .anyRequest()
         .authenticated()

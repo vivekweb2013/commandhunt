@@ -19,7 +19,7 @@ public class Pagination {
   private Sort sort;
 
   public int getOffset() {
-    return (this.pageNumber - 1) * this.getPageSize();
+    return (this.pageNumber - 1) * this.pageSize;
   }
 
   public int getPageNumber() {
