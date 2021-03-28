@@ -11,6 +11,13 @@ public class PageResponse<T> {
 
   private List<T> records = new ArrayList<>();
 
+  public PageResponse(long pageNumber, long pageSize, long totalSize, List<T> records) {
+    this.pageNumber = pageNumber;
+    this.totalSize = totalSize;
+    this.pageSize = pageSize;
+    this.records = records;
+  }
+
   public long getPageNumber() {
     return pageNumber;
   }

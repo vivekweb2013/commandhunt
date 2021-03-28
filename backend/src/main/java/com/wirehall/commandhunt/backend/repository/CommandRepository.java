@@ -13,10 +13,6 @@ import com.wirehall.commandhunt.backend.model.graph.VertexType;
 import com.wirehall.commandhunt.backend.model.graph.props.CommandProperty;
 import com.wirehall.commandhunt.backend.model.graph.props.FlagProperty;
 import com.wirehall.commandhunt.backend.model.graph.props.OptionProperty;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 import org.apache.tinkerpop.gremlin.process.traversal.Order;
 import org.apache.tinkerpop.gremlin.process.traversal.Scope;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
@@ -30,6 +26,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 public class CommandRepository {
@@ -73,7 +74,6 @@ public class CommandRepository {
     LOGGER.debug("Applying the filter: {}", filter);
 
     Pagination pagination = filter.getPagination();
-    PageResponse<Command> commandPage = new PageResponse<>();
 
     GraphTraversal<Vertex, Vertex> commandGT = gt.V().hasLabel(VertexType.COMMAND.toLowerCase());
     applyConditions(commandGT, filter.getConditions());
@@ -97,11 +97,7 @@ public class CommandRepository {
       commands.add(command);
     }
 
-    commandPage.setTotalSize(totalSize);
-    commandPage.setPageSize(pagination.getPageSize());
-    commandPage.setRecords(commands);
-
-    return commandPage;
+    return new PageResponse<>(pagination.getPageNumber(), pagination.getPageSize(), totalSize, commands);
   }
 
   /**
