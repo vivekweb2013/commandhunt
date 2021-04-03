@@ -1,0 +1,85 @@
+@import "../../styles/shared";
+/* The Modal (background) */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9000;
+    overflow: auto;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* Modal Content */
+.modal-content {
+    & > .top-close-btn {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        cursor: pointer;
+        color: #fff;
+        &:hover {
+            font-weight: bold;
+        }
+    }
+    & > .modal-header {
+        padding: 15px 20px;
+        background: lighten($color-primary, 10%);
+        color: #fff;
+
+        &.error {
+            background: lighten(red, 20%);
+        }
+    }
+
+    & > .modal-body {
+        padding: 20px;
+        line-height: 1.4;
+        font-size: 14px;
+        color: #454b4d;
+        background: #fff;
+        position: relative;
+        z-index: 2;
+    }
+
+    & > .modal-footer {
+        overflow: hidden;
+        padding: 20px;
+
+        & > .footer-btn {
+            box-sizing: border-box;
+            padding: 0 10px;
+            margin: 0;
+            line-height: 32px;
+            height: 32px;
+            border: 1px solid #666;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 400;
+            color: #333;
+            background: transparent;
+            outline: none;
+            text-decoration: none;
+            cursor: pointer;
+            float: right;
+            border-radius: 3px;
+
+            &.confirm {
+                margin-left: 10px;
+                background-color: lighten($color-primary, 10%);
+                color: white;
+            }
+        }
+    }
+    width: 350px;
+    position: fixed;
+    top: 100px;
+    left: 50%;
+    margin-left: -175px;
+    background: #fff;
+    border-radius: 5px;
+    border: 1px solid #b8c8cc;
+    overflow: hidden;
+    z-index: 1001;
+}

@@ -7,18 +7,20 @@ import * as API from '../api/API';
 import { getQueryParamByName } from '../Utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Login.scss';
+import Modal from './common/Modal';
 
 class Login extends Component {
     state = {
         loginInProgress: false,
-        loginRequest: {}
+        loginRequest: {},
+        loginError: ''
     }
     componentDidMount() {
         const token = getQueryParamByName('token', window.location.search);
         const error = getQueryParamByName('error', window.location.search);
         if (token || error) {
             window.history.replaceState(null, null, window.location.origin + window.location.pathname); // URL Cleanup
-            (token && this.props.getUserProfile(token)) || alert(error);
+            (token && this.props.getUserProfile(token)) || this.setState({ loginError: error });
         }
     }
     handleInputChange(event) {
@@ -44,11 +46,15 @@ class Login extends Component {
         e.preventDefault();
         this.props.history.push('/signup');
     }
+
+    onCloseModal() {
+        this.setState({ loginError: '' });
+    }
     render() {
         const { user, history } = this.props;
         if (user) history.replace('/');
 
-        const { loginInProgress } = this.state;
+        const { loginInProgress, loginError } = this.state;
         const isRedirected = window.location.href.match(/[&?]token=/);
         return (
             loginInProgress || isRedirected ? <div className="app loading" ><Spinner size="50" /> <br />LOADING</div> :
@@ -61,7 +67,7 @@ class Login extends Component {
                             <input type="password" name="password" onChange={e => this.handleInputChange(e)} placeholder="Password" required />
 
                             <button type="submit">
-                                {this.state.loginInProgress && <FontAwesomeIcon icon="circle-notch" spin />} Login
+                                {loginInProgress && <FontAwesomeIcon icon="circle-notch" spin />} Login
                             </button>
                             <button type="button" onClick={e => this.handleSignUp(e)}>Sign Up</button>
                         </form>
@@ -78,6 +84,8 @@ class Login extends Component {
                         </div>
 
                     </div>
+                    {loginError && <Modal onClose={this.onCloseModal.bind(this)} title="Something Went Wrong..." type="error">
+                        <span>{loginError}</span></Modal>}
                 </div>
         )
     }
