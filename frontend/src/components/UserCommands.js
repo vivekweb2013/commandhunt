@@ -42,7 +42,7 @@ class UserCommands extends Component {
             const { userCommands } = this.props;
             const { filter } = this.state;
 
-            if (filter.pagination.pageNumber > userCommands.totalPages) {
+            if (userCommands.pageNumber !== 0 && (filter.pagination.pageNumber > userCommands.totalPages)) {
                 this.setState({ filter: { ...filter, pagination: { ...filter.pagination, pageNumber: userCommands.totalPages } } }, () => {
                     const { filter } = this.state;
                     history.push(getQueryParamsFromFilter(filter))

@@ -37,10 +37,10 @@ class Finder extends Component {
             const { commands } = this.props;
             const { filter } = this.state;
 
-            if (filter.pagination.pageNumber > commands.totalPages) {
+            if (commands.pageNumber !== 0 && (filter.pagination.pageNumber > commands.totalPages)) {
                 this.setState({ filter: { ...filter, pagination: { ...filter.pagination, pageNumber: commands.totalPages } } }, () => {
                     const { filter } = this.state;
-                    history.push(getQueryParamsFromFilter(filter))
+                    history.push(getQueryParamsFromFilter(filter));
                 });
             }
         });

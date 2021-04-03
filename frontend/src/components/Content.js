@@ -5,8 +5,13 @@ import Builder from './Builder';
 import Login from './Login';
 import UserCommands from './UserCommands';
 import './Content.scss';
-import { withRouter } from 'react-router';
+import { Redirect, withRouter } from 'react-router';
 import SignUp from './SignUp';
+import { connect } from 'react-redux';
+
+const ProtectedRoute = ({ component: Component, isLoggedIn, path, ...rest }) =>
+    <Route path={path} {...rest} render={props => isLoggedIn ?
+        <Component {...props} /> : <Redirect to={{ pathname: "/login", state: { referer: props.location.pathname + props.location.search } }} />} />
 
 class Content extends Component {
     render() {
@@ -17,11 +22,17 @@ class Content extends Component {
                     <Route path="/login" component={Login} />
                     <Route path="/signup" component={SignUp} />
                     <Route path="/command/build/:commandName" key={this.props.history.location.search} component={Builder} />
-                    <Route path="/command/user-commands" key={this.props.history.location.search} component={UserCommands} />
+                    <ProtectedRoute isLoggedIn={!!this.props.user} path="/command/user-commands" key={this.props.history.location.search} component={UserCommands} />
                 </Switch>
             </div>
         )
     }
 }
 
-export default withRouter(Content);
+const mapStateToProps = (state) => {
+    return {
+        user: state.authReducer.user
+    }
+}
+
+export default withRouter(connect(mapStateToProps)(Content));

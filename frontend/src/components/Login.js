@@ -13,14 +13,21 @@ class Login extends Component {
     state = {
         loginInProgress: false,
         loginRequest: {},
-        loginError: ''
+        loginError: '',
+        postLoginRedirectUrl: '/'
     }
     componentDidMount() {
         const token = getQueryParamByName('token', window.location.search);
         const error = getQueryParamByName('error', window.location.search);
+        const referer = getQueryParamByName('referer', window.location.search);
         if (token || error) {
             window.history.replaceState(null, null, window.location.origin + window.location.pathname); // URL Cleanup
-            (token && this.props.getUserProfile(token)) || this.setState({ loginError: error });
+            if (token) {
+                this.props.getUserProfile(token);
+                referer && this.setState({ postLoginRedirectUrl: referer });
+            } else {
+                this.setState({ loginError: error });
+            }
         }
     }
     handleInputChange(event) {
@@ -32,7 +39,9 @@ class Login extends Component {
     handleOAuthLogin(e, provider) {
         e.preventDefault();
         this.setState({ loginInProgress: true });
-        window.location.href = `${API.API_URL}/oauth2/authorize/${provider}?redirect_uri=${window.location.href}`;
+        const { location } = this.props;
+        const referer = location.state && location.state.referer ? `?referer=${location.state.referer}` : '';
+        window.location.href = `${API.API_URL}/oauth2/authorize/${provider}?redirect_uri=${window.location.href}${referer}`;
     }
     handleManualLogin(e) {
         e.preventDefault();
@@ -52,7 +61,7 @@ class Login extends Component {
     }
     render() {
         const { user, history } = this.props;
-        if (user) history.replace('/');
+        if (user) history.replace(this.state.postLoginRedirectUrl);
 
         const { loginInProgress, loginError } = this.state;
         const isRedirected = window.location.href.match(/[&?]token=/);
