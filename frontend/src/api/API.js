@@ -1,5 +1,6 @@
 import { getQueryParamsFromFilter } from '../Utils';
 
+// when we start the application using 'npm start' then process.env.NODE_ENV will be automatically set to 'development'
 export const API_URL = process.env.NODE_ENV === 'development' ? "http://localhost:8080/api" : '/api';
 
 const getHeaders = () => {
@@ -47,10 +48,18 @@ export const getUserProfile = (token) => {
         localStorage.setItem('token', token);
     }
 
-    return fetch(`${API_URL}/auth/user/me`, { headers: getHeaders() }).then(handleErrors).then(async res => {
+    // There is no point in calling profile api without token, since it will fail without token
+    // So in case of page reload etc we call this endpoint only when there is token in local-storage, which implies
+    // that user has already logged-in
+    return localStorage.getItem('token') ? fetch(`${API_URL}/auth/user/me`, { headers: getHeaders() }).then(async res => {
+        if (!res.ok) {
+            console.log('User session has been expired. Login again!');
+            localStorage.removeItem('token');
+            return null;
+        }
         const user = await res.json();
         return user;
-    }).catch(catchError);
+    }).catch(catchError) : Promise.resolve();
 }
 
 export const getCommands = (filter) => fetch(`${API_URL}/command` + getQueryParamsFromFilter(filter),
