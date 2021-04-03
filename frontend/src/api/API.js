@@ -28,16 +28,6 @@ export const userSignUp = (signUpRequest) => {
     return fetch(`${API_URL}/auth/signup`, { method: 'POST', body: JSON.stringify(signUpRequest), headers: getHeaders() }).then(handleErrors).catch(catchError);
 }
 
-export const userLogin = (loginRequest) => {
-    return fetch(`${API_URL}/auth/login`, { method: 'POST', body: JSON.stringify(loginRequest), headers: getHeaders() }).then(handleErrors).then(async res => {
-        const payload = await res.json();
-        const token = payload.token;
-        localStorage.setItem('token', token);
-        const user = payload.user;
-        return user;
-    }).catch(catchError);
-};
-
 export const userLogout = () => {
     localStorage.removeItem('token');
     return Promise.resolve();

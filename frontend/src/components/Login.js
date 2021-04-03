@@ -39,26 +39,21 @@ class Login extends Component {
     handleOAuthLogin(e, provider) {
         e.preventDefault();
         this.setState({ loginInProgress: true });
-        const { location } = this.props;
-        const referer = location.state && location.state.referer ? `?referer=${location.state.referer}` : '';
-        window.location.href = `${API.API_URL}/oauth2/authorize/${provider}?redirect_uri=${window.location.href}${referer}`;
-    }
-    handleManualLogin(e) {
-        e.preventDefault();
-        const { loginRequest } = this.state;
-        this.setState({ loginInProgress: true });
-        this.props.userLogin(loginRequest).then((resp) => {
-            this.setState({ loginInProgress: false });
-        });
+        window.location.href = `${API.API_URL}/oauth2/authorize/${provider}` + this.getRedirectQueryParam();
     }
     handleSignUp(e) {
         e.preventDefault();
         this.props.history.push('/signup');
     }
-
+    getRedirectQueryParam() {
+        const { location } = this.props;
+        const referer = location.state && location.state.referer ? `?referer=${location.state.referer}` : '';
+        return `?redirect_uri=${window.location.href}${referer}`;
+    }
     onCloseModal() {
         this.setState({ loginError: '' });
     }
+
     render() {
         const { user, history } = this.props;
         if (user) history.replace(this.state.postLoginRedirectUrl);
@@ -71,7 +66,7 @@ class Login extends Component {
                     <span className="icon-s-nw-login"></span>
                     <div className="box">
 
-                        <form onSubmit={(e) => this.handleManualLogin(e)} className="manual-login">
+                        <form action={`${API.API_URL}/auth/login` + this.getRedirectQueryParam()} method="post" className="manual-login">
                             <input type="email" name="email" onChange={e => this.handleInputChange(e)} placeholder="Email" required />
                             <input type="password" name="password" onChange={e => this.handleInputChange(e)} placeholder="Password" required />
 
@@ -110,11 +105,6 @@ const mapDispatchToProps = dispatch => {
     return {
         getUserProfile: (token) => {
             return API.getUserProfile(token).then((user) => {
-                dispatch(userLogin(user));
-            });
-        },
-        userLogin: (loginRequest) => {
-            return API.userLogin(loginRequest).then((user) => {
                 dispatch(userLogin(user));
             });
         }
