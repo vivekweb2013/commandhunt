@@ -103,6 +103,7 @@ $form-bottom-button-spacing: 15px;
           textarea {
             &:disabled {
               background-color: $color-disabled;
+              cursor: not-allowed;
             }
 
             width: 100%;
@@ -121,6 +122,7 @@ $form-bottom-button-spacing: 15px;
 
             &:disabled + label {
               background-color: $color-disabled;
+              cursor: not-allowed;
             }
 
             &:checked + label svg path {
@@ -240,6 +242,7 @@ $form-bottom-button-spacing: 15px;
 
           &:disabled {
             background-color: $color-disabled;
+            cursor: default;
           }
         }
       }

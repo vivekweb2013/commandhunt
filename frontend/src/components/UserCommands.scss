@@ -60,6 +60,7 @@ $search-field-font-size: ($search-input-height/30px * 1rem);
     td.actions > span {
       cursor: pointer;
       padding: 6px;
+      &.view-icon,
       &.copy-icon,
       &.edit-icon {
         svg:hover {
@@ -103,7 +104,7 @@ $search-field-font-size: ($search-input-height/30px * 1rem);
       width: 50%;
     }
     th.actions-column {
-      width: 150px;
+      width: 175px;
     }
   }
 }

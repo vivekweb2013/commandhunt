@@ -152,6 +152,11 @@ class UserCommands extends Component {
                                             <FontAwesomeIcon icon="copy" color="slateblue" size="lg" />
                                         </span>
                                     </CopyToClipboard>
+                                    <span title="view" onClick={(e) =>
+                                        history.push(`/command/view/${userCommand.commandName}?userCommandId=${userCommand.id}`)
+                                    } className="view-icon">
+                                        <FontAwesomeIcon icon="eye" color="slateblue" size="lg" />
+                                    </span>
                                     <span title="edit" onClick={() =>
                                         history.push(`/command/build/${userCommand.commandName}?userCommandId=${userCommand.id}`)
                                     } className="edit-icon">

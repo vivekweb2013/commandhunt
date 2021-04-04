@@ -15,7 +15,8 @@ class Builder extends Component {
             flags: {},
             options: {}
         },
-        saveInProgress: false
+        saveInProgress: false,
+        enableEdit: true
     }
 
     headerDiv = React.createRef();
@@ -32,7 +33,7 @@ class Builder extends Component {
         window.scrollTo(0, 0);
         const { match, location } = this.props;
         const userCommandId = getQueryParamByName('userCommandId', location.search);
-        this.setState({ userCommandId });
+        this.setState({ userCommandId, enableEdit: location.pathname.startsWith('/command/build/') });
         if (userCommandId != null) {
             this.props.getUserCommand(userCommandId).then((userCommand) => {
                 this.setState({ userCommand });
@@ -151,6 +152,7 @@ class Builder extends Component {
 
     render() {
         const { command, user } = this.props;
+        const { enableEdit } = this.state;
         const userCommand = this.state.userCommand || { flags: {}, options: {} };
         const newlineRegex = /(?:\r\n|\r|\n)/g;
 
@@ -190,14 +192,14 @@ class Builder extends Component {
                                                     <PermissionInput id={option.id} name={option.properties.name}
                                                         handleChange={this.handleOptionChange.bind(this)}
                                                         pattern={getValidationRegex(option.properties.data_type)}
-                                                        disabled={this.hasSolitarySituation()}
+                                                        disabled={!enableEdit || this.hasSolitarySituation()}
                                                         required={option.properties.is_mandatory === 'true'}
                                                         value={userCommand.options[option.properties.name] || ['']} />
                                                     :
                                                     <DynamicTextInput id={option.id} name={option.properties.name}
                                                         handleChange={this.handleOptionChange.bind(this)}
                                                         pattern={getValidationRegex(option.properties.data_type)}
-                                                        disabled={this.hasSolitarySituation()}
+                                                        disabled={!enableEdit || this.hasSolitarySituation()}
                                                         required={option.properties.is_mandatory === 'true'}
                                                         isRepeatable={option.properties.is_repeatable === 'true'}
                                                         values={userCommand.options[option.properties.name] || ['']} />}
@@ -220,7 +222,8 @@ class Builder extends Component {
                                                 <div className="input-col">
                                                     <input id={flag.id} type="checkbox" name={flag.properties.name}
                                                         onChange={(e) => this.handleFlagChange(e)}
-                                                        disabled={flag.properties.is_solitary === 'true' ? this.hasSolitarySituation(flag) : this.hasSolitarySituation()}
+                                                        disabled={!enableEdit ||
+                                                            (flag.properties.is_solitary === 'true' ? this.hasSolitarySituation(flag) : this.hasSolitarySituation())}
                                                         checked={!!userCommand.flags[flag.properties.name]} />
                                                     <label htmlFor={flag.id}>
                                                         <svg viewBox="0,0,50,50"><path d="M5 30 L 20 45 L 45 5"></path></svg>
@@ -234,11 +237,11 @@ class Builder extends Component {
                         </div>
                         <div className="form-buttons no-print">
                             <button className="ripple" onClick={e => window.print()} type="button">PRINT</button>
-                            <button className="ripple tooltip-t"
+                            {enableEdit && <button className="ripple tooltip-t"
                                 {...(!user ? { 'data-tooltip': 'Login to Save' } : {})} type="submit"
                                 disabled={!user || this.state.saveInProgress}>
                                 {this.state.saveInProgress && <FontAwesomeIcon icon="circle-notch" spin />} SAVE
-                            </button>
+                            </button>}
                         </div>
                     </form>
                 </div>

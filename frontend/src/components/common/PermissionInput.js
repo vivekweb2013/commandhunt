@@ -34,7 +34,7 @@ class PermissionInput extends Component {
             <span className="dynamic-text-ip-wrapper">
                 <input id={id} name={name} pattern={pattern} type="text" value={value[0]}
                     onChange={this.handleTextChange.bind(this)} required={required} disabled={disabled} />
-                <input type="button" onClick={e => this.toggle(e)} className="small" value={valArray.length === 0 ? ' ＋ ' : ' － '} />
+                {!disabled && <input type="button" disabled={disabled} onClick={e => this.toggle(e)} className="small" value={valArray.length === 0 ? ' ＋ ' : ' － '} />}
             </span>
 
             {valArray.map((v, i) => <div key={i} className="permission-row">

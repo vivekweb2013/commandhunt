@@ -23,6 +23,7 @@ class Content extends Component {
                     <Route path="/login" component={Login} />
                     <Route path="/signup" component={SignUp} />
                     <Route path="/command/build/:commandName" key={this.props.history.location.search} component={Builder} />
+                    <Route path="/command/view/:commandName" key={this.props.history.location.search} component={Builder} />
                     <ProtectedRoute isLoggedIn={!!this.props.user} path="/command/user-commands" key={this.props.history.location.search} component={UserCommands} />
                     <Route component={PageNotFound} />
                 </Switch>
