@@ -52,6 +52,8 @@ export const getUserProfile = (token) => {
     }).catch(catchError) : Promise.resolve();
 }
 
+export const isManualAuthAllowed = () => fetch(`${API_URL}/auth/isManualAuthAllowed`).then(handleErrors).then(res => res.text()).catch(catchError);
+
 export const getCommands = (filter) => fetch(`${API_URL}/command` + getQueryParamsFromFilter(filter),
     { headers: getHeaders() }).then(handleErrors).then(res => res.json()).catch(catchError);
 

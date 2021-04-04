@@ -9,6 +9,7 @@ app:
       enable: false
       path: ./graph/app.graphml
 
+  isManualAuthAllowed: false # Enable/disable manual sign-up and login. If disabled, only OAuth login will be allowed
   jwt:
     secret: ${APP_JWT_SECRET}
   oauth2:

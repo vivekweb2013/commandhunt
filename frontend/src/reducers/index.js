@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import {
     GET_COMMANDS, GET_COMMAND,
     GET_USER_COMMANDS,
-    USER_LOGIN, USER_LOGOUT
+    USER_LOGIN, USER_LOGOUT, IS_MANUAL_AUTH_ALLOWED
 } from '../actions';
 
 const commandReducer = (state = {}, action) => {
@@ -37,7 +37,7 @@ const userCommandReducer = (state = {}, action) => {
 };
 
 const authReducer = (state = {}, action) => {
-    const { user } = action;
+    const { user, manualAuthAllowed } = action;
     switch (action.type) {
         case USER_LOGIN:
             return {
@@ -48,6 +48,11 @@ const authReducer = (state = {}, action) => {
             return {
                 ...state,
                 user // user is set to null
+            };
+        case IS_MANUAL_AUTH_ALLOWED:
+            return {
+                ...state,
+                manualAuthAllowed
             };
         default:
             return state;

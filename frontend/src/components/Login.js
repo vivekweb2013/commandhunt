@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import Spinner from './common/Spinner';
-import { userLogin } from '../actions';
+import { userLogin, isManualAuthAllowed } from '../actions';
 import * as API from '../api/API';
 import { getQueryParamByName } from '../Utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -29,6 +29,7 @@ class Login extends Component {
                 this.setState({ loginError: error });
             }
         }
+        this.props.isManualAuthAllowed();
     }
     handleInputChange(event) {
         const { name, value } = event.target;
@@ -55,7 +56,7 @@ class Login extends Component {
     }
 
     render() {
-        const { user, history } = this.props;
+        const { user, history, manualAuthAllowed } = this.props;
         if (user) history.replace(this.state.postLoginRedirectUrl);
 
         const { loginInProgress, loginError } = this.state;
@@ -66,20 +67,20 @@ class Login extends Component {
                     <span className="icon-s-nw-login"></span>
                     <div className="box">
 
-                        <form action={`${API.API_URL}/auth/login` + this.getRedirectQueryParam()} method="post" className="manual-login">
-                            <input type="email" name="email" onChange={e => this.handleInputChange(e)} placeholder="Email" required />
-                            <input type="password" name="password" onChange={e => this.handleInputChange(e)} placeholder="Password" required />
+                        {manualAuthAllowed && <>
+                            <form action={`${API.API_URL}/auth/login` + this.getRedirectQueryParam()} method="post" className="manual-login">
+                                <input type="email" name="email" onChange={e => this.handleInputChange(e)} placeholder="Email" required />
+                                <input type="password" name="password" onChange={e => this.handleInputChange(e)} placeholder="Password" required />
 
-                            <button type="submit">
-                                {loginInProgress && <FontAwesomeIcon icon="circle-notch" spin />} Login
+                                <button type="submit">
+                                    {loginInProgress && <FontAwesomeIcon icon="circle-notch" spin />} Login
                             </button>
-                            <button type="button" onClick={e => this.handleSignUp(e)}>Sign Up</button>
-                        </form>
+                                <button type="button" onClick={e => this.handleSignUp(e)}>Sign Up</button>
+                            </form>
 
-                        <div className="divide">
-                            <span className="divide-text">or</span>
-                        </div>
-
+                            <div className="divide">
+                                <span className="divide-text">or</span>
+                            </div> </>}
                         <div className="s-nw-buttons">
                             <span className="s-nw-login-text">Login with Social Networks</span>
                             <button className="ggl" onClick={(e) => this.handleOAuthLogin(e, 'google')}> <span className="icon-ggl"></span>Login with Google</button>
@@ -97,7 +98,8 @@ class Login extends Component {
 
 const mapStateToProps = (state, props) => {
     return {
-        user: state.authReducer.user
+        user: state.authReducer.user,
+        manualAuthAllowed: state.authReducer.manualAuthAllowed
     }
 }
 
@@ -106,6 +108,11 @@ const mapDispatchToProps = dispatch => {
         getUserProfile: (token) => {
             return API.getUserProfile(token).then((user) => {
                 dispatch(userLogin(user));
+            });
+        },
+        isManualAuthAllowed: () => {
+            return API.isManualAuthAllowed().then((manualAuthAllowed) => {
+                dispatch(isManualAuthAllowed(manualAuthAllowed === "true"));
             });
         }
     }

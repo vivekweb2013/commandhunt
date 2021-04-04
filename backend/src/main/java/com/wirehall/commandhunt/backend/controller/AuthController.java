@@ -38,6 +38,9 @@ public class AuthController {
   @Value("${app.oauth2.authorizedRedirectUris}")
   private String[] authorizedRedirectUris;
 
+  @Value("${app.isManualAuthAllowed}")
+  private boolean isManualAuthAllowed;
+
   @Autowired
   private AuthenticationManager authenticationManager;
 
@@ -49,6 +52,7 @@ public class AuthController {
 
   /**
    * The endpoint used by clients to login into the application with user credentials.
+   * This is driven by the isManualAuthAllowed flag. If set false this manual login won't work.
    * This is intentionally kept as form-login type instead of json post since it needs to be
    * aligned with the OAuth style response mechanism of sending token/error using redirect.
    *
@@ -59,10 +63,13 @@ public class AuthController {
   @PostMapping("/login")
   public ModelAndView authenticateUser(@Valid @ModelAttribute Login loginRequest,
                                        @RequestParam("redirect_uri") String redirectUri) {
-
     LOGGER.debug("Login requested: {}", loginRequest);
-    LOGGER.debug("Send redirect to: {}", redirectUri);
 
+    if (!isManualAuthAllowed) {
+      throw new BadRequestException("Manual login is not allowed, use OAuth login instead");
+    }
+
+    LOGGER.debug("Send redirect to: {}", redirectUri);
     String redirectUrl = "redirect:" + redirectUri + (redirectUri.contains("?") ? "&" : "?");
 
     try {
@@ -91,13 +98,15 @@ public class AuthController {
    */
   @PostMapping("/signup")
   public ResponseEntity<User> registerUser(@Valid @RequestBody SignUp signUpRequest) {
-
     LOGGER.debug("Signup requested: {}", signUpRequest);
 
-    User user = userService.registerUser(signUpRequest);
+    if (!isManualAuthAllowed) {
+      throw new BadRequestException("Manual sign-up is not allowed at the moment");
+    }
 
+    User user = userService.registerUser(signUpRequest);
     URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/me")
-        .buildAndExpand().toUri();
+            .buildAndExpand().toUri();
 
     return ResponseEntity.created(location).body(user);
   }
@@ -113,5 +122,18 @@ public class AuthController {
   public User getCurrentUser(@CurrentUser CustomUserPrincipal customUserPrincipal) {
     UserEntity userEntity = customUserPrincipal.getUser();
     return userMapper.mapToUser(userEntity);
+  }
+
+  /**
+   * Allows clients to enquire if manual signup and login is allowed.
+   * This behaviour is driven by app.isManualAuthAllowed property.
+   * If the property is set false then only OAuth login should be allowed and
+   * both manual sign-up and login should be disabled by client.
+   *
+   * @return True or false depending on the value of app.isManualAuthAllowed property
+   */
+  @GetMapping("/isManualAuthAllowed")
+  public Boolean isManualAuthAllowed() {
+    return isManualAuthAllowed;
   }
 }
