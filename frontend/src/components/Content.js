@@ -8,6 +8,7 @@ import './Content.scss';
 import { Redirect, withRouter } from 'react-router';
 import SignUp from './SignUp';
 import { connect } from 'react-redux';
+import PageNotFound from './common/PageNotFound';
 
 const ProtectedRoute = ({ component: Component, isLoggedIn, path, ...rest }) =>
     <Route path={path} {...rest} render={props => isLoggedIn ?
@@ -23,6 +24,7 @@ class Content extends Component {
                     <Route path="/signup" component={SignUp} />
                     <Route path="/command/build/:commandName" key={this.props.history.location.search} component={Builder} />
                     <ProtectedRoute isLoggedIn={!!this.props.user} path="/command/user-commands" key={this.props.history.location.search} component={UserCommands} />
+                    <Route component={PageNotFound} />
                 </Switch>
             </div>
         )
