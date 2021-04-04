@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Builder.scss';
 import DynamicTextInput from './common/DynamicTextInput';
 import PermissionInput from './common/PermissionInput';
+import CopyToClipboard from 'react-copy-to-clipboard';
+import ToastMaker from 'toastmaker';
 
 class Builder extends Component {
     state = {
@@ -163,9 +165,18 @@ class Builder extends Component {
                 <div className="header" ref={this.headerDiv}>
                     <div className="text">
                         <code>
-                            {generatedCommand != null && (<span>{generatedCommand}</span>)}
+                            {generatedCommand != null && <span>{generatedCommand}</span>}
                         </code>
                     </div>
+                    <CopyToClipboard text={generatedCommand}>
+                        <button className="copy" onClick={(e) => ToastMaker("Copied!")}>
+                            <span className="copy-icon" title="copy">
+                                <FontAwesomeIcon icon="copy" color="white" size="lg" />
+                            </span><br />
+                            <span className="copy-label">COPY</span>
+                        </button>
+                    </CopyToClipboard>
+
                 </div>
 
                 <div className="content" ref={this.contentDiv}>

@@ -4,6 +4,7 @@ $builder-header-min-height: 50px;
 $header-padding-vertical: 5px;
 $checkbox-size: 30px;
 $form-bottom-button-spacing: 15px;
+$command-copy-button-width: 50px;
 
 .builder {
   > .header {
@@ -16,12 +17,32 @@ $form-bottom-button-spacing: 15px;
     min-height: $builder-header-min-height;
     min-width: auto;
     padding: $header-padding-vertical 10px;
+    padding-right: $command-copy-button-width;
     position: fixed;
     text-align: center;
     width: 100%;
     z-index: 100;
     .text {
       width: 100%;
+      user-select: none;
+    }
+    button.copy {
+      background-color: $color-primary;
+      border: none;
+      border-left: 1px solid lighten($color-primary, 50%);
+      outline: none;
+      position: absolute;
+      right: 0;
+      height: 100%;
+      width: $command-copy-button-width;
+      cursor: pointer;
+      .copy-icon {
+        padding: 2px;
+      }
+      .copy-label {
+        font-size: xx-small;
+        color: white;
+      }
     }
   }
   > .content {
