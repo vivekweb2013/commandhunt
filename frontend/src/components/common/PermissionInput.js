@@ -36,20 +36,22 @@ class PermissionInput extends Component {
                     onChange={this.handleTextChange.bind(this)} required={required} disabled={disabled} />
                 {!disabled && <input type="button" disabled={disabled} onClick={e => this.toggle(e)} className="small" value={valArray.length === 0 ? ' ＋ ' : ' － '} />}
             </span>
-
-            {valArray.map((v, i) => <div key={i} className="permission-row">
-                <span className="assignee">{i === 0 ? 'User' : (i === 1 ? 'Group' : 'Other')}</span>
-                <span className="permissions">
-                    {['Read', 'Write', 'Execute'].map((p, j) =>
-                        <span key={`${id}_${i}_${j}`}><span className="permission-type">{p} </span><input id={`${id}_${i}_${j}`} type="checkbox" name={name}
-                            onChange={(e) => this.handleChange(e, i, j)}
-                            disabled={disabled} checked={(v | binaryPermissions[j]) === v} />
-                            <label htmlFor={`${id}_${i}_${j}`}>
-                                <svg viewBox="0,0,50,50"><path d="M5 30 L 20 45 L 45 5"></path></svg>
-                            </label>
-                        </span>)}
-                </span>
-            </div>)}
+            <div className="permission-container">
+                {valArray.map((v, i) => <div key={i} className="permission-row">
+                    <span className="assignee">{i === 0 ? 'Owner' : (i === 1 ? 'Group' : 'Others')}</span>
+                    <span className="permissions">
+                        {['Read', 'Write', 'Execute'].map((p, j) =>
+                            <span key={`${id}_${i}_${j}`}><span className="permission-type">{p.charAt(0)}<span className="lg">{p.substring(1)}</span></span>
+                                <input id={`${id}_${i}_${j}`} type="checkbox" name={name}
+                                    onChange={(e) => this.handleChange(e, i, j)}
+                                    disabled={disabled} checked={(v | binaryPermissions[j]) === v} />
+                                <label htmlFor={`${id}_${i}_${j}`}>
+                                    <svg viewBox="0,0,50,50"><path d="M5 30 L 20 45 L 45 5"></path></svg>
+                                </label>
+                            </span>)}
+                    </span>
+                </div>)}
+            </div>
         </div>);
     }
 

@@ -34,18 +34,18 @@ class Modal extends Component {
         // Use a portal to render the children into the element
         return createPortal(
             // Any valid React child: JSX, strings, arrays, etc.
-            <div class="modal">
-                <div class="modal-content">
-                    <span class="top-close-btn" onClick={e => onClose()}>&#x2715;</span>
-                    <div class={`modal-header ${type}`}>
+            <div className="modal">
+                <div className="modal-content">
+                    <span className="top-close-btn" onClick={e => onClose()}>&#x2715;</span>
+                    <div className={`modal-header ${type}`}>
                         {title}
                     </div>
-                    <div class="modal-body">
+                    <div className="modal-body">
                         {children}
                     </div>
-                    <div class="modal-footer">
-                        {type === 'confirm' && <button class="footer-btn confirm" onClick={e => onConfirm()}>OKAY</button>}
-                        <button class="footer-btn" onClick={e => onClose()}>{type === 'confirm' ? 'CANCEL' : 'CLOSE'}</button>
+                    <div className="modal-footer">
+                        {type === 'confirm' && <button className="footer-btn confirm" onClick={e => onConfirm()}>OKAY</button>}
+                        <button className="footer-btn" onClick={e => onClose()}>{type === 'confirm' ? 'CANCEL' : 'CLOSE'}</button>
                     </div>
                 </div>
             </div>,

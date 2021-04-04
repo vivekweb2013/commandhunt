@@ -83,4 +83,4 @@ export const updateUserCommand = (userCommand) => fetch(`${API_URL}/user/user-co
 export const deleteUserCommand = (userCommand) => fetch(`${API_URL}/user/user-command/${userCommand.id}`, {
     method: 'DELETE',
     headers: getHeaders()
-}).then(handleErrors).then(res => res.json()).catch(catchError);
+}).then(handleErrors).then(res => res.text()).catch(catchError);

@@ -66,16 +66,21 @@ $form-bottom-button-spacing: 15px;
 
           .dynamic-text-ip-wrapper {
             display: inline-flex;
+            width: 100%;
 
             input[type="button"] {
               border: 1px solid #767676;
               border-radius: 2px;
               background-color: #efefef;
               outline: none;
+              margin: 0; // required for safari
             }
           }
 
           .permission-ip-wrapper {
+            .permission-container {
+              display: table;
+            }
             font-size: smaller;
             input[type="checkbox"] + label {
               height: 20px;
@@ -83,8 +88,9 @@ $form-bottom-button-spacing: 15px;
               border-width: 2px;
             }
             .assignee {
-              float: left;
+              vertical-align: middle;
               font-weight: 500;
+              text-transform: uppercase;
             }
             .permissions {
               float: right;
@@ -95,6 +101,7 @@ $form-bottom-button-spacing: 15px;
             }
             .permission-type {
               margin-left: 8px;
+              vertical-align: middle;
             }
           }
 
@@ -114,6 +121,7 @@ $form-bottom-button-spacing: 15px;
             font-size: 1.4rem;
             background-color: lighten($color-primary, 66%);
             outline: none;
+            margin: 0; // required for safari
           }
 
           input[type="checkbox"] {
@@ -142,6 +150,7 @@ $form-bottom-button-spacing: 15px;
               cursor: pointer;
               transition: all 0.2s ease;
               vertical-align: middle;
+              margin-left: 2px;
 
               &:active {
                 transform: scale(1.05);
@@ -201,7 +210,7 @@ $form-bottom-button-spacing: 15px;
         }
 
         .input-col {
-          width: 40%;
+          width: 43%;
         }
       }
       .form-buttons {
@@ -257,6 +266,9 @@ $form-bottom-button-spacing: 15px;
         .form-buttons button {
           width: 100%;
           margin: 10px 0 0 0;
+        }
+        .permission-type .lg {
+          display: none;
         }
       }
     }

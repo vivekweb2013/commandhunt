@@ -62,6 +62,17 @@ $table-row-hover-bg-color: lighten($color-primary, 60%);
     th.syntax-column {
       width: 30%;
     }
+
+    /* Responsive layout - when the screen is less than 800px wide,
+      hide the syntax-column and make name-column a fixed width  */
+    @media screen and (max-width: 800px) {
+      th.syntax-column {
+        width: 0;
+      }
+      th.name-column {
+        width: 160px;
+      }
+    }
   }
 
   .no-data-msg {
