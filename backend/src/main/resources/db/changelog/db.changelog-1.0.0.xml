@@ -5,6 +5,11 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
+    <changeSet author="commandhunt-jsonb-h2" id="changelog-1.0.0" dbms="h2">
+        <sql>CREATE domain IF NOT EXISTS JSONB AS other;</sql>
+        <!-- H2 does not support jsonb so above is the hack that allows jsonb type with h2. -->
+    </changeSet>
+
     <changeSet author="commandhunt-tbl" id="changelog-1.0.0">
         <createTable tableName="appuser">
             <column name="email" type="varchar(255)">
@@ -39,36 +44,14 @@
                              referencedColumnNames="email" nullable="false" deleteCascade="false"/>
             </column>
             <column name="created_on" type="datetime">
-              <constraints nullable="false"/>
+                <constraints nullable="false"/>
             </column>
-            <column name="modified_on" type="datetime" />
+            <column name="modified_on" type="datetime"/>
             <column name="operated_on" type="datetime">
                 <constraints nullable="false"/>
             </column>
-        </createTable>
-        <createTable tableName="usercommand_flag">
-            <column name="usercommand_id" type="bigint">
-                <constraints foreignKeyName="fk_ucflag_ucid" referencedTableName="usercommand"
-                  referencedColumnNames="id" nullable="false" deleteCascade="true"/>
-            </column>
-            <column name="name" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="value" type="boolean">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-        <createTable tableName="usercommand_option">
-            <column name="usercommand_id" type="bigint">
-                <constraints foreignKeyName="fk_ucoption_ucid" referencedTableName="usercommand"
-                  referencedColumnNames="id" nullable="false" deleteCascade="true"/>
-            </column>
-            <column name="name" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="value" type="clob">
-                <constraints nullable="false"/>
-            </column>
+            <column name="flags" type="jsonb"/> <!-- json array of flag names -->
+            <column name="options" type="jsonb"/> <!-- json object of options -->
         </createTable>
     </changeSet>
 

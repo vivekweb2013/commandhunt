@@ -4,6 +4,10 @@ package com.wirehall.commandhunt.backend.mapper;
 import com.wirehall.commandhunt.backend.dto.UserCommand;
 import com.wirehall.commandhunt.backend.model.UserCommandEntity;
 
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 public final class UserCommandMapper {
 
   /**
@@ -25,7 +29,7 @@ public final class UserCommandMapper {
     userCommand.setOperatedOn(userCommandEntity.getOperatedOn());
 
     if (mapAssociations) {
-      userCommand.setFlags(userCommandEntity.getFlags());
+      userCommand.setFlags(userCommandEntity.getFlags().stream().collect(Collectors.toMap(f -> f, f -> true)));
       userCommand.setOptions(userCommandEntity.getOptions());
     }
     return userCommand;
@@ -48,7 +52,9 @@ public final class UserCommandMapper {
     userCommandEntity.setModifiedOn(userCommand.getModifiedOn());
     userCommandEntity.setOperatedOn(userCommand.getOperatedOn());
 
-    userCommandEntity.setFlags(userCommand.getFlags());
+    Set<String> flags = userCommand.getFlags().entrySet().stream().filter(Map.Entry::getValue)
+            .map(Map.Entry::getKey).collect(Collectors.toSet());
+    userCommandEntity.setFlags(flags);
     userCommandEntity.setOptions(userCommand.getOptions());
     return userCommandEntity;
   }

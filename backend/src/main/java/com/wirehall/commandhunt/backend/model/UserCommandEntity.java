@@ -1,40 +1,27 @@
 package com.wirehall.commandhunt.backend.model;
 
-import com.wirehall.commandhunt.backend.converter.OptionValueConverter;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+
+import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapKeyColumn;
-import javax.persistence.Table;
+import java.util.*;
 
 @Entity
 @Table(name = "usercommand")
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class UserCommandEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-  @ElementCollection
-  @MapKeyColumn(name = "name")
-  @Column(name = "value")
-  @CollectionTable(name = "usercommand_flag", joinColumns = @JoinColumn(name = "usercommand_id"))
-  Map<String, Boolean> flags = new HashMap<>();
+  @Type(type = "jsonb")
+  @Column(columnDefinition = "jsonb")
+  Set<String> flags = new HashSet<>();
 
-  @Convert(converter = OptionValueConverter.class, attributeName = "value")
-  @ElementCollection
-  @MapKeyColumn(name = "name")
-  @Column(name = "value")
-  @CollectionTable(name = "usercommand_option", joinColumns = @JoinColumn(name = "usercommand_id"))
+  @Type(type = "jsonb")
+  @Column(columnDefinition = "jsonb")
   Map<String, List<String>> options = new HashMap<>();
 
 
@@ -107,11 +94,11 @@ public class UserCommandEntity {
     this.operatedOn = operatedOn;
   }
 
-  public Map<String, Boolean> getFlags() {
+  public Set<String> getFlags() {
     return flags;
   }
 
-  public void setFlags(Map<String, Boolean> flags) {
+  public void setFlags(Set<String> flags) {
     this.flags = flags;
   }
 

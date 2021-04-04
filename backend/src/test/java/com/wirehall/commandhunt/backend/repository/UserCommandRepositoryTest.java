@@ -28,40 +28,6 @@ class UserCommandRepositoryTest {
   }
 
   @Test
-  @Sql(scripts = {"classpath:sql/InsertSingleUser.sql", "classpath:sql/InsertSingleUserCommand.sql"})
-  void should_LazyLoadAssociations_When_FindAll() {
-    // This is to test the lazy loading of entity associations.
-    // Since we do not want to load options and flags in getAll as these collections are not required on UI list.
-    // They are only required for single record request, since these details will be needed in UI for detailed view/edit.
-    // By default collection elements are loaded lazily (i.e. loaded on demand when calling size()/toString() etc)
-
-    // The association collections (options & flags) should not be loaded EAGERLY
-    List<UserCommandEntity> list = userCommandRepository.findAll();
-    assertEquals(1, list.size());
-
-    // Will need to use PersistenceUtil to check that the lazy loading is not invoked
-    PersistenceUtil pu = Persistence.getPersistenceUtil();
-    // To avoid invoking lazy load, do not store list element to separate variable,
-    // Since it may cause debugger to invoke some methods to show object info in debugger panel
-    boolean isFlagsLoaded1 = pu.isLoaded(list.get(0).getFlags());
-    boolean isOptionsLoaded1 = pu.isLoaded(list.get(0).getOptions());
-
-
-    // Calling size() on option and flags collection to invoke lazy load
-    int flagSize = list.get(0).getFlags().size();
-    int optionSize = list.get(0).getOptions().size();
-    boolean isFlagsLoaded2 = pu.isLoaded(list.get(0).getFlags());
-    boolean isOptionsLoaded2 = pu.isLoaded(list.get(0).getOptions());
-
-    assertFalse(isFlagsLoaded1);
-    assertFalse(isOptionsLoaded1);
-    assertTrue(isFlagsLoaded2);
-    assertTrue(isOptionsLoaded2);
-    assertEquals(2, flagSize);
-    assertEquals(2, optionSize);
-  }
-
-  @Test
   @Sql(scripts = {"classpath:sql/InsertSingleUser.sql"})
   void should_InsertOne_When_NullableFieldsAreEmpty() {
     // Saved entity should match with retrieved entity.
@@ -179,10 +145,10 @@ class UserCommandRepositoryTest {
     userCommandEntity.setOperatedOn(new Timestamp(Calendar.getInstance().getTimeInMillis()));
 
     // Add flags
-    Map<String, Boolean> flags = new HashMap<>();
-    flags.put("-t", true);
-    flags.put("-a", true);
-    flags.put("-l", true);
+    Set<String> flags = new HashSet<>();
+    flags.add("-t");
+    flags.add("-a");
+    flags.add("-l");
     userCommandEntity.setFlags(flags);
 
     // Add options

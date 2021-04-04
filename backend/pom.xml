@@ -46,6 +46,14 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
+            <!--  This dependency is used for supporting the jsonb data type of postgres
+                  The version needs to be updated depending upon the hibernate version
+                  https://github.com/vladmihalcea/hibernate-types -->
+            <groupId>com.vladmihalcea</groupId>
+            <artifactId>hibernate-types-5</artifactId>
+            <version>2.10.4</version>
+        </dependency>
+        <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
         </dependency>

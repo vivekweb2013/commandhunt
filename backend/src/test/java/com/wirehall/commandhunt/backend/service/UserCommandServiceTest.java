@@ -40,9 +40,9 @@ class UserCommandServiceTest {
         // Given
         Filter filter = generateTestFilter();
         UserCommandEntity uce = new UserCommandEntity();
-        Map<String, Boolean> flags = new HashMap<>();
-        flags.put("a", true);
-        flags.put("l", true);
+        Set<String> flags = new HashSet<>();
+        flags.add("a");
+        flags.add("l");
         uce.setFlags(flags);
         Map<String, List<String>> options = new HashMap<>();
         options.put("DIR", Arrays.asList("/root", "/user"));
@@ -78,9 +78,9 @@ class UserCommandServiceTest {
     void should_GetSingleUserCommand_When_IdAndEmailProvided() {
         // Given
         UserCommandEntity uce = new UserCommandEntity();
-        Map<String, Boolean> flags = new HashMap<>();
-        flags.put("a", true);
-        flags.put("l", true);
+        Set<String> flags = new HashSet<>();
+        flags.add("a");
+        flags.add("l");
         uce.setFlags(flags);
         Map<String, List<String>> options = new HashMap<>();
         options.put("DIR", Arrays.asList("/root", "/user"));
