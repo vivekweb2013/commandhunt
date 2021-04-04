@@ -86,20 +86,20 @@ class UserCommands extends Component {
         });
     }
 
-    getSortIcon(column) {
+    getSortIcon(columns) {
         const { filter } = this.state;
-        return filter.pagination.sort.by === column ? (filter.pagination.sort.order === 'DESC' ? 'sort-down' : 'sort-up') : '';
+        return filter.pagination.sort.by === columns ? (filter.pagination.sort.order === 'DESC' ? 'sort-down' : 'sort-up') : '';
     }
 
-    sort(column) {
+    sort(columns) {
         const { history } = this.props;
         const { filter } = this.state;
         this.setState({
             filter: {
                 ...filter, pagination: {
                     ...filter.pagination, sort: {
-                        by: column,
-                        order: filter.pagination.sort.by === column && filter.pagination.sort.order === 'ASC' ? 'DESC' : 'ASC'
+                        by: columns,
+                        order: filter.pagination.sort.by === columns && filter.pagination.sort.order === 'ASC' ? 'DESC' : 'ASC'
                     }
                 }
             }
@@ -129,8 +129,8 @@ class UserCommands extends Component {
                         <th className="type-column" onClick={(e) => this.sort('commandName')}>
                             TYPE {this.getSortIcon('commandName') && <FontAwesomeIcon icon={this.getSortIcon('commandName')} />}
                         </th>
-                        <th className="date-column" onClick={(e) => this.sort('timestamp')}>
-                            DATE {this.getSortIcon('timestamp') && <FontAwesomeIcon icon={this.getSortIcon('timestamp')} />}
+                        <th className="date-column" onClick={(e) => this.sort('operatedOn')}>
+                            DATE {this.getSortIcon('operatedOn') && <FontAwesomeIcon icon={this.getSortIcon('operatedOn')} />}
                         </th>
                         <th className="actions-column">ACTIONS</th>
                     </tr></thead>
@@ -143,8 +143,8 @@ class UserCommands extends Component {
                                     <code>{userCommand.commandName}</code>
                                 </td>
                                 <td className="date">
-                                    {formatDate(new Date(userCommand.timestamp))} <br />
-                                    <small>{formatTime(new Date(userCommand.timestamp))}</small>
+                                    {formatDate(new Date(userCommand.operatedOn))} <br />
+                                    <small>{formatTime(new Date(userCommand.operatedOn))}</small>
                                 </td>
                                 <td className="actions">
                                     <CopyToClipboard text={userCommand.commandText}>

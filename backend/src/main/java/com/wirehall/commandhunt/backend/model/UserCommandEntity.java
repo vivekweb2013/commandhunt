@@ -38,14 +38,18 @@ public class UserCommandEntity {
   Map<String, List<String>> options = new HashMap<>();
 
 
-  @Column(nullable = false)
+  @Column(nullable = false, updatable = false)
   private String commandName;
   @Column(nullable = false)
   private String commandText;
-  @Column(nullable = false)
+  @Column(nullable = false, updatable = false)
   private String userEmail;
+  @Column(nullable = false, updatable = false)
+  private Timestamp createdOn;
+
+  private Timestamp modifiedOn;
   @Column(nullable = false)
-  private Timestamp timestamp;
+  private Timestamp operatedOn;
 
   public Long getId() {
     return id;
@@ -79,12 +83,28 @@ public class UserCommandEntity {
     this.userEmail = userEmail;
   }
 
-  public Timestamp getTimestamp() {
-    return timestamp;
+  public Timestamp getCreatedOn() {
+    return createdOn;
   }
 
-  public void setTimestamp(Timestamp timestamp) {
-    this.timestamp = timestamp;
+  public void setCreatedOn(Timestamp createdOn) {
+    this.createdOn = createdOn;
+  }
+
+  public Timestamp getModifiedOn() {
+    return modifiedOn;
+  }
+
+  public void setModifiedOn(Timestamp modifiedOn) {
+    this.modifiedOn = modifiedOn;
+  }
+
+  public Timestamp getOperatedOn() {
+    return operatedOn;
+  }
+
+  public void setOperatedOn(Timestamp operatedOn) {
+    this.operatedOn = operatedOn;
   }
 
   public Map<String, Boolean> getFlags() {
@@ -110,7 +130,9 @@ public class UserCommandEntity {
         ", commandName='" + commandName + '\'' +
         ", commandText='" + commandText + '\'' +
         ", userEmail='" + userEmail + '\'' +
-        ", timestamp=" + timestamp +
+        ", createdOn=" + createdOn +
+        ", modifiedOn=" + modifiedOn +
+        ", operatedOn=" + operatedOn +
         ", flags=" + flags +
         ", options=" + options +
         '}';

@@ -105,7 +105,9 @@ public class UserCommandService {
     if (userCommand.getId() != null) {
       throw new BadRequestException("Invalid save operation. Not a new user-command.");
     }
-    userCommand.setTimestamp(new Timestamp(System.currentTimeMillis()));
+    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+    userCommand.setCreatedOn(timestamp);
+    userCommand.setOperatedOn(timestamp);
     UserCommandEntity userCommandEntity = mapper.mapToUserCommandEntity(userCommand, userEmail);
     LOGGER.info("Inserting user-command entity: {}", userCommandEntity);
     userCommandRepository.save(userCommandEntity);
@@ -122,7 +124,9 @@ public class UserCommandService {
     if (userCommand.getId() == null) {
       throw new BadRequestException("Invalid update operation. Save user-command before updating.");
     }
-    userCommand.setTimestamp(new Timestamp(System.currentTimeMillis()));
+    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+    userCommand.setModifiedOn(timestamp);
+    userCommand.setOperatedOn(timestamp);
     UserCommandEntity userCommandEntity = mapper.mapToUserCommandEntity(userCommand, userEmail);
     LOGGER.info("Updating user-command entity: {}", userCommandEntity);
     userCommandRepository.save(userCommandEntity);

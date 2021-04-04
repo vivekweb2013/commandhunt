@@ -63,6 +63,39 @@ class UserCommandRepositoryTest {
 
   @Test
   @Sql(scripts = {"classpath:sql/InsertSingleUser.sql"})
+  void should_InsertOne_When_NullableFieldsAreEmpty() {
+    // Saved entity should match with retrieved entity.
+    UserCommandEntity userCommandEntity = new UserCommandEntity();
+    userCommandEntity.setModifiedOn(null);
+    userCommandEntity.setOptions(null);
+    userCommandEntity.setFlags(null);
+    userCommandEntity.setCommandName("ls");
+    userCommandEntity.setCommandText("ls -alt");
+    userCommandEntity.setUserEmail("abc@xyz.com");
+    userCommandEntity.setCreatedOn(new Timestamp(System.currentTimeMillis()));
+    userCommandEntity.setOperatedOn(new Timestamp(System.currentTimeMillis()));
+
+    userCommandRepository.save(userCommandEntity);
+    List<UserCommandEntity> userCommandEntities = userCommandRepository.findAll();
+    UserCommandEntity uceRetrieved = userCommandEntities.get(0);
+
+    assertAll(
+            () -> assertEquals(1, userCommandEntities.size()),
+            () -> assertNotNull(userCommandEntity.getId()),
+            () -> assertEquals(userCommandEntity.getId(), uceRetrieved.getId()),
+            () -> assertEquals(userCommandEntity.getCommandName(), uceRetrieved.getCommandName()),
+            () -> assertEquals(userCommandEntity.getCommandText(), uceRetrieved.getCommandText()),
+            () -> assertEquals(userCommandEntity.getUserEmail(), uceRetrieved.getUserEmail()),
+            () -> assertEquals(userCommandEntity.getCreatedOn(), uceRetrieved.getCreatedOn()),
+            () -> assertEquals(userCommandEntity.getOperatedOn(), uceRetrieved.getOperatedOn()),
+            () -> assertNull(userCommandEntity.getModifiedOn()),
+            () -> assertEquals(userCommandEntity.getOptions(), uceRetrieved.getOptions()),
+            () -> assertEquals(userCommandEntity.getFlags(), uceRetrieved.getFlags())
+    );
+  }
+
+  @Test
+  @Sql(scripts = {"classpath:sql/InsertSingleUser.sql"})
   void should_MatchWithRetrievedEntity_When_SameWasInserted() {
     // Saved entity should match with retrieved entity.
     UserCommandEntity userCommandEntity = generateNewUserCommandEntity();
@@ -78,7 +111,9 @@ class UserCommandRepositoryTest {
             () -> assertEquals(userCommandEntity.getCommandName(), uceRetrieved.getCommandName()),
             () -> assertEquals(userCommandEntity.getCommandText(), uceRetrieved.getCommandText()),
             () -> assertEquals(userCommandEntity.getUserEmail(), uceRetrieved.getUserEmail()),
-            () -> assertEquals(userCommandEntity.getTimestamp(), uceRetrieved.getTimestamp()),
+            () -> assertEquals(userCommandEntity.getCreatedOn(), uceRetrieved.getCreatedOn()),
+            () -> assertEquals(userCommandEntity.getModifiedOn(), uceRetrieved.getModifiedOn()),
+            () -> assertEquals(userCommandEntity.getOperatedOn(), uceRetrieved.getOperatedOn()),
             () -> assertEquals(userCommandEntity.getOptions(), uceRetrieved.getOptions()),
             () -> assertEquals(userCommandEntity.getFlags(), uceRetrieved.getFlags())
     );
@@ -116,9 +151,9 @@ class UserCommandRepositoryTest {
 
   @Test
   @Sql(scripts = {"classpath:sql/InsertSingleUser.sql"})
-  void should_ThrowException_When_InsertedWithoutTimestamp() {
+  void should_ThrowException_When_InsertedWithoutCreatedOnField() {
     UserCommandEntity userCommandEntity = generateNewUserCommandEntity();
-    userCommandEntity.setTimestamp(null);
+    userCommandEntity.setCreatedOn(null);
 
     Executable executable = () -> userCommandRepository.saveAndFlush(userCommandEntity);
     assertThrows(DataIntegrityViolationException.class, executable);
@@ -139,7 +174,9 @@ class UserCommandRepositoryTest {
     userCommandEntity.setCommandName("ls");
     userCommandEntity.setCommandText("ls -alt");
     userCommandEntity.setUserEmail("abc@xyz.com");
-    userCommandEntity.setTimestamp(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+    userCommandEntity.setCreatedOn(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+    userCommandEntity.setModifiedOn(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+    userCommandEntity.setOperatedOn(new Timestamp(Calendar.getInstance().getTimeInMillis()));
 
     // Add flags
     Map<String, Boolean> flags = new HashMap<>();

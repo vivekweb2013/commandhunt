@@ -112,7 +112,10 @@ class UserCommandServiceTest {
         verify(userCommandRepository).save(argument.capture());
         UserCommandEntity uceSaved = argument.getValue();
         assertEquals(uceSaved.getUserEmail(), userEmail);
-        assertNotNull(uceSaved.getTimestamp());
+        assertNotNull(uceSaved.getCreatedOn());
+        assertNotNull(uceSaved.getOperatedOn());
+        assertNull(uceSaved.getModifiedOn());
+        assertEquals(uceSaved.getCreatedOn(), uceSaved.getOperatedOn());
     }
 
     @Test
@@ -146,7 +149,9 @@ class UserCommandServiceTest {
         verify(userCommandRepository).save(argument.capture());
         UserCommandEntity uceSaved = argument.getValue();
         assertEquals(uceSaved.getUserEmail(), userEmail);
-        assertNotNull(uceSaved.getTimestamp());
+        assertNotNull(uceSaved.getModifiedOn());
+        assertNotNull(uceSaved.getOperatedOn());
+        assertEquals(uceSaved.getModifiedOn(), uceSaved.getOperatedOn());
     }
 
     @Test
@@ -177,7 +182,7 @@ class UserCommandServiceTest {
         pagination.setPageNumber(1); // pageNumber field is not index in this dto class, so it starts with 1.
         pagination.setPageSize(10);
         Pagination.Sort sort = new Pagination.Sort();
-        sort.setBy("commandName");
+        sort.setBy(new String[]{"commandName"});
         sort.setOrder(Pagination.Sort.SortOrder.DESC);
         pagination.setSort(sort);
         filter.setPagination(pagination);

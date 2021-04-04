@@ -15,7 +15,9 @@ public class UserCommand {
   @NotNull
   private String commandText;
 
-  private Timestamp timestamp;
+  private Timestamp createdOn;
+  private Timestamp modifiedOn;
+  private Timestamp operatedOn;
 
   private Map<String, Boolean> flags = new HashMap<>();
   private Map<String, List<String>> options = new HashMap<>();
@@ -44,12 +46,28 @@ public class UserCommand {
     this.commandText = commandText;
   }
 
-  public Timestamp getTimestamp() {
-    return timestamp;
+  public Timestamp getCreatedOn() {
+    return createdOn;
   }
 
-  public void setTimestamp(Timestamp timestamp) {
-    this.timestamp = timestamp;
+  public void setCreatedOn(Timestamp createdOn) {
+    this.createdOn = createdOn;
+  }
+
+  public Timestamp getModifiedOn() {
+    return modifiedOn;
+  }
+
+  public void setModifiedOn(Timestamp modifiedOn) {
+    this.modifiedOn = modifiedOn;
+  }
+
+  public Timestamp getOperatedOn() {
+    return operatedOn;
+  }
+
+  public void setOperatedOn(Timestamp operatedOn) {
+    this.operatedOn = operatedOn;
   }
 
   /**
@@ -94,7 +112,9 @@ public class UserCommand {
             "id=" + id +
             ", commandName='" + commandName + '\'' +
             ", commandText='" + commandText + '\'' +
-            ", timestamp=" + timestamp +
+            ", createdOn=" + createdOn +
+            ", modifiedOn=" + modifiedOn +
+            ", operatedOn=" + operatedOn +
             ", flags=" + flags +
             ", options=" + options +
             '}';

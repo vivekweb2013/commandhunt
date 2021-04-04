@@ -20,7 +20,9 @@ public final class UserCommandMapper {
 
     userCommand.setCommandName(userCommandEntity.getCommandName());
     userCommand.setCommandText(userCommandEntity.getCommandText());
-    userCommand.setTimestamp(userCommandEntity.getTimestamp());
+    userCommand.setCreatedOn(userCommandEntity.getCreatedOn());
+    userCommand.setModifiedOn(userCommandEntity.getModifiedOn());
+    userCommand.setOperatedOn(userCommandEntity.getOperatedOn());
 
     if (mapAssociations) {
       userCommand.setFlags(userCommandEntity.getFlags());
@@ -42,7 +44,9 @@ public final class UserCommandMapper {
     userCommandEntity.setUserEmail(userEmail);
     userCommandEntity.setCommandName(userCommand.getCommandName());
     userCommandEntity.setCommandText(userCommand.getCommandText());
-    userCommandEntity.setTimestamp(userCommand.getTimestamp());
+    userCommandEntity.setCreatedOn(userCommand.getCreatedOn());
+    userCommandEntity.setModifiedOn(userCommand.getModifiedOn());
+    userCommandEntity.setOperatedOn(userCommand.getOperatedOn());
 
     userCommandEntity.setFlags(userCommand.getFlags());
     userCommandEntity.setOptions(userCommand.getOptions());

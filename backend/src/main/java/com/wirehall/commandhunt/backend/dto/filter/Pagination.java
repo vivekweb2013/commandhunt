@@ -5,7 +5,10 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
+import java.util.List;
 
 public class Pagination {
 
@@ -57,16 +60,16 @@ public class Pagination {
 
   public static class Sort {
 
-    @NotBlank
-    private String by;
+    @NotEmpty
+    private String[] by;
 
     private SortOrder order = SortOrder.ASC;
 
-    public String getBy() {
+    public String[] getBy() {
       return by;
     }
 
-    public void setBy(String by) {
+    public void setBy(String[] by) {
       this.by = by;
     }
 
@@ -80,7 +83,7 @@ public class Pagination {
 
     @Override
     public String toString() {
-      return "Sort{" + "by='" + by + '\'' + ", order=" + order + '}';
+      return "Sort{" + "by='" + Arrays.toString(by) + '\'' + ", order=" + order + '}';
     }
 
     public enum SortOrder {

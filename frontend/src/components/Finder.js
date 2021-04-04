@@ -73,20 +73,20 @@ class Finder extends Component {
         });
     }
 
-    getSortIcon(column) {
+    getSortIcon(columns) {
         const { filter } = this.state;
-        return filter.pagination.sort.by === column ? (filter.pagination.sort.order === 'DESC' ? 'sort-down' : 'sort-up') : '';
+        return filter.pagination.sort.by === columns ? (filter.pagination.sort.order === 'DESC' ? 'sort-down' : 'sort-up') : '';
     }
 
-    sort(column) {
+    sort(columns) {
         const { history } = this.props;
         const { filter } = this.state;
         this.setState({
             filter: {
                 ...filter, pagination: {
                     ...filter.pagination, sort: {
-                        by: column,
-                        order: filter.pagination.sort.by === column && filter.pagination.sort.order === 'ASC' ? 'DESC' : 'ASC'
+                        by: columns,
+                        order: filter.pagination.sort.by === columns && filter.pagination.sort.order === 'ASC' ? 'DESC' : 'ASC'
                     }
                 }
             }
