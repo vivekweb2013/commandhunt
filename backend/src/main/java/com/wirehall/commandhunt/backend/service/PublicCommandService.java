@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 @Transactional
@@ -35,14 +33,12 @@ public class PublicCommandService {
      * @param userEmail       The email of logged in user if any, otherwise null.
      * @return The public-command with deletable indicator.
      */
-    public Map<String, Object> getPublicCommandById(Long publicCommandId, String userEmail) {
+    public PublicCommand getPublicCommandById(Long publicCommandId, String userEmail) {
         PublicCommandEntity entity = publicCommandRepository.getOne(publicCommandId);
         LOGGER.debug("Retrieved public-command entity: {}", entity);
         PublicCommand publicCommand = mapper.mapToPublicCommand(entity, true);
-        Map<String, Object> response = new HashMap<>();
-        response.put("publicCommand ", publicCommand);
-        response.put("isDeletable", entity.getUserEmail().equals(userEmail));
-        return response;
+        publicCommand.setDeletable(entity.getUserEmail().equals(userEmail));
+        return publicCommand;
     }
 
     /**
@@ -50,8 +46,9 @@ public class PublicCommandService {
      *
      * @param publicCommand The public-command dto to be added.
      * @param userEmail     Logged-in user's email id.
+     * @return The newly added public-command.
      */
-    public void addPublicCommand(PublicCommand publicCommand, String userEmail) {
+    public PublicCommand addPublicCommand(PublicCommand publicCommand, String userEmail) {
         if (publicCommand.getId() != null) {
             throw new BadRequestException("Invalid save operation. Not a new public-command.");
         }
@@ -61,6 +58,7 @@ public class PublicCommandService {
         LOGGER.info("Inserting public-command entity: {}", entity);
         publicCommandRepository.save(entity);
         LOGGER.info("Inserted public-command entity with id: {}", entity.getId());
+        return mapper.mapToPublicCommand(entity, false);
     }
 
     /**

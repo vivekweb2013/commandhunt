@@ -14,17 +14,16 @@ class Pagination extends Component {
 
         return totalSize > 0 ? (
             <div className="pagination">
-                <button onClick={() => this.props.handlePageChange(1)}>&laquo;</button>
+                <button type="button" onClick={() => this.props.handlePageChange(1)}>&laquo;</button>
 
                 {Array.from(Array(visiblePages), (e, i) =>
-                    <button key={startOfVisiblePages + i}
-                        disabled={pageNumber === (startOfVisiblePages + i)}
+                    <button type="button" key={startOfVisiblePages + i} disabled={pageNumber === (startOfVisiblePages + i)}
                         onClick={() => this.props.handlePageChange((startOfVisiblePages + i))}>
                         {startOfVisiblePages + i}
                     </button>
                 )}
 
-                <button onClick={() => this.props.handlePageChange(totalPages)}>&raquo;</button>
+                <button type="button" onClick={() => this.props.handlePageChange(totalPages)}>&raquo;</button>
             </div>
         ) : '';
     }

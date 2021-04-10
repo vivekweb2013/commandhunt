@@ -1,5 +1,7 @@
 /* only import this file in index.scss to avoid duplication */
 
+@import "shared";
+
 [data-tooltip] {
   position: relative;
 
@@ -107,6 +109,35 @@ button[data-tooltip] {
     }
     &:before {
       top: auto;
+    }
+  }
+}
+
+.txt-btn-input-wrapper {
+  display: inline-flex;
+  width: 100%;
+
+  input[type="text"] {
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    resize: vertical;
+    background-color: lighten($color-primary, 66%);
+    outline: none;
+    margin: 0; // required for safari
+  }
+
+  input[type="button"],
+  button {
+    border: 1px solid #767676;
+    border-radius: 2px;
+    background-color: #efefef;
+    outline: none;
+    cursor: pointer;
+    margin: 0; // required for safari
+    &:hover {
+      filter: brightness(80%);
     }
   }
 }

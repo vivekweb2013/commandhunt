@@ -10,7 +10,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.Map;
 
 /**
  * Controller for performing action on public-command.
@@ -32,7 +31,7 @@ public class PublicCommandController {
     }
 
     @GetMapping(value = "/public-command/{id}")
-    public Map<String, Object> getPublicCommandById(@PathVariable(name = "id") Long publicCommandId, Principal principal) {
+    public PublicCommand getPublicCommandById(@PathVariable(name = "id") Long publicCommandId, Principal principal) {
         LOGGER.info("Request for retrieving public-command with id: {}", publicCommandId);
         String userEmail = principal == null ? null : principal.getName();
         return publicCommandService.getPublicCommandById(publicCommandId, userEmail);
@@ -40,9 +39,9 @@ public class PublicCommandController {
 
     @PostMapping(value = "/public-command")
     @PreAuthorize("hasRole('ROLE_USER')")
-    public void addPublicCommand(@RequestBody PublicCommand publicCommand, Principal principal) {
+    public PublicCommand addPublicCommand(@RequestBody PublicCommand publicCommand, Principal principal) {
         LOGGER.info("Request from user: {} for adding public-command: {}", principal.getName(), publicCommand);
-        publicCommandService.addPublicCommand(publicCommand, principal.getName());
+        return publicCommandService.addPublicCommand(publicCommand, principal.getName());
     }
 
     @DeleteMapping(value = "/public-command/{id}")

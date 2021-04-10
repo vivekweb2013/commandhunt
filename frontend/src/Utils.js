@@ -10,7 +10,7 @@ export const getValidationRegex = (dataType) => {
         case 'PERMISSION':
             return '[0-9]{3}';
         default:
-            return '*';
+            return '[\\s\\S]*'; // match anything
     }
 }
 
@@ -71,7 +71,7 @@ export const formatTime = (date) => {
 
 export const arrayEquals = (array1, array2) => {
     const array2Sorted = array2.slice().sort();
-    return array1.length === array2.length && array1.slice().sort().every(function(value, index) {
+    return array1.length === array2.length && array1.slice().sort().every(function (value, index) {
         return value === array2Sorted[index];
     });
 }

@@ -2,6 +2,7 @@
 /* The Modal (background) */
 .modal {
     position: fixed;
+    padding-top: 100px;
     top: 0;
     left: 0;
     width: 100%;
@@ -13,12 +14,24 @@
 
 /* Modal Content */
 .modal-content {
+    width: 350px;
+    margin: auto;
+    background: #fff;
+    border-radius: 5px;
+    border: 1px solid #b8c8cc;
+    overflow: hidden;
+    z-index: 1001;
+
     & > .top-close-btn {
-        position: absolute;
-        top: 15px;
+        overflow: hidden;
+        position: relative;
+        display: block;
+        float: right;
         right: 20px;
+        top: 15px;
         cursor: pointer;
         color: #fff;
+
         &:hover {
             font-weight: bold;
         }
@@ -64,6 +77,9 @@
             cursor: pointer;
             float: right;
             border-radius: 3px;
+            &:hover {
+                filter: brightness(-80%);
+            }
 
             &.confirm {
                 margin-left: 10px;
@@ -72,14 +88,4 @@
             }
         }
     }
-    width: 350px;
-    position: fixed;
-    top: 100px;
-    left: 50%;
-    margin-left: -175px;
-    background: #fff;
-    border-radius: 5px;
-    border: 1px solid #b8c8cc;
-    overflow: hidden;
-    z-index: 1001;
 }

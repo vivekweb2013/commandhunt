@@ -5,22 +5,24 @@ import * as API from '../api/API';
 import { getMetaCommand } from '../actions';
 import { getQueryParamByName, getValidationRegex } from '../Utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import './Builder.scss';
 import DynamicTextInput from './common/DynamicTextInput';
 import PermissionInput from './common/PermissionInput';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import ToastMaker from 'toastmaker';
+import './Builder.scss';
+import Modal from './common/Modal';
 
 class Builder extends Component {
     state = {
-        userCommand: {
+        commandInstance: {
             flags: {},
             options: {}
         },
         saveInProgress: false,
-        enableEdit: true
+        publishInProgress: false
     }
 
+    commandForm = React.createRef();
     headerDiv = React.createRef();
     contentDiv = React.createRef();
 
@@ -34,11 +36,17 @@ class Builder extends Component {
     componentDidMount() {
         window.scrollTo(0, 0);
         const { match, location } = this.props;
+
+        const publicCommandId = getQueryParamByName('publicCommandId', location.search);
         const userCommandId = getQueryParamByName('userCommandId', location.search);
-        this.setState({ userCommandId, enableEdit: location.pathname.startsWith('/command/build/') });
-        if (userCommandId != null) {
-            this.props.getUserCommand(userCommandId).then((userCommand) => {
-                this.setState({ userCommand });
+        if (publicCommandId != null) {
+            this.props.getPublicCommand(publicCommandId).then((commandInstance) => {
+                this.setState({ commandInstance });
+                this.props.getMetaCommand(match.params.commandName);
+            });
+        } else if (userCommandId != null) {
+            this.props.getUserCommand(userCommandId).then((commandInstance) => {
+                this.setState({ commandInstance });
                 this.props.getMetaCommand(match.params.commandName);
             });
         } else {
@@ -47,32 +55,34 @@ class Builder extends Component {
     }
 
     handleOptionChange(name, value) {
-        const userCommand = {
+        const commandInstance = {
+            id: this.state.commandInstance.id,
             flags: {
-                ...this.state.userCommand.flags,
+                ...this.state.commandInstance.flags,
             },
             options: {
-                ...this.state.userCommand.options,
+                ...this.state.commandInstance.options,
                 [name]: value
             }
         }
 
-        this.setState({ userCommand });
+        this.setState({ commandInstance });
     }
 
     handleFlagChange(event) {
         const { name, checked } = event.target;
-        const userCommand = {
+        const commandInstance = {
+            id: this.state.commandInstance.id,
             flags: {
-                ...this.state.userCommand.flags,
+                ...this.state.commandInstance.flags,
                 [name]: checked
             },
             options: {
-                ...this.state.userCommand.options
+                ...this.state.commandInstance.options
             }
         }
 
-        this.setState({ userCommand });
+        this.setState({ commandInstance });
     }
 
     hasSolitarySituation(currentSolitaryFlag) {
@@ -80,23 +90,23 @@ class Builder extends Component {
         // - one of the solitary flag is enabled, because of which no other option or flag(other than selected solitary flag) can be used
         // - non solitary flag or option is used, because of which all the solitary flags should be disabled
 
-        const { userCommand } = this.state;
+        const { commandInstance } = this.state;
         const { metaCommand } = this.props;
 
         if (currentSolitaryFlag) {
-            return userCommand.flags[currentSolitaryFlag.properties.name] !== true &&
-                (Object.keys(userCommand.options).filter(k => userCommand.options[k].filter(val => !!val).length > 0).length > 0
-                    || Object.keys(userCommand.flags).filter(k => userCommand.flags[k]).length > 0)
+            return commandInstance.flags[currentSolitaryFlag.properties.name] !== true &&
+                (Object.keys(commandInstance.options).filter(k => commandInstance.options[k].filter(val => !!val).length > 0).length > 0
+                    || Object.keys(commandInstance.flags).filter(k => commandInstance.flags[k]).length > 0)
         }
         return metaCommand.flags.filter(cf => cf.properties.is_solitary).map(cf => cf.properties.name)
-            .includes(Object.keys(userCommand.flags).filter(k => userCommand.flags[k])[0]);
+            .includes(Object.keys(commandInstance.flags).filter(k => commandInstance.flags[k])[0]);
     }
 
     getGeneratedFlags(metaCommand) {
         let flagsStr = '';
         let hyphenPrefixedFlags = '';
         let otherFlags = '';
-        metaCommand.flags.filter(f => this.state.userCommand.flags[f.properties.name]).forEach(f => {
+        metaCommand.flags.filter(f => this.state.commandInstance.flags[f.properties.name]).forEach(f => {
             if (f.properties.prefix === '-') {
                 // normally only single hyphen prefixed flags are allowed to group
                 hyphenPrefixedFlags += f.properties.name;
@@ -116,12 +126,12 @@ class Builder extends Component {
     }
 
     getGeneratedOptions(metaCommand) {
-        const { userCommand } = this.state;
+        const { commandInstance } = this.state;
         let optionsStr = '';
-        metaCommand.options.filter(o => (userCommand.options[o.properties.name] != null)
-            && (userCommand.options[o.properties.name].filter(val => !!val).length > 0)).forEach(o => {
+        metaCommand.options.filter(o => (commandInstance.options[o.properties.name] != null)
+            && (commandInstance.options[o.properties.name].filter(val => !!val).length > 0)).forEach(o => {
                 const prefix = !o.properties.prefix.endsWith('=') ? `${o.properties.prefix} ` : o.properties.prefix;
-                optionsStr += ` ${prefix}${userCommand.options[o.properties.name].join(' ')}`;
+                optionsStr += ` ${prefix}${commandInstance.options[o.properties.name].join(' ')}`;
             });
 
         return optionsStr.trim();
@@ -139,23 +149,68 @@ class Builder extends Component {
 
     handleSave(e) {
         e.preventDefault();
-        const userCommand = {
-            ...this.state.userCommand,
-            id: this.state.userCommandId,
+        const commandInstance = {
+            ...this.state.commandInstance,
             commandName: this.props.metaCommand.properties.name,
             commandText: this.getGeneratedCommand(this.props.metaCommand)
         };
         this.setState({ saveInProgress: true });
-        this.props.saveUserCommand(userCommand).then(() => {
+        this.props.saveUserCommand(commandInstance).then(() => {
             this.setState({ saveInProgress: false });
             this.props.history.push('/command/user-commands');
         });
     }
 
+    handlePublish(e) {
+        e.stopPropagation();
+        if (!this.commandForm.current.checkValidity()) {
+            this.commandForm.current.reportValidity();
+            return;
+        }
+        const commandInstance = {
+            ...this.state.commandInstance,
+            id: null, // Override the id
+            commandName: this.props.metaCommand.properties.name,
+            commandText: this.getGeneratedCommand(this.props.metaCommand)
+        };
+        this.setState({ publishInProgress: true });
+        this.props.savePublicCommand(commandInstance).then((commandInstance) => {
+            this.setState({ publishInProgress: false });
+            const url = `/command/view/${commandInstance.commandName}?publicCommandId=${commandInstance.id}`;
+            this.props.history.push(url, { published: true });
+        });
+    }
+
+    onClosePublishModal() {
+        const { location } = this.props;
+        this.props.history.replace(location.pathname + location.search); // reset the action
+    }
+
+    isEditable() {
+        const { location } = this.props;
+        return location.pathname.startsWith('/command/build/') &&
+            !getQueryParamByName('publicCommandId', location.search);
+    }
+
+    isSaveAllowed() {
+        const { location } = this.props;
+        return location.pathname.startsWith('/command/build/') &&
+            !getQueryParamByName('publicCommandId', location.search);
+    }
+
+    isPublishAllowed() {
+        const { location } = this.props;
+        return location.pathname.startsWith('/command/build/') &&
+            !getQueryParamByName('publicCommandId', location.search);
+    }
+
     render() {
-        const { metaCommand, user } = this.props;
-        const { enableEdit } = this.state;
-        const userCommand = this.state.userCommand || { flags: {}, options: {} };
+        const { metaCommand, user, location } = this.props;
+        const enableEdit = this.isEditable();
+        const showSaveButton = this.isSaveAllowed();
+        const showPublishButton = this.isPublishAllowed();
+
+        const commandInstance = this.state.commandInstance || { flags: {}, options: {} };
         const newlineRegex = /(?:\r\n|\r|\n)/g;
 
         const generatedCommand = this.getGeneratedCommand(metaCommand);
@@ -169,7 +224,7 @@ class Builder extends Component {
                         </code>
                     </div>
                     <CopyToClipboard text={generatedCommand}>
-                        <button className="copy" onClick={(e) => ToastMaker("Copied!")}>
+                        <button className="copy" type="button" onClick={(e) => ToastMaker("Copied!")}>
                             <span className="copy-icon" title="copy">
                                 <FontAwesomeIcon icon="copy" color="white" size="lg" />
                             </span><br />
@@ -187,7 +242,7 @@ class Builder extends Component {
                             <span key={index}>{item.replace(/\.\.\./g, '···') /* replacing dots to avoid confusion with ellipsis */}<br /></span>
                         ))}</code><br />
                     </div>
-                    <form onSubmit={(e) => this.handleSave(e)}>
+                    <form onSubmit={(e) => this.handleSave(e)} ref={this.commandForm}>
                         <div className="section">
                             {metaCommand.options.length > 0 && (
                                 <div className="options">
@@ -205,7 +260,7 @@ class Builder extends Component {
                                                         pattern={getValidationRegex(option.properties.data_type)}
                                                         disabled={!enableEdit || this.hasSolitarySituation()}
                                                         required={option.properties.is_mandatory === 'true'}
-                                                        value={userCommand.options[option.properties.name] || ['']} />
+                                                        value={commandInstance.options[option.properties.name] || ['']} />
                                                     :
                                                     <DynamicTextInput id={option.id} name={option.properties.name}
                                                         handleChange={this.handleOptionChange.bind(this)}
@@ -213,7 +268,7 @@ class Builder extends Component {
                                                         disabled={!enableEdit || this.hasSolitarySituation()}
                                                         required={option.properties.is_mandatory === 'true'}
                                                         isRepeatable={option.properties.is_repeatable === 'true'}
-                                                        values={userCommand.options[option.properties.name] || ['']} />}
+                                                        values={commandInstance.options[option.properties.name] || ['']} />}
                                                 </div>
                                             </div>
                                         ))}
@@ -235,7 +290,7 @@ class Builder extends Component {
                                                         onChange={(e) => this.handleFlagChange(e)}
                                                         disabled={!enableEdit ||
                                                             (flag.properties.is_solitary === 'true' ? this.hasSolitarySituation(flag) : this.hasSolitarySituation())}
-                                                        checked={!!userCommand.flags[flag.properties.name]} />
+                                                        checked={!!commandInstance.flags[flag.properties.name]} />
                                                     <label htmlFor={flag.id}>
                                                         <svg viewBox="0,0,50,50"><path d="M5 30 L 20 45 L 45 5"></path></svg>
                                                     </label>
@@ -248,14 +303,31 @@ class Builder extends Component {
                         </div>
                         <div className="form-buttons no-print">
                             <button className="ripple" onClick={e => window.print()} type="button">PRINT</button>
-                            {enableEdit && <button className="ripple tooltip-t"
+                            {showSaveButton && <button className="ripple tooltip-t" value="SAVE"
                                 {...(!user ? { 'data-tooltip': 'Login to Save' } : {})} type="submit"
                                 disabled={!user || this.state.saveInProgress}>
                                 {this.state.saveInProgress && <FontAwesomeIcon icon="circle-notch" spin />} SAVE
                             </button>}
+                            {showPublishButton && <button type="button" className="ripple tooltip-t" onClick={e => this.handlePublish(e)}
+                                {...(!user ? { 'data-tooltip': 'Login to Publish' } : {})}
+                                disabled={!user || this.state.publishInProgress}>
+                                {this.state.publishInProgress && <FontAwesomeIcon icon="circle-notch" spin />} PUBLISH
+                            </button>}
                         </div>
                     </form>
                 </div>
+                {location.state && location.state.published &&
+                    <Modal title="Command Published" style={{ width: '90%', maxWidth: '500px' }} type="info" onClose={this.onClosePublishModal.bind(this)}>
+                        <span style={{ fontSize: '1rem', lineHeight: '2rem' }}>Link to Published Command</span>
+                        <span className="txt-btn-input-wrapper">
+                            <input type="text" value={window.location.href} onFocus={e => e.target.select()} readOnly />
+                            <CopyToClipboard text={window.location.href}>
+                                <button onClick={(e) => ToastMaker("Link Copied!")} type="button" style={{ width: '45px' }}>
+                                    <FontAwesomeIcon icon="copy" color="#666666" size="lg" />
+                                </button>
+                            </CopyToClipboard>
+                        </span>
+                    </Modal>}
             </div>
         ) : '';
     }
@@ -276,8 +348,14 @@ const mapDispatchToProps = dispatch => {
         getUserCommand: (userCommandId) => {
             return API.getUserCommand(userCommandId);
         },
-        saveUserCommand: (userCommand) => {
-            return userCommand.id ? API.updateUserCommand(userCommand) : API.saveUserCommand(userCommand);
+        getPublicCommand: (publicCommandId) => {
+            return API.getPublicCommand(publicCommandId);
+        },
+        saveUserCommand: (commandInstance) => {
+            return commandInstance.id ? API.updateUserCommand(commandInstance) : API.saveUserCommand(commandInstance);
+        },
+        savePublicCommand: (commandInstance) => {
+            return API.savePublicCommand(commandInstance);
         }
     }
 }

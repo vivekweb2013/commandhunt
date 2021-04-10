@@ -29,13 +29,13 @@ class Modal extends Component {
      * If "type" prop is not specified, info will be default value
      */
     render() {
-        const { title, children, onClose, onConfirm } = this.props;
+        const { title, children, style, onClose, onConfirm } = this.props;
         const type = this.props.type || 'info';
         // Use a portal to render the children into the element
         return createPortal(
             // Any valid React child: JSX, strings, arrays, etc.
             <div className="modal">
-                <div className="modal-content">
+                <div className="modal-content" style={{ ...style }}>
                     <span className="top-close-btn" onClick={e => onClose()}>&#x2715;</span>
                     <div className={`modal-header ${type}`}>
                         {title}
@@ -44,8 +44,8 @@ class Modal extends Component {
                         {children}
                     </div>
                     <div className="modal-footer">
-                        {type === 'confirm' && <button className="footer-btn confirm" onClick={e => onConfirm()}>OKAY</button>}
-                        <button className="footer-btn" onClick={e => onClose()}>{type === 'confirm' ? 'CANCEL' : 'CLOSE'}</button>
+                        {type === 'confirm' && <button type="button" className="footer-btn confirm" onClick={e => onConfirm()}>OKAY</button>}
+                        <button type="button" className="footer-btn" onClick={e => onClose && onClose()}>{type === 'confirm' ? 'CANCEL' : 'CLOSE'}</button>
                     </div>
                 </div>
             </div>,

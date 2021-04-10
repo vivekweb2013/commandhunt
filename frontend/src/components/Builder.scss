@@ -36,6 +36,9 @@ $command-copy-button-width: 50px;
       height: 100%;
       width: $command-copy-button-width;
       cursor: pointer;
+      &:hover {
+        filter: brightness(120%);
+      }
       .copy-icon {
         padding: 2px;
       }

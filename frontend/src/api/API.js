@@ -68,11 +68,20 @@ export const getUserCommands = (filter) => fetch(`${API_URL}/user/user-command` 
 export const getUserCommand = (userCommandId) =>
     fetch(`${API_URL}/user/user-command/${userCommandId}`, { headers: getHeaders() }).then(handleErrors).then(res => res.json()).catch(catchError);
 
+export const getPublicCommand = (publicCommandId) =>
+    fetch(`${API_URL}/public/public-command/${publicCommandId}`, { headers: getHeaders() }).then(handleErrors).then(res => res.json()).catch(catchError);
+
 export const saveUserCommand = (userCommand) => fetch(`${API_URL}/user/user-command`, {
     method: 'POST',
     body: JSON.stringify(userCommand),
     headers: getHeaders()
 }).then(handleErrors).then(res => res.text()).catch(catchError);
+
+export const savePublicCommand = (publicCommand) => fetch(`${API_URL}/public/public-command`, {
+    method: 'POST',
+    body: JSON.stringify(publicCommand),
+    headers: getHeaders()
+}).then(handleErrors).then(res => res.json()).catch(catchError);
 
 export const updateUserCommand = (userCommand) => fetch(`${API_URL}/user/user-command/${userCommand.id}`, {
     method: 'PUT',
@@ -81,6 +90,11 @@ export const updateUserCommand = (userCommand) => fetch(`${API_URL}/user/user-co
 }).then(handleErrors).then(res => res.text()).catch(catchError);
 
 export const deleteUserCommand = (userCommand) => fetch(`${API_URL}/user/user-command/${userCommand.id}`, {
+    method: 'DELETE',
+    headers: getHeaders()
+}).then(handleErrors).then(res => res.text()).catch(catchError);
+
+export const deletePublicCommand = (publicCommand) => fetch(`${API_URL}/public/public-command/${publicCommand.id}`, {
     method: 'DELETE',
     headers: getHeaders()
 }).then(handleErrors).then(res => res.text()).catch(catchError);
