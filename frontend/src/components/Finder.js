@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as API from '../api/API';
 import { getQueryParamByName, getArrayQueryParamByName, getQueryParamsFromFilter } from '../Utils';
-import { getCommands } from '../actions';
+import { getMetaCommands } from '../actions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class Finder extends Component {
@@ -27,18 +27,18 @@ class Finder extends Component {
     }
 
     componentDidMount() {
-        this.getCommands(this.state.filter);
+        this.getMetaCommands(this.state.filter);
     }
 
-    getCommands() {
+    getMetaCommands() {
         const { history } = this.props;
 
-        this.props.getCommands(this.state.filter).then(() => {
-            const { commands } = this.props;
+        this.props.getMetaCommands(this.state.filter).then(() => {
+            const { metaCommands } = this.props;
             const { filter } = this.state;
 
-            if (commands.pageNumber !== 0 && (filter.pagination.pageNumber > commands.totalPages)) {
-                this.setState({ filter: { ...filter, pagination: { ...filter.pagination, pageNumber: commands.totalPages } } }, () => {
+            if (metaCommands.pageNumber !== 0 && (filter.pagination.pageNumber > metaCommands.totalPages)) {
+                this.setState({ filter: { ...filter, pagination: { ...filter.pagination, pageNumber: metaCommands.totalPages } } }, () => {
                     const { filter } = this.state;
                     history.push(getQueryParamsFromFilter(filter));
                 });
@@ -97,7 +97,7 @@ class Finder extends Component {
     }
 
     render() {
-        const { commands, history } = this.props;
+        const { metaCommands, history } = this.props;
         const { filter } = this.state;
 
         return (
@@ -105,7 +105,7 @@ class Finder extends Component {
                 <SearchInput defaultValue={filter.conditions[0] ? filter.conditions[0].value : ''}
                     onChange={this.handleQueryUpdate.bind(this)} />
 
-                {commands && commands.totalSize > 0 ? <div>
+                {metaCommands && metaCommands.totalSize > 0 ? <div>
                     <div className="toolbar">
                         <ItemsPerPage pageSize={filter.pagination.pageSize} handlePageSizeChange={this.handlePageSizeChange.bind(this)} />
                     </div>
@@ -122,22 +122,22 @@ class Finder extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {commands.records.map(command => <tr key={command.id}
-                                onClick={e => { e.preventDefault(); history.push(`/command/build/${command.properties.name}`) }}>
-                                <td className="name">{command.properties.name} </td>
+                            {metaCommands.records.map(metaCommand => <tr key={metaCommand.id}
+                                onClick={e => { e.preventDefault(); history.push(`/command/build/${metaCommand.properties.name}`) }}>
+                                <td className="name">{metaCommand.properties.name} </td>
                                 <td className="syntax">
-                                    <code>{command.properties.syntax.replace(/\.\.\./g, '···') /* replacing dots to avoid confusion with ellipsis */}</code>
+                                    <code>{metaCommand.properties.syntax.replace(/\.\.\./g, '···') /* replacing dots to avoid confusion with ellipsis */}</code>
                                 </td>
                                 <td className="desc">
-                                    <span>{command.properties.desc}</span><br />
-                                    {command.properties.desc && <small>{command.properties.long_desc}</small>}
+                                    <span>{metaCommand.properties.desc}</span><br />
+                                    {metaCommand.properties.desc && <small>{metaCommand.properties.long_desc}</small>}
                                 </td>
                             </tr>)}
                         </tbody>
 
                     </table>
-                    <Pagination pageNumber={filter.pagination.pageNumber} totalSize={commands.totalSize}
-                        totalPages={commands.totalPages} maxPagesToShow={5} handlePageChange={this.handlePageChange.bind(this)} />
+                    <Pagination pageNumber={filter.pagination.pageNumber} totalSize={metaCommands.totalSize}
+                        totalPages={metaCommands.totalPages} maxPagesToShow={5} handlePageChange={this.handlePageChange.bind(this)} />
                 </div> : <div className="no-data-msg">No Commands Found!</div>
                 }
             </div>
@@ -147,14 +147,14 @@ class Finder extends Component {
 
 const mapStateToProps = (state, props) => {
     return {
-        commands: state.commandReducer.commands
+        metaCommands: state.metaCommandReducer.metaCommands
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        getCommands: (filter) => API.getCommands(filter).then(commands => {
-            dispatch(getCommands(commands));
+        getMetaCommands: (filter) => API.getMetaCommands(filter).then(metaCommands => {
+            dispatch(getMetaCommands(metaCommands));
         })
     }
 }

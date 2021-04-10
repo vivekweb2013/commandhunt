@@ -37,7 +37,7 @@
             <data key="desc">Exit non-zero for improperly formatted checksum lines</data>
         </node>
         <node id="16416">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">base64</data>
             <data key="syntax">base64 [OPTION]... [FILE]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/base64.1.en.html</data>
@@ -154,7 +154,7 @@
             <data key="desc">Display this help and exit</data>
         </node>
         <node id="86048">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">cut</data>
             <data key="syntax">cut OPTION... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/cut.1.en.html</data>
@@ -285,7 +285,7 @@
             <data key="desc">Output version information and exit</data>
         </node>
         <node id="159776">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">dirname</data>
             <data key="syntax">dirname [OPTION] NAME...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/dirname.1.en.html</data>
@@ -342,7 +342,7 @@
             <data key="desc">Ignore, for compatibility with other versions</data>
         </node>
         <node id="192544">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">link</data>
             <data key="syntax">link FILE1 FILE2&#10;link OPTION</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/link.1.en.html</data>
@@ -409,7 +409,7 @@
             <data key="desc">Set file permission bits to MODE, not a=rw - umask</data>
         </node>
         <node id="229408">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">mknod</data>
             <data key="syntax">mknod [OPTION]... NAME TYPE [MAJOR MINOR]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/mknod.1.en.html</data>
@@ -424,7 +424,7 @@
             <data key="desc">Set the SELinux security context to default type</data>
         </node>
         <node id="237600">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">mktemp</data>
             <data key="syntax">mktemp [OPTION]... [TEMPLATE]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/mktemp.1.en.html</data>
@@ -454,7 +454,7 @@
             <data key="desc">Replace the numbers in these input fields (default=1) see FIELDS below</data>
         </node>
         <node id="253984">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">pinky</data>
             <data key="syntax">pinky [OPTION]... [USER]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/pinky.1.en.html</data>
@@ -462,7 +462,7 @@
             <data key="long_desc"></data>
         </node>
         <node id="258080">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">pr</data>
             <data key="syntax">pr [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/pr.1.en.html</data>
@@ -593,7 +593,7 @@
             <data key="desc">Directory path</data>
         </node>
         <node id="327712">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">seq</data>
             <data key="syntax">seq [OPTION]... LAST&#10;seq [OPTION]... FIRST LAST&#10;seq [OPTION]... FIRST INCREMENT LAST</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/seq.1.en.html</data>
@@ -733,7 +733,7 @@
             <data key="desc">Display this help and exit</data>
         </node>
         <node id="409632">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">unlink</data>
             <data key="syntax">unlink FILE&#10;unlink OPTION</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/unlink.1.en.html</data>
@@ -833,7 +833,7 @@
             <data key="desc">Sort the listing by last modification time.</data>
         </node>
         <node id="466976">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">ssh-add</data>
             <data key="syntax">ssh-add [-cDdkLlqXx] [-E fingerprint_hash] [-t life] [file ...] ssh-add -s pkcs11 ssh-add -e pkcs11</data>
             <data key="man_page_url">https://manpages.debian.org/buster/openssh-client/ssh-add.1.en.html</data>
@@ -920,7 +920,7 @@
             <data key="desc">Force ssh-keyscan to use IPv4 addresses only.</data>
         </node>
         <node id="520224">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">ssh</data>
             <data key="syntax">ssh [-46AaCfGgKkMNnqsTtVvXxYy] [-B bind_interface] [-b bind_address] [-c cipher_spec] [-D [bind_address:]port] [-E log_file] [-e escape_char] [-F configfile] [-I pkcs11] [-i identity_file] [-J destination] [-L address] [-l login_name] [-m mac_spec] [-O ctl_cmd] [-o option] [-p port] [-Q query_option] [-R address] [-S ctl_path] [-W host:port] [-w local_tun[:remote_tun]] destination [command]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/openssh-client/ssh.1.en.html</data>
@@ -998,7 +998,7 @@
             <data key="desc">Equivalent to -vT</data>
         </node>
         <node id="24616">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">chcon</data>
             <data key="syntax">chcon [OPTION]... CONTEXT FILE...&#10;chcon [OPTION]... [-u USER] [-r ROLE] [-l RANGE] [-t TYPE] FILE...&#10;chcon [OPTION]... --reference=RFILE FILE...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/chcon.1.en.html</data>
@@ -1130,7 +1130,7 @@
             <data key="desc">Output version information and exit</data>
         </node>
         <node id="98344">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">chroot</data>
             <data key="syntax">chroot [OPTION] NEWROOT [COMMAND [ARG]...]&#10;chroot OPTION</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/chroot.8.en.html</data>
@@ -1379,7 +1379,7 @@
             <data key="desc">Output C shell code to set LS_COLORS</data>
         </node>
         <node id="237608">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">du</data>
             <data key="syntax">du [OPTION]... [FILE]...&#10;du [OPTION]... --files0-from=F</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/du.1.en.html</data>
@@ -1474,7 +1474,7 @@
             <data key="desc">Print the prime factors of each specified integer NUMBER</data>
         </node>
         <node id="290856">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">fmt</data>
             <data key="syntax">fmt [-WIDTH] [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/fmt.1.en.html</data>
@@ -1512,7 +1512,7 @@
             <data key="desc">File path</data>
         </node>
         <node id="311336">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">hostid</data>
             <data key="syntax">hostid [OPTION]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/hostid.1.en.html</data>
@@ -1919,7 +1919,7 @@
             <data key="desc">Display this help and exit</data>
         </node>
         <node id="540712">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">nproc</data>
             <data key="syntax">nproc [OPTION]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/nproc.1.en.html</data>
@@ -1934,7 +1934,7 @@
             <data key="desc">Output version information and exit</data>
         </node>
         <node id="548904">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">numfmt</data>
             <data key="syntax">numfmt [OPTION]... [NUMBER]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/numfmt.1.en.html</data>
@@ -1996,7 +1996,7 @@
             <data key="desc">Swap input bytes according the specified order</data>
         </node>
         <node id="585768">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">paste</data>
             <data key="syntax">paste [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/paste.1.en.html</data>
@@ -2169,7 +2169,7 @@
             <data key="desc">Display this help and exit</data>
         </node>
         <node id="679976">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">runcon</data>
             <data key="syntax">runcon CONTEXT COMMAND [args]&#10;runcon [ -c ] [-u USER] [-r ROLE] [-t TYPE] [-l RANGE] COMMAND [args]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/runcon.1.en.html</data>
@@ -2206,7 +2206,7 @@
             <data key="desc">Display this help and exit</data>
         </node>
         <node id="700456">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">sha224sum</data>
             <data key="syntax">sha224sum [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/sha224sum.1.en.html</data>
@@ -2288,7 +2288,7 @@
             <data key="desc">Warn about improperly formatted checksum lines</data>
         </node>
         <node id="745512">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">sha384sum</data>
             <data key="syntax">sha384sum [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/sha384sum.1.en.html</data>
@@ -2438,7 +2438,7 @@
             <data key="desc">Use SIZE for main memory buffer</data>
         </node>
         <node id="827432">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">split</data>
             <data key="syntax">split [OPTION]... [FILE [PREFIX]]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/split.1.en.html</data>
@@ -2483,7 +2483,7 @@
             <data key="desc">Output version information and exit</data>
         </node>
         <node id="852008">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">stdbuf</data>
             <data key="syntax">stdbuf OPTION... COMMAND</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/stdbuf.1.en.html</data>
@@ -2535,7 +2535,7 @@
             <data key="desc">Display this help and exit</data>
         </node>
         <node id="880680">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">tac</data>
             <data key="syntax">tac [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/tac.1.en.html</data>
@@ -2543,7 +2543,7 @@
             <data key="long_desc">Write each FILE to standard output, last line first.</data>
         </node>
         <node id="884776">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">tail</data>
             <data key="syntax">tail [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/tail.1.en.html</data>
@@ -2588,7 +2588,7 @@
             <data key="desc">Display this help and exit</data>
         </node>
         <node id="909352">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">test</data>
             <data key="syntax">test EXPRESSION&#10;test&#10;[ EXPRESSION ]&#10;[ ]&#10;[ OPTION</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/test.1.en.html</data>
@@ -2692,7 +2692,7 @@
             <data key="desc">Use [[CC]YY]MMDDhhmm[.ss] instead of current time</data>
         </node>
         <node id="974888">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">tr</data>
             <data key="syntax">tr [OPTION]... SET1 [SET2]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/tr.1.en.html</data>
@@ -2723,7 +2723,7 @@
             <data key="desc">Output version information and exit</data>
         </node>
         <node id="991272">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">true</data>
             <data key="syntax">true [ignored command line arguments]&#10;true OPTION</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/true.1.en.html</data>
@@ -2752,7 +2752,7 @@
             <data key="desc">Display this help and exit</data>
         </node>
         <node id="1007656">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">tty</data>
             <data key="syntax">tty [OPTION]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/tty.1.en.html</data>
@@ -2911,7 +2911,7 @@
             <data key="desc">Add user's message status as +, - or ?</data>
         </node>
         <node id="1097768">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">yes</data>
             <data key="syntax">yes [STRING]...&#10;yes OPTION</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/yes.1.en.html</data>
@@ -2998,7 +2998,7 @@
             <data key="desc">Bind the agent to the UNIX-domain socket bind_address. The default is $TMPDIR/ssh-XXXXXXXXXX/agent.&lt;ppid&gt;.</data>
         </node>
         <node id="1151016">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">ssh-argv0</data>
             <data key="syntax">hostname | user@hostname [-l login_name] [command] hostname | user@hostname [-afgknqstvxACNTX1246] [-b bind_address] [-c cipher_spec] [-e escape_char] [-i identity_file] [-l login_name] [-m mac_spec] [-o option] [-p port] [-F configfile] [-L port:host:hostport] [-R port:host:hostport] [-D port] [command]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/openssh-client/ssh-argv0.1.en.html</data>
@@ -3006,7 +3006,7 @@
             <data key="long_desc">ssh-argv0 replaces the old ssh command-name as hostname handling. If you link to this script with a hostname then executing the link is equivalent to having executed ssh with that hostname as an argument. All other arguments are passed to ssh and will be processed normally.</data>
         </node>
         <node id="1155112">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">ssh-copy-id</data>
             <data key="syntax">ssh-copy-id [-f] [-n] [-i [identity_file]] [-p port] [-o ssh_option] [user@]hostname ssh-copy-id -h | -?</data>
             <data key="man_page_url">https://manpages.debian.org/buster/openssh-client/ssh-copy-id.1.en.html</data>
@@ -3107,7 +3107,7 @@
             <data key="desc">Set the timeout for connection attempts. If timeout seconds have elapsed since a connection was initiated to a host or since the last time anything was read from that host, the connection is closed and the host in question considered unavailable. The default is 5 seconds.</data>
         </node>
         <node id="1216552">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">ssh-keysign</data>
             <data key="syntax">ssh-keysign </data>
             <data key="man_page_url">https://manpages.debian.org/buster/openssh-client/ssh-keysign.8.en.html</data>
@@ -3186,7 +3186,7 @@
             <data key="desc">Output version information and exit</data>
         </node>
         <node id="12360">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">base32</data>
             <data key="syntax">base32 [OPTION]... [FILE]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/base32.1.en.html</data>
@@ -3260,7 +3260,7 @@
             <data key="desc">Output version information and exit</data>
         </node>
         <node id="53320">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">chgrp</data>
             <data key="syntax">chgrp [OPTION]... GROUP FILE...&#10;chgrp [OPTION]... --reference=RFILE FILE...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/chgrp.1.en.html</data>
@@ -3298,7 +3298,7 @@
             <data key="desc">Fail to operate recursively on '/'</data>
         </node>
         <node id="73800">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">comm</data>
             <data key="syntax">comm [OPTION]... FILE1 FILE2</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/comm.1.en.html</data>
@@ -3380,7 +3380,7 @@
             <data key="desc">Output version information and exit</data>
         </node>
         <node id="118856">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">date</data>
             <data key="syntax">date [OPTION]... [+FORMAT]&#10;date [-u|--utc|--universal] [MMDDhhmm[[CC]YY][.ss]]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/date.1.en.html</data>
@@ -3538,7 +3538,7 @@
             <data key="desc">With -l, show time as WORD instead of default modification time: atime or access or use (-u); ctime or status (-c); also use specified time as sort key if --sort=time (newest first)</data>
         </node>
         <node id="204872">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">dircolors</data>
             <data key="syntax">dircolors [OPTION]... [FILE]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/dircolors.1.en.html</data>
@@ -3687,7 +3687,7 @@
             <data key="desc">Output version information and exit</data>
         </node>
         <node id="286792">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">false</data>
             <data key="syntax">false [ignored command line arguments]&#10;false OPTION</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/false.1.en.html</data>
@@ -3756,7 +3756,7 @@
             <data key="desc">Output version information and exit</data>
         </node>
         <node id="323656">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">groups</data>
             <data key="syntax">groups [OPTION]... [USERNAME]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/groups.1.en.html</data>
@@ -3835,7 +3835,7 @@
             <data key="desc">Print the name of each directory as it is created</data>
         </node>
         <node id="364616">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">join</data>
             <data key="syntax">join [OPTION]... FILE1 FILE2</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/join.1.en.html</data>
@@ -3906,7 +3906,7 @@
             <data key="desc">Specify the DIRECTORY in which to create the links</data>
         </node>
         <node id="405576">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">logname</data>
             <data key="syntax">logname [OPTION]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/logname.1.en.html</data>
@@ -3914,7 +3914,7 @@
             <data key="long_desc">Print the name of the current user.</data>
         </node>
         <node id="409672">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">ls</data>
             <data key="syntax">ls [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/ls.1.en.html</data>
@@ -4002,7 +4002,7 @@
             <data key="desc">Append indicator with style WORD to entry names: none (default), slash (-p), file-type (--file-type), classify (-F)</data>
         </node>
         <node id="458824">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">md5sum</data>
             <data key="syntax">md5sum [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/md5sum.1.en.html</data>
@@ -4077,7 +4077,7 @@
             <data key="desc">Append SUFF to TEMPLATE; SUFF must not contain a slash. This option is implied if TEMPLATE does not end in X</data>
         </node>
         <node id="499784">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">mv</data>
             <data key="syntax">mv [OPTION]... [-T] SOURCE DEST&#10;mv [OPTION]... SOURCE... DIRECTORY&#10;mv [OPTION]... -t DIRECTORY SOURCE...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/mv.1.en.html</data>
@@ -4101,7 +4101,7 @@
             <data key="desc">Set SELinux security context of destination file to default type</data>
         </node>
         <node id="512072">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">nice</data>
             <data key="syntax">nice [OPTION] [COMMAND [ARG]...]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/nice.1.en.html</data>
@@ -4170,7 +4170,7 @@
             <data key="desc">File path</data>
         </node>
         <node id="548936">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">nohup</data>
             <data key="syntax">nohup COMMAND [ARG]...&#10;nohup OPTION</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/nohup.1.en.html</data>
@@ -4329,7 +4329,7 @@
             <data key="desc">Display this help and exit</data>
         </node>
         <node id="639048">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">readlink</data>
             <data key="syntax">readlink [OPTION]... FILE...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/readlink.1.en.html</data>
@@ -4458,7 +4458,7 @@
             <data key="desc">Output version information and exit</data>
         </node>
         <node id="708680">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">sha256sum</data>
             <data key="syntax">sha256sum [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/sha256sum.1.en.html</data>
@@ -4523,7 +4523,7 @@
             <data key="desc">Deallocate and remove file after overwriting</data>
         </node>
         <node id="745544">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">shuf</data>
             <data key="syntax">shuf [OPTION]... [FILE]&#10;shuf -e [OPTION]... [ARG]...&#10;shuf -i LO-HI [OPTION]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/shuf.1.en.html</data>
@@ -4538,7 +4538,7 @@
             <data key="desc">Output version information and exit</data>
         </node>
         <node id="753736">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">sort</data>
             <data key="syntax">sort [OPTION]... [FILE]...&#10;sort [OPTION]... --files0-from=F</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/sort.1.en.html</data>
@@ -4714,7 +4714,7 @@
             <data key="desc">FILE exists and is a named pipe</data>
         </node>
         <node id="852040">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">timeout</data>
             <data key="syntax">timeout [OPTION] DURATION COMMAND [ARG]...&#10;timeout [OPTION]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/timeout.1.en.html</data>
@@ -4781,7 +4781,7 @@
             <data key="desc">Print the processor type (non-portable)</data>
         </node>
         <node id="888904">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">unexpand</data>
             <data key="syntax">unexpand [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/unexpand.1.en.html</data>
@@ -4848,7 +4848,7 @@
             <data key="desc">Display this help and exit</data>
         </node>
         <node id="925768">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">vdir</data>
             <data key="syntax">vdir [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/vdir.1.en.html</data>
@@ -4963,7 +4963,7 @@
             <data key="desc">Set output width to COLS. 0 means no limit</data>
         </node>
         <node id="987208">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">wc</data>
             <data key="syntax">wc [OPTION]... [FILE]...&#10;wc [OPTION]... --files0-from=F</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/wc.1.en.html</data>
@@ -5089,7 +5089,7 @@
             <data key="desc">Remove keys provided by the PKCS#11 shared library pkcs11.</data>
         </node>
         <node id="1060936">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">ssh-agent</data>
             <data key="syntax">ssh-agent [-c | -s] [-Dd] [-a bind_address] [-E fingerprint_hash] [-P pkcs11_whitelist] [-t life] [command [arg ...]] ssh-agent [-c | -s] -k</data>
             <data key="man_page_url">https://manpages.debian.org/buster/openssh-client/ssh-agent.1.en.html</data>
@@ -5117,7 +5117,7 @@
             <data key="desc">Forced mode: doesn't check if the keys are present on the remote server. This means that it does not need the private key. Of course, this can result in more than one copy of the key being installed on the remote system.</data>
         </node>
         <node id="1077320">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">ssh-keygen</data>
             <data key="syntax">ssh-keygen [-q] [-b bits] [-t dsa | ecdsa | ed25519 | rsa] [-N new_passphrase] [-C comment] [-f output_keyfile] ssh-keygen -p [-P old_passphrase] [-N new_passphrase] [-f keyfile] ssh-keygen -i [-m key_format] [-f input_keyfile] ssh-keygen -e [-m key_format] [-f input_keyfile] ssh-keygen -y [-f input_keyfile] ssh-keygen -c [-P passphrase] [-C comment] [-f keyfile] ssh-keygen -l [-v] [-E fingerprint_hash] [-f input_keyfile] ssh-keygen -B [-f input_keyfile] ssh-keygen -D pkcs11 ssh-keygen -F hostname [-f known_hosts_file] [-l] ssh-keygen -H [-f known_hosts_file] ssh-keygen -R hostname [-f known_hosts_file] ssh-keygen -r hostname [-f input_keyfile] [-g] ssh-keygen -G output_file [-v] [-b bits] [-M memory] [-S start_point] ssh-keygen -T output_file -f input_file [-v] [-a rounds] [-J num_lines] [-j start_line] [-K checkpt] [-W generator] ssh-keygen -s ca_key -I certificate_identity [-h] [-U] [-D pkcs11_provider] [-n principals] [-O option] [-V validity_interval] [-z serial_number] file ... ssh-keygen -L [-f input_keyfile] ssh-keygen -A [-f prefix_path] ssh-keygen -k -f krl_file [-u] [-s ca_public] [-z version_number] file ... ssh-keygen -Q -f krl_file file ...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/openssh-client/ssh-keygen.1.en.html</data>
@@ -5170,7 +5170,7 @@
             <data key="desc">Read hosts or “addrlist namelist” pairs from file, one per line. If ‘-’ is supplied instead of a filename, ssh-keyscan will read from the standard input. Input is expected in the format:</data>
         </node>
         <node id="1110088">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">ssh-pkcs11-helper</data>
             <data key="syntax">ssh-pkcs11-helper </data>
             <data key="man_page_url">https://manpages.debian.org/buster/openssh-client/ssh-pkcs11-helper.8.en.html</data>
@@ -5320,7 +5320,7 @@
             <data key="desc">Use RFILE's mode instead of MODE values</data>
         </node>
         <node id="53376">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">chown</data>
             <data key="syntax">chown [OPTION]... [OWNER][:[GROUP]] FILE...&#10;chown [OPTION]... --reference=RFILE FILE...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/chown.1.en.html</data>
@@ -5357,7 +5357,7 @@
             <data key="desc">From first to M'th (included) byte, character or field</data>
         </node>
         <node id="73856">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">df</data>
             <data key="syntax">df [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/df.1.en.html</data>
@@ -5477,7 +5477,7 @@
             <data key="desc">Print verbose information for each processing step</data>
         </node>
         <node id="139392">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">factor</data>
             <data key="syntax">factor [NUMBER]...&#10;factor OPTION</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/factor.1.en.html</data>
@@ -5499,7 +5499,7 @@
             <data key="desc">File path</data>
         </node>
         <node id="151680">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">fold</data>
             <data key="syntax">fold [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/fold.1.en.html</data>
@@ -5507,7 +5507,7 @@
             <data key="long_desc">Wrap input lines in each FILE, writing to standard output.</data>
         </node>
         <node id="155776">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">head</data>
             <data key="syntax">head [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/head.1.en.html</data>
@@ -5515,7 +5515,7 @@
             <data key="long_desc">Print the first 10 lines of each FILE to standard output. With more than one FILE, precede each with a header giving the file name.</data>
         </node>
         <node id="159872">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">id</data>
             <data key="syntax">id [OPTION]... [USER]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/id.1.en.html</data>
@@ -5639,7 +5639,7 @@
             <data key="desc">Warn about improperly formatted checksum lines</data>
         </node>
         <node id="229504">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">mkdir</data>
             <data key="syntax">mkdir [OPTION]... DIRECTORY...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/mkdir.1.en.html</data>
@@ -5654,7 +5654,7 @@
             <data key="desc">Interpret TEMPLATE as a single file name component, relative to a directory: $TMPDIR, if set; else the directory specified via -p; else /tmp [deprecated]</data>
         </node>
         <node id="237696">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">nl</data>
             <data key="syntax">nl [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/nl.1.en.html</data>
@@ -5758,7 +5758,7 @@
             <data key="desc">Use octal backslash notation</data>
         </node>
         <node id="295040">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">printf</data>
             <data key="syntax">printf FORMAT [ARGUMENT]...&#10;printf OPTION</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/printf.1.en.html</data>
@@ -5766,7 +5766,7 @@
             <data key="long_desc">Print ARGUMENT(s) according to FORMAT, or execute according to OPTION:</data>
         </node>
         <node id="299136">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">ptx</data>
             <data key="syntax">ptx [OPTION]... [INPUT]... (without -G)&#10;ptx -G [OPTION]... [INPUT [OUTPUT]]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/ptx.1.en.html</data>
@@ -5825,7 +5825,7 @@
             <data key="desc">File path</data>
         </node>
         <node id="331904">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">rmdir</data>
             <data key="syntax">rmdir [OPTION]... DIRECTORY...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/rmdir.1.en.html</data>
@@ -6013,7 +6013,7 @@
             <data key="desc">Base size on RFILE</data>
         </node>
         <node id="438400">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">uname</data>
             <data key="syntax">uname [OPTION]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/uname.1.en.html</data>
@@ -6036,7 +6036,7 @@
             <data key="desc">Avoid comparing the first N fields</data>
         </node>
         <node id="450688">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">users</data>
             <data key="syntax">users [OPTION]... [FILE]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/users.1.en.html</data>
@@ -6213,7 +6213,7 @@
             <data key="desc"> </data>
         </node>
         <node id="4240">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">arch</data>
             <data key="syntax">arch [OPTION]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/arch.1.en.html</data>
@@ -6221,7 +6221,7 @@
             <data key="long_desc">Print machine architecture.</data>
         </node>
         <node id="8336">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">cat</data>
             <data key="syntax">cat [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/cat.1.en.html</data>
@@ -6256,7 +6256,7 @@
             <data key="desc">Do not treat '/' specially (the default)</data>
         </node>
         <node id="28816">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">chmod</data>
             <data key="syntax">chmod [OPTION]... MODE[,MODE]... FILE...&#10;chmod [OPTION]... OCTAL-MODE FILE...&#10;chmod [OPTION]... --reference=RFILE FILE...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/chmod.1.en.html</data>
@@ -6367,7 +6367,7 @@
             <data key="desc">Scale sizes by SIZE before printing them; e.g., '-BM' prints sizes in units of 1,048,576 bytes; see SIZE format below</data>
         </node>
         <node id="90256">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">dir</data>
             <data key="syntax">dir [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/dir.1.en.html</data>
@@ -6441,7 +6441,7 @@
             <data key="desc">Output version information and exit</data>
         </node>
         <node id="131216">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">install</data>
             <data key="syntax">install [OPTION]... [-T] SOURCE DEST&#10;install [OPTION]... SOURCE... DIRECTORY&#10;install [OPTION]... -t DIRECTORY SOURCE...&#10;install [OPTION]... -d DIRECTORY...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/install.1.en.html</data>
@@ -6825,7 +6825,7 @@
             <data key="desc">Like --format, but interpret backslash escapes, and do not output a mandatory trailing newline; if you want a newline, include &#10; in FORMAT</data>
         </node>
         <node id="344208">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">stty</data>
             <data key="syntax">stty [-F DEVICE | --file=DEVICE] [SETTING]...&#10;stty [-F DEVICE | --file=DEVICE] [-a|--all]&#10;stty [-F DEVICE | --file=DEVICE] [-g|--save]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/stty.1.en.html</data>
@@ -6913,7 +6913,7 @@
             <data key="desc">Treat SIZE as number of IO blocks instead of bytes</data>
         </node>
         <node id="393360">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">tsort</data>
             <data key="syntax">tsort [OPTION] [FILE]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/tsort.1.en.html</data>
@@ -7026,7 +7026,7 @@
             <data key="desc">Print the word counts</data>
         </node>
         <node id="454800">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">who</data>
             <data key="syntax">who [OPTION]... [ FILE | ARG1 ARG2 ]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/who.1.en.html</data>
@@ -7226,7 +7226,7 @@
             <data key="desc">Decode data</data>
         </node>
         <node id="20656">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">basename</data>
             <data key="syntax">basename NAME [SUFFIX]&#10;basename OPTION... NAME...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/basename.1.en.html</data>
@@ -7454,7 +7454,7 @@
             <data key="desc">Display this help and exit</data>
         </node>
         <node id="151728">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">expand</data>
             <data key="syntax">expand [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/expand.1.en.html</data>
@@ -7511,7 +7511,7 @@
             <data key="desc">Directory path</data>
         </node>
         <node id="184496">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">mkfifo</data>
             <data key="syntax">mkfifo [OPTION]... NAME...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/mkfifo.1.en.html</data>
@@ -7553,7 +7553,7 @@
             <data key="desc">Pad the output to N characters; positive N will right-align; negative N will left-align; padding is ignored if the output is wider than N; the default is to automatically pad if a whitespace is found</data>
         </node>
         <node id="209072">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">od</data>
             <data key="syntax">od [OPTION]... [FILE]...&#10;od [-abcdfilosx]... [FILE] [[+]OFFSET[.][b]]&#10;od --traditional [OPTION]... [FILE] [[+]OFFSET[.][b] [+][LABEL][.][b]]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/od.1.en.html</data>
@@ -7692,7 +7692,7 @@
             <data key="desc">Don't expand symlinks</data>
         </node>
         <node id="282800">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">rm</data>
             <data key="syntax">rm [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/rm.1.en.html</data>
@@ -7746,7 +7746,7 @@
             <data key="desc">Equalize width by padding with leading zeroes</data>
         </node>
         <node id="311472">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">sha1sum</data>
             <data key="syntax">sha1sum [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/sha1sum.1.en.html</data>
@@ -7783,7 +7783,7 @@
             <data key="desc">File path</data>
         </node>
         <node id="331952">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">sha512sum</data>
             <data key="syntax">sha512sum [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/sha512sum.1.en.html</data>
@@ -7791,7 +7791,7 @@
             <data key="long_desc">Print or check SHA512 (512-bit) checksums.</data>
         </node>
         <node id="336048">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">shred</data>
             <data key="syntax">shred [OPTION]... FILE...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/shred.1.en.html</data>
@@ -7805,7 +7805,7 @@
             <data key="desc">Get random bytes from FILE</data>
         </node>
         <node id="344240">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">sleep</data>
             <data key="syntax">sleep NUMBER[SUFFIX]...&#10;sleep OPTION</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/sleep.1.en.html</data>
@@ -7926,7 +7926,7 @@
             <data key="desc">File path</data>
         </node>
         <node id="409776">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">tee</data>
             <data key="syntax">tee [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/tee.1.en.html</data>
@@ -7956,7 +7956,7 @@
             <data key="desc">Delete characters in SET1, do not translate</data>
         </node>
         <node id="426160">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">truncate</data>
             <data key="syntax">truncate OPTION... FILE...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/truncate.1.en.html</data>
@@ -8030,7 +8030,7 @@
             <data key="desc">File path</data>
         </node>
         <node id="467120">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">uniq</data>
             <data key="syntax">uniq [OPTION]... [INPUT [OUTPUT]]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/uniq.1.en.html</data>
@@ -8118,7 +8118,7 @@
             <data key="desc">Display this help and exit</data>
         </node>
         <node id="516272">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">whoami</data>
             <data key="syntax">whoami [OPTION]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/whoami.1.en.html</data>
@@ -8133,7 +8133,7 @@
             <data key="desc">Compression enable. Passes the -C flag to ssh to enable compression.</data>
         </node>
         <node id="524464">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">sftp</data>
             <data key="syntax">sftp [-46aCfpqrv] [-B buffer_size] [-b batchfile] [-c cipher] [-D sftp_server_path] [-F ssh_config] [-i identity_file] [-l limit] [-o ssh_option] [-P port] [-R num_requests] [-S program] [-s subsystem | sftp_server] destination</data>
             <data key="man_page_url">https://manpages.debian.org/buster/openssh-client/sftp.1.en.html</data>
@@ -8214,7 +8214,7 @@
             <data key="desc">Specifies a serial number to be embedded in the certificate to distinguish this certificate from others from the same CA. The default serial number is zero.</data>
         </node>
         <node id="573616">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">ssh-keyscan</data>
             <data key="syntax">ssh-keyscan [-46cDHv] [-f file] [-p port] [-T timeout] [-t type] [host | addrlist namelist]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/openssh-client/ssh-keyscan.1.en.html</data>
@@ -8256,7 +8256,7 @@
             <data key="desc">Sets the escape character for sessions with a pty (default: ‘~’). The escape character is only recognized at the beginning of a line. The escape character followed by a dot (‘.’) closes the connection; followed by control-Z suspends the connection; and followed by itself sends the escape character once. Setting the character to “none” disables any escapes and makes the session fully transparent.</data>
         </node>
         <node id="4328">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">b2sum</data>
             <data key="syntax">b2sum [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/b2sum.1.en.html</data>
@@ -8379,7 +8379,7 @@
             <data key="desc">File path</data>
         </node>
         <node id="69864">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">cksum</data>
             <data key="syntax">cksum [FILE]...&#10;cksum [OPTION]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/cksum.1.en.html</data>
@@ -8490,7 +8490,7 @@
             <data key="desc">Display the last modification time of FILE</data>
         </node>
         <node id="131304">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">dd</data>
             <data key="syntax">dd [OPERAND]...&#10;dd OPTION</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/dd.1.en.html</data>
@@ -8593,7 +8593,7 @@
             <data key="desc">Do not output the trailing newline</data>
         </node>
         <node id="188648">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">env</data>
             <data key="syntax">env [OPTION]... [-] [NAME=VALUE]... [COMMAND [ARG]...]</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/env.1.en.html</data>
@@ -8838,7 +8838,7 @@
             <data key="desc">File path</data>
         </node>
         <node id="323816">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">printenv</data>
             <data key="syntax">printenv [OPTION]... [VARIABLE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/printenv.1.en.html</data>
@@ -8854,7 +8854,7 @@
             <data key="desc">Word break characters in this FILE</data>
         </node>
         <node id="332008">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">realpath</data>
             <data key="syntax">realpath [OPTION]... FILE...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/realpath.1.en.html</data>
@@ -8942,7 +8942,7 @@
             <data key="desc">Display this help and exit</data>
         </node>
         <node id="381160">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">stat</data>
             <data key="syntax">stat [OPTION]... FILE...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/stat.1.en.html</data>
@@ -8957,7 +8957,7 @@
             <data key="desc">Same as icanon</data>
         </node>
         <node id="389352">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">sync</data>
             <data key="syntax">sync [OPTION] [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/sync.1.en.html</data>
@@ -8985,7 +8985,7 @@
             <data key="desc">FILE exists and is a symbolic link (same as -h)</data>
         </node>
         <node id="405736">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">touch</data>
             <data key="syntax">touch [OPTION]... FILE...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/touch.1.en.html</data>
@@ -9116,7 +9116,7 @@
             <data key="desc">Display this help and exit</data>
         </node>
         <node id="479464">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">scp</data>
             <data key="syntax">scp [-346BCpqrTv] [-c cipher] [-F ssh_config] [-i identity_file] [-l limit] [-o ssh_option] [-P port] [-S program] source ... target</data>
             <data key="man_page_url">https://manpages.debian.org/buster/openssh-client/scp.1.en.html</data>
@@ -9332,7 +9332,7 @@
             <data key="desc">Specify supplementary groups as g1,g2,..,gN</data>
         </node>
         <node id="49392">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">cp</data>
             <data key="syntax">cp [OPTION]... [-T] SOURCE DEST&#10;cp [OPTION]... SOURCE... DIRECTORY&#10;cp [OPTION]... -t DIRECTORY SOURCE...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/cp.1.en.html</data>
@@ -9369,7 +9369,7 @@
             <data key="desc">Set SELinux security context of destination file to default type</data>
         </node>
         <node id="69872">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">csplit</data>
             <data key="syntax">csplit [OPTION]... FILE PATTERN...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/csplit.1.en.html</data>
@@ -9433,7 +9433,7 @@
             <data key="desc">Show time as WORD instead of modification time: atime, access, use, ctime or status</data>
         </node>
         <node id="106736">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">echo</data>
             <data key="syntax">echo [SHORT-OPTION]... [STRING]...&#10;echo LONG-OPTION</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/echo.1.en.html</data>
@@ -9463,7 +9463,7 @@
             <data key="desc">Display this help and exit</data>
         </node>
         <node id="123120">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">expr</data>
             <data key="syntax">expr EXPRESSION&#10;expr OPTION</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/expr.1.en.html</data>
@@ -9550,7 +9550,7 @@
             <data key="desc">Output version information and exit</data>
         </node>
         <node id="172272">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">ln</data>
             <data key="syntax">ln [OPTION]... [-T] TARGET LINK_NAME&#10;ln [OPTION]... TARGET&#10;ln [OPTION]... TARGET... DIRECTORY&#10;ln [OPTION]... -t DIRECTORY TARGET...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/ln.1.en.html</data>
@@ -9702,7 +9702,7 @@
             <data key="desc">File path</data>
         </node>
         <node id="258288">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">pathchk</data>
             <data key="syntax">pathchk [OPTION]... NAME...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/pathchk.1.en.html</data>
@@ -9748,7 +9748,7 @@
             <data key="desc">For end of lines or end of sentences</data>
         </node>
         <node id="282864">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">pwd</data>
             <data key="syntax">pwd [OPTION]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/pwd.1.en.html</data>
@@ -9953,7 +9953,7 @@
             <data key="desc">Same as cooked</data>
         </node>
         <node id="393456">
-            <data key="labelV">command</data>
+            <data key="labelV">metacommand</data>
             <data key="name">sum</data>
             <data key="syntax">sum [OPTION]... [FILE]...</data>
             <data key="man_page_url">https://manpages.debian.org/buster/coreutils/sum.1.en.html</data>

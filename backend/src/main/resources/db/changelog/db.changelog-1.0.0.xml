@@ -29,7 +29,7 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <createTable tableName="usercommand">
+        <createTable tableName="user_command">
             <column name="id" type="bigint">
               <constraints primaryKey="true"/>
             </column>
@@ -48,6 +48,26 @@
             </column>
             <column name="modified_on" type="datetime"/>
             <column name="operated_on" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="flags" type="jsonb"/> <!-- json array of flag names -->
+            <column name="options" type="jsonb"/> <!-- json object of options -->
+        </createTable>
+        <createTable tableName="public_command">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="command_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="command_text" type="clob">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_email" type="varchar(255)">
+                <constraints foreignKeyName="fk_pcemail_auemail" referencedTableName="appuser"
+                             referencedColumnNames="email" nullable="false" deleteCascade="false"/>
+            </column>
+            <column name="created_on" type="datetime">
                 <constraints nullable="false"/>
             </column>
             <column name="flags" type="jsonb"/> <!-- json array of flag names -->

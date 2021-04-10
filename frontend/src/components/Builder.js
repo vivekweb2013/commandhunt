@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as API from '../api/API';
-import { getCommand } from '../actions';
+import { getMetaCommand } from '../actions';
 import { getQueryParamByName, getValidationRegex } from '../Utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Builder.scss';
@@ -39,10 +39,10 @@ class Builder extends Component {
         if (userCommandId != null) {
             this.props.getUserCommand(userCommandId).then((userCommand) => {
                 this.setState({ userCommand });
-                this.props.getCommand(match.params.commandName);
+                this.props.getMetaCommand(match.params.commandName);
             });
         } else {
-            this.props.getCommand(match.params.commandName);
+            this.props.getMetaCommand(match.params.commandName);
         }
     }
 
@@ -81,22 +81,22 @@ class Builder extends Component {
         // - non solitary flag or option is used, because of which all the solitary flags should be disabled
 
         const { userCommand } = this.state;
-        const { command } = this.props;
+        const { metaCommand } = this.props;
 
         if (currentSolitaryFlag) {
             return userCommand.flags[currentSolitaryFlag.properties.name] !== true &&
                 (Object.keys(userCommand.options).filter(k => userCommand.options[k].filter(val => !!val).length > 0).length > 0
                     || Object.keys(userCommand.flags).filter(k => userCommand.flags[k]).length > 0)
         }
-        return command.flags.filter(cf => cf.properties.is_solitary).map(cf => cf.properties.name)
+        return metaCommand.flags.filter(cf => cf.properties.is_solitary).map(cf => cf.properties.name)
             .includes(Object.keys(userCommand.flags).filter(k => userCommand.flags[k])[0]);
     }
 
-    getGeneratedFlags(command) {
+    getGeneratedFlags(metaCommand) {
         let flagsStr = '';
         let hyphenPrefixedFlags = '';
         let otherFlags = '';
-        command.flags.filter(f => this.state.userCommand.flags[f.properties.name]).forEach(f => {
+        metaCommand.flags.filter(f => this.state.userCommand.flags[f.properties.name]).forEach(f => {
             if (f.properties.prefix === '-') {
                 // normally only single hyphen prefixed flags are allowed to group
                 hyphenPrefixedFlags += f.properties.name;
@@ -115,10 +115,10 @@ class Builder extends Component {
         return flagsStr;
     }
 
-    getGeneratedOptions(command) {
+    getGeneratedOptions(metaCommand) {
         const { userCommand } = this.state;
         let optionsStr = '';
-        command.options.filter(o => (userCommand.options[o.properties.name] != null)
+        metaCommand.options.filter(o => (userCommand.options[o.properties.name] != null)
             && (userCommand.options[o.properties.name].filter(val => !!val).length > 0)).forEach(o => {
                 const prefix = !o.properties.prefix.endsWith('=') ? `${o.properties.prefix} ` : o.properties.prefix;
                 optionsStr += ` ${prefix}${userCommand.options[o.properties.name].join(' ')}`;
@@ -127,13 +127,13 @@ class Builder extends Component {
         return optionsStr.trim();
     }
 
-    getGeneratedCommand(command) {
-        if (!command) return null;
+    getGeneratedCommand(metaCommand) {
+        if (!metaCommand) return null;
         let commandStr = '';
-        const flagsStr = this.getGeneratedFlags(command);
-        const optionsStr = this.getGeneratedOptions(command);
+        const flagsStr = this.getGeneratedFlags(metaCommand);
+        const optionsStr = this.getGeneratedOptions(metaCommand);
 
-        commandStr = `${command.properties.name} ${flagsStr} ${optionsStr}`;
+        commandStr = `${metaCommand.properties.name} ${flagsStr} ${optionsStr}`;
         return commandStr;
     }
 
@@ -142,8 +142,8 @@ class Builder extends Component {
         const userCommand = {
             ...this.state.userCommand,
             id: this.state.userCommandId,
-            commandName: this.props.command.properties.name,
-            commandText: this.getGeneratedCommand(this.props.command)
+            commandName: this.props.metaCommand.properties.name,
+            commandText: this.getGeneratedCommand(this.props.metaCommand)
         };
         this.setState({ saveInProgress: true });
         this.props.saveUserCommand(userCommand).then(() => {
@@ -153,14 +153,14 @@ class Builder extends Component {
     }
 
     render() {
-        const { command, user } = this.props;
+        const { metaCommand, user } = this.props;
         const { enableEdit } = this.state;
         const userCommand = this.state.userCommand || { flags: {}, options: {} };
         const newlineRegex = /(?:\r\n|\r|\n)/g;
 
-        const generatedCommand = this.getGeneratedCommand(command);
+        const generatedCommand = this.getGeneratedCommand(metaCommand);
 
-        return command ? (
+        return metaCommand ? (
             <div className="builder">
                 <div className="header" ref={this.headerDiv}>
                     <div className="text">
@@ -180,20 +180,20 @@ class Builder extends Component {
                 </div>
 
                 <div className="content" ref={this.contentDiv}>
-                    <div className="title"><span>Build <span className="command-name">{command.properties.name}</span> Command</span></div>
+                    <div className="title"><span>Build <span className="command-name">{metaCommand.properties.name}</span> Command</span></div>
                     <div className="category"><span>SYNTAX</span></div>
                     <div className="syntax"><code>
-                        {command.properties.syntax.split(newlineRegex).map((item, index) => (
+                        {metaCommand.properties.syntax.split(newlineRegex).map((item, index) => (
                             <span key={index}>{item.replace(/\.\.\./g, '···') /* replacing dots to avoid confusion with ellipsis */}<br /></span>
                         ))}</code><br />
                     </div>
                     <form onSubmit={(e) => this.handleSave(e)}>
                         <div className="section">
-                            {command.options.length > 0 && (
+                            {metaCommand.options.length > 0 && (
                                 <div className="options">
                                     <div className="category"><span>OPTIONS</span></div>
                                     <div className="fields">
-                                        {command.options.map((option, i) => (
+                                        {metaCommand.options.map((option, i) => (
                                             <div key={i} className="row">
                                                 <div className="label-col">
                                                     <label htmlFor={option.id} className={option.properties.is_mandatory === 'true' ?
@@ -221,11 +221,11 @@ class Builder extends Component {
                                     <br />
                                 </div>
                             )}
-                            {command.flags.length > 0 && (
+                            {metaCommand.flags.length > 0 && (
                                 <div className="flags">
                                     <div className="category"><span>FLAGS</span></div>
                                     <div className="fields">
-                                        {command.flags.map((flag, i) => (
+                                        {metaCommand.flags.map((flag, i) => (
                                             <div key={i} className="row">
                                                 <div className="label-col">
                                                     <label htmlFor={flag.id}>{flag.properties.desc}</label>
@@ -263,15 +263,15 @@ class Builder extends Component {
 
 const mapStateToProps = (state, props) => {
     return {
-        command: state.commandReducer.command,
+        metaCommand: state.metaCommandReducer.metaCommand,
         user: state.authReducer.user
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        getCommand: (commandId) => {
-            API.getCommand(commandId).then(command => dispatch(getCommand(command)));
+        getMetaCommand: (commandId) => {
+            API.getMetaCommand(commandId).then(metaCommand => dispatch(getMetaCommand(metaCommand)));
         },
         getUserCommand: (userCommandId) => {
             return API.getUserCommand(userCommandId);

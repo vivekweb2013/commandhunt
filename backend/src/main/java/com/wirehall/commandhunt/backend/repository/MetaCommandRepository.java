@@ -1,16 +1,16 @@
 package com.wirehall.commandhunt.backend.repository;
 
-import com.wirehall.commandhunt.backend.dto.Command;
 import com.wirehall.commandhunt.backend.dto.Flag;
+import com.wirehall.commandhunt.backend.dto.MetaCommand;
 import com.wirehall.commandhunt.backend.dto.Option;
 import com.wirehall.commandhunt.backend.dto.filter.Condition;
 import com.wirehall.commandhunt.backend.dto.filter.Filter;
 import com.wirehall.commandhunt.backend.dto.filter.PageResponse;
 import com.wirehall.commandhunt.backend.dto.filter.Pagination;
-import com.wirehall.commandhunt.backend.mapper.CommandMapper;
+import com.wirehall.commandhunt.backend.mapper.MetaCommandMapper;
 import com.wirehall.commandhunt.backend.model.graph.EdgeType;
 import com.wirehall.commandhunt.backend.model.graph.VertexType;
-import com.wirehall.commandhunt.backend.model.graph.props.CommandProperty;
+import com.wirehall.commandhunt.backend.model.graph.props.MetaCommandProperty;
 import com.wirehall.commandhunt.backend.model.graph.props.FlagProperty;
 import com.wirehall.commandhunt.backend.model.graph.props.OptionProperty;
 import org.apache.tinkerpop.gremlin.process.traversal.Order;
@@ -33,15 +33,15 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class CommandRepository {
+public class MetaCommandRepository {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(CommandRepository.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MetaCommandRepository.class);
 
-  private final CommandMapper mapper = new CommandMapper();
+  private final MetaCommandMapper mapper = new MetaCommandMapper();
   private final GraphTraversalSource gt;
 
   @Autowired
-  public CommandRepository(GraphTraversalSource gt) {
+  public MetaCommandRepository(GraphTraversalSource gt) {
     this.gt = gt;
   }
 
@@ -50,17 +50,17 @@ public class CommandRepository {
    *
    * @return List of command DTOs This will return the list of all command DTOs.
    */
-  public List<Command> getAllCommands() {
-    LOGGER.debug("Retrieving all commands from database.");
+  public List<MetaCommand> getAllMetaCommands() {
+    LOGGER.debug("Retrieving all meta-commands from database.");
 
-    List<Vertex> vertices = gt.V().hasLabel(VertexType.COMMAND.toLowerCase()).toList();
-    List<Command> commands = new ArrayList<>();
+    List<Vertex> vertices = gt.V().hasLabel(VertexType.METACOMMAND.toLowerCase()).toList();
+    List<MetaCommand> metaCommands = new ArrayList<>();
     for (Vertex commandVertex : vertices) {
-      Command command = mapper.mapToCommand(commandVertex);
-      commands.add(command);
+      MetaCommand metaCommand = mapper.mapToCommand(commandVertex);
+      metaCommands.add(metaCommand);
     }
 
-    return commands;
+    return metaCommands;
   }
 
   /**
@@ -69,13 +69,13 @@ public class CommandRepository {
    * @param filter Filter criteria.
    * @return Page of command DTOs.
    */
-  public PageResponse<Command> getAllCommands(Filter filter) {
-    LOGGER.debug("Retrieving all commands from database.");
+  public PageResponse<MetaCommand> getAllMetaCommands(Filter filter) {
+    LOGGER.debug("Retrieving all meta-commands from database.");
     LOGGER.debug("Applying the filter: {}", filter);
 
     Pagination pagination = filter.getPagination();
 
-    GraphTraversal<Vertex, Vertex> commandGT = gt.V().hasLabel(VertexType.COMMAND.toLowerCase());
+    GraphTraversal<Vertex, Vertex> commandGT = gt.V().hasLabel(VertexType.METACOMMAND.toLowerCase());
     applyConditions(commandGT, filter.getConditions());
 
     final String listKey = "list";
@@ -91,13 +91,13 @@ public class CommandRepository {
     List<Vertex> vertices = (List<Vertex>) result.get(listKey);
     Long totalSize = (Long) result.get(countKey);
 
-    List<Command> commands = new ArrayList<>();
+    List<MetaCommand> metaCommands = new ArrayList<>();
     for (Vertex commandVertex : vertices) {
-      Command command = mapper.mapToCommand(commandVertex);
-      commands.add(command);
+      MetaCommand metaCommand = mapper.mapToCommand(commandVertex);
+      metaCommands.add(metaCommand);
     }
 
-    return new PageResponse<>(pagination.getPageNumber(), pagination.getPageSize(), totalSize, commands);
+    return new PageResponse<>(pagination.getPageNumber(), pagination.getPageSize(), totalSize, metaCommands);
   }
 
   /**
@@ -106,7 +106,7 @@ public class CommandRepository {
    * @param id The command id.
    * @return The command DTO This will return the command DTO with the matching id.
    */
-  public Command getCommandById(String id) {
+  public MetaCommand getMetaCommandById(String id) {
     LOGGER.debug("Retrieving command with id: {}", id);
 
     Vertex commandVertex = gt.V(id).next();
@@ -119,26 +119,26 @@ public class CommandRepository {
    * @param name The command name.
    * @return The command DTO This will return the command DTO with the matching name.
    */
-  public Command getCommandByName(String name) {
+  public MetaCommand getMetaCommandByName(String name) {
     LOGGER.debug("Retrieving command with name: {}", name);
 
-    Vertex commandVertex = gt.V().hasLabel(VertexType.COMMAND.toLowerCase()).has("name", name)
-        .next();
+    Vertex commandVertex = gt.V().hasLabel(VertexType.METACOMMAND.toLowerCase()).has("name", name)
+            .next();
     return getCommand(commandVertex);
   }
 
-  private Command getCommand(Vertex commandVertex) {
-    Command command = mapper.mapToCommand(commandVertex);
+  private MetaCommand getCommand(Vertex commandVertex) {
+    MetaCommand metaCommand = mapper.mapToCommand(commandVertex);
 
     List<Map<String, Object>> flagList = gt.V(commandVertex)
-        .outE()
-        .hasLabel(EdgeType.HAS_FLAG.toLowerCase())
-        .as("E")
-        .inV()
-        .as("V")
-        .select("E", "V")
-        .by(__.valueMap()
-            .with(WithOptions.tokens)
+            .outE()
+            .hasLabel(EdgeType.HAS_FLAG.toLowerCase())
+            .as("E")
+            .inV()
+            .as("V")
+            .select("E", "V")
+            .by(__.valueMap()
+                    .with(WithOptions.tokens)
             .unfold()
             .group()
             .by(Column.keys)
@@ -149,7 +149,7 @@ public class CommandRepository {
       Map<Object, Object> flagVertexProps = (Map<Object, Object>) flagProps.get("V");
       Map<Object, Object> flagEdgeProps = (Map<Object, Object>) flagProps.get("E");
       Flag flag = mapper.mapToFlag(flagVertexProps, flagEdgeProps);
-      command.addFlag(flag);
+      metaCommand.addFlag(flag);
     }
 
     List<Map<String, Object>> optionList = gt.V(commandVertex)
@@ -161,24 +161,24 @@ public class CommandRepository {
         .select("E", "V")
         .by(__.valueMap()
             .with(WithOptions.tokens)
-            .unfold()
-            .group()
-            .by(Column.keys)
-            .by(__.select(Column.values).unfold()))
-        .toList();
+                .unfold()
+                .group()
+                .by(Column.keys)
+                .by(__.select(Column.values).unfold()))
+            .toList();
 
     for (Map<String, Object> optionProps : optionList) {
       Map<Object, Object> optionVertexProps = (Map<Object, Object>) optionProps.get("V");
       Map<Object, Object> optionEdgeProps = (Map<Object, Object>) optionProps.get("E");
       Option option = mapper.mapToOption(optionVertexProps, optionEdgeProps);
-      command.addOption(option);
+      metaCommand.addOption(option);
     }
-    Collections.sort(command.getFlags());
-    Collections.sort(command.getOptions());
-    return command;
+    Collections.sort(metaCommand.getFlags());
+    Collections.sort(metaCommand.getOptions());
+    return metaCommand;
   }
 
-  public List<Command> getMatchingCommands(Filter filter) {
+  public List<MetaCommand> getMatchingMetaCommands(Filter filter) {
     // TODO: To be implemented.
     return new ArrayList<>();
   }
@@ -189,47 +189,47 @@ public class CommandRepository {
    * @param query The text to be matched against command.
    * @return List of all the matching command.
    */
-  public List<Command> getMatchingCommands(String query) {
-    LOGGER.debug("Retrieving matching commands by query: {}", query);
+  public List<MetaCommand> getMatchingMetaCommands(String query) {
+    LOGGER.debug("Retrieving matching meta-commands by query: {}", query);
 
     List<Vertex> vertices =
-        gt.V().hasLabel(VertexType.COMMAND.toLowerCase())
-            .or(__.has(CommandProperty.NAME.toLowerCase(), Text.textContainsFuzzy(query)),
-                __.has(CommandProperty.DESC.toLowerCase(), Text.textContainsFuzzy(query)),
-                __.has(CommandProperty.LONG_DESC.toLowerCase(), Text.textContainsFuzzy(query)))
-            .toList();
+            gt.V().hasLabel(VertexType.METACOMMAND.toLowerCase())
+                    .or(__.has(MetaCommandProperty.NAME.toLowerCase(), Text.textContainsFuzzy(query)),
+                            __.has(MetaCommandProperty.DESC.toLowerCase(), Text.textContainsFuzzy(query)),
+                            __.has(MetaCommandProperty.LONG_DESC.toLowerCase(), Text.textContainsFuzzy(query)))
+                    .toList();
 
-    List<Command> commands = new ArrayList<>();
+    List<MetaCommand> metaCommands = new ArrayList<>();
     for (Vertex commandVertex : vertices) {
-      Command command = mapper.mapToCommand(commandVertex);
-      commands.add(command);
+      MetaCommand metaCommand = mapper.mapToCommand(commandVertex);
+      metaCommands.add(metaCommand);
     }
 
-    return commands;
+    return metaCommands;
   }
 
   /**
-   * The command DTO Used to add the command to database.
+   * The metaCommand DTO Used to add the metaCommand to database.
    *
-   * @param command he command to add to database.
+   * @param metaCommand he metaCommand to add to database.
    */
-  public void addCommand(Command command) {
-    LOGGER.trace("Adding command: {}", command);
+  public void addCommand(MetaCommand metaCommand) {
+    LOGGER.trace("Adding meta-command: {}", metaCommand);
 
-    GraphTraversal<Vertex, Vertex> graphTraversal = gt.addV(VertexType.COMMAND.toLowerCase());
+    GraphTraversal<Vertex, Vertex> graphTraversal = gt.addV(VertexType.METACOMMAND.toLowerCase());
 
-    for (CommandProperty property : CommandProperty.values()) {
-      if (command.getProperty(property) != null) {
-        graphTraversal.property(property.toLowerCase(), command.getProperty(property));
+    for (MetaCommandProperty property : MetaCommandProperty.values()) {
+      if (metaCommand.getProperty(property) != null) {
+        graphTraversal.property(property.toLowerCase(), metaCommand.getProperty(property));
       }
     }
     Vertex commandVertex = graphTraversal.next();
 
-    for (Flag flag : command.getFlags()) {
+    for (Flag flag : metaCommand.getFlags()) {
       addFlag(commandVertex, flag);
     }
 
-    for (Option option : command.getOptions()) {
+    for (Option option : metaCommand.getOptions()) {
       addOption(commandVertex, option);
     }
   }
@@ -272,9 +272,9 @@ public class CommandRepository {
       List<Condition> conditions) {
     conditions.forEach(c -> {
       if (c.getOperator().equals(Condition.Operator.CONTAINS)) {
-        gt.or(__.has(CommandProperty.NAME.toLowerCase(), Text.textContainsFuzzy(c.getValue())),
-            __.has(CommandProperty.DESC.toLowerCase(), Text.textContainsFuzzy(c.getValue())),
-            __.has(CommandProperty.LONG_DESC.toLowerCase(), Text.textContainsFuzzy(c.getValue())));
+        gt.or(__.has(MetaCommandProperty.NAME.toLowerCase(), Text.textContainsFuzzy(c.getValue())),
+            __.has(MetaCommandProperty.DESC.toLowerCase(), Text.textContainsFuzzy(c.getValue())),
+            __.has(MetaCommandProperty.LONG_DESC.toLowerCase(), Text.textContainsFuzzy(c.getValue())));
       }
     });
   }

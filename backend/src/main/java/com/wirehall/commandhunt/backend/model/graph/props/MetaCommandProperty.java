@@ -2,7 +2,7 @@ package com.wirehall.commandhunt.backend.model.graph.props;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum CommandProperty {
+public enum MetaCommandProperty {
   NAME("V", true),
   SYNTAX("V", true),
   DESC("V", true),
@@ -12,7 +12,7 @@ public enum CommandProperty {
   private final String propertyOf;
   private final boolean isMandatory;
 
-  CommandProperty(String propertyOf, boolean isMandatory) {
+  MetaCommandProperty(String propertyOf, boolean isMandatory) {
     this.propertyOf = propertyOf;
     this.isMandatory = isMandatory;
   }

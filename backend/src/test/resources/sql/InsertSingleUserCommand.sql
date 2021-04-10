@@ -1,5 +1,1 @@
-insert into usercommand (id, user_email, command_name, command_text, created_on, modified_on, operated_on) values(99, 'abc@xyz.com', 'basename', 'basename -az  --suffix=test  /abc/xyz', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-insert into usercommand_flag (usercommand_id, name, value) values(99, 'z', true)
-insert into usercommand_flag (usercommand_id, name, value) values(99, 'a', true)
-insert into usercommand_option (usercommand_id, name, value) values(99, 'SUFFIX', '["test"]')
-insert into usercommand_option (usercommand_id, name, value) values(99, 'FILE', '["/abc/xyz"]')
+insert into user_command (id, user_email, command_name, command_text, created_on, modified_on, operated_on) values(99, 'abc@xyz.com', 'basename', 'basename -az  --suffix=test  /abc/xyz', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)

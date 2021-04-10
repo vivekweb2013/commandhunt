@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 import java.util.*;
 
 @Entity
-@Table(name = "usercommand")
+@Table(name = "user_command")
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class UserCommandEntity {
   @Id

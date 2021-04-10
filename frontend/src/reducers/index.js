@@ -1,22 +1,22 @@
 import { combineReducers } from 'redux';
 import {
-    GET_COMMANDS, GET_COMMAND,
+    GET_META_COMMANDS, GET_META_COMMAND,
     GET_USER_COMMANDS,
     USER_LOGIN, USER_LOGOUT, IS_MANUAL_AUTH_ALLOWED
 } from '../actions';
 
-const commandReducer = (state = {}, action) => {
-    const { commands, command } = action;
+const metaCommandReducer = (state = {}, action) => {
+    const { metaCommands, metaCommand } = action;
     switch (action.type) {
-        case GET_COMMANDS:
+        case GET_META_COMMANDS:
             return {
                 ...state,
-                commands
+                metaCommands
             };
-        case GET_COMMAND:
+        case GET_META_COMMAND:
             return {
                 ...state,
-                command
+                metaCommand
             };
         default:
             return state;
@@ -59,4 +59,4 @@ const authReducer = (state = {}, action) => {
     }
 };
 
-export default combineReducers({ authReducer, commandReducer, userCommandReducer });
+export default combineReducers({ authReducer, metaCommandReducer, userCommandReducer });

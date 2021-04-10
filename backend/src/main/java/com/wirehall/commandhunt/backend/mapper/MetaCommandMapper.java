@@ -1,35 +1,36 @@
 package com.wirehall.commandhunt.backend.mapper;
 
-import com.wirehall.commandhunt.backend.dto.Command;
 import com.wirehall.commandhunt.backend.dto.Flag;
+import com.wirehall.commandhunt.backend.dto.MetaCommand;
 import com.wirehall.commandhunt.backend.dto.Option;
-import com.wirehall.commandhunt.backend.model.graph.props.CommandProperty;
+import com.wirehall.commandhunt.backend.model.graph.props.MetaCommandProperty;
 import com.wirehall.commandhunt.backend.model.graph.props.FlagProperty;
 import com.wirehall.commandhunt.backend.model.graph.props.OptionProperty;
-import java.util.Map;
 import org.apache.tinkerpop.gremlin.structure.T;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 
-public final class CommandMapper extends BaseMapper {
+import java.util.Map;
+
+public final class MetaCommandMapper {
 
   /**
    * Used to map the vertex to command dto.
    *
-   * @param commandVertex Command vertex to be converted to Command dto.
-   * @return The Command dto is returned, Only the Command details are available in the dto.
+   * @param commandVertex MetaCommand vertex to be converted to MetaCommand dto.
+   * @return The MetaCommand dto is returned, Only the MetaCommand details are available in the dto.
    */
-  public Command mapToCommand(Vertex commandVertex) {
-    Command command = new Command();
-    command.setId(commandVertex.id());
+  public MetaCommand mapToCommand(Vertex commandVertex) {
+    MetaCommand metaCommand = new MetaCommand();
+    metaCommand.setId(commandVertex.id());
 
-    for (CommandProperty commandProperty : CommandProperty.values()) {
-      if (commandProperty.isMandatory()
-          || commandVertex.property(commandProperty.toLowerCase()).isPresent()) {
-        command.addProperty(
-            commandProperty, commandVertex.property(commandProperty.toLowerCase()).value());
+    for (MetaCommandProperty metaCommandProperty : MetaCommandProperty.values()) {
+      if (metaCommandProperty.isMandatory()
+              || commandVertex.property(metaCommandProperty.toLowerCase()).isPresent()) {
+        metaCommand.addProperty(
+                metaCommandProperty, commandVertex.property(metaCommandProperty.toLowerCase()).value());
       }
     }
-    return command;
+    return metaCommand;
   }
 
   /**

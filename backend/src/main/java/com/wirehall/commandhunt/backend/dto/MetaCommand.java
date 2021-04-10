@@ -1,18 +1,22 @@
 package com.wirehall.commandhunt.backend.dto;
 
-import com.wirehall.commandhunt.backend.model.graph.props.CommandProperty;
+import com.wirehall.commandhunt.backend.model.graph.props.MetaCommandProperty;
+
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-public class Command extends Node<CommandProperty> {
+/**
+ * This class holds the metadata of a specific command.
+ */
+public class MetaCommand extends Node<MetaCommandProperty> {
 
   private List<Flag> flags;
   private List<Option> options;
 
-  public Command() {
-    super(CommandProperty.class);
+  public MetaCommand() {
+    super(MetaCommandProperty.class);
   }
 
   /**
@@ -21,9 +25,9 @@ public class Command extends Node<CommandProperty> {
    * @return The command properties.
    */
   @Override
-  public Map<CommandProperty, Object> getProperties() {
+  public Map<MetaCommandProperty, Object> getProperties() {
     if (properties == null) {
-      properties = new EnumMap<>(CommandProperty.class);
+      properties = new EnumMap<>(MetaCommandProperty.class);
     }
     return properties;
   }
@@ -70,13 +74,13 @@ public class Command extends Node<CommandProperty> {
 
   @Override
   public String toString() {
-    return "Command{"
-        + "flags="
-        + flags
-        + ", options="
-        + options
-        + ", properties="
-        + properties
-        + '}';
+    return "MetaCommand{"
+            + "flags="
+            + flags
+            + ", options="
+            + options
+            + ", properties="
+            + properties
+            + '}';
   }
 }

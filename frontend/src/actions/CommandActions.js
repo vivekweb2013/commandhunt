@@ -1,16 +1,16 @@
-export const GET_COMMANDS = "GET_COMMANDS";
-export const GET_COMMAND = "GET_COMMAND";
+export const GET_META_COMMANDS = "GET_META_COMMANDS";
+export const GET_META_COMMAND = "GET_META_COMMAND";
 
-export function getCommands(commands) {
+export function getMetaCommands(metaCommands) {
     return {
-        type: GET_COMMANDS,
-        commands
+        type: GET_META_COMMANDS,
+        metaCommands
     };
 }
 
-export function getCommand(command) {
+export function getMetaCommand(metaCommand) {
     return {
-        type: GET_COMMAND,
-        command
+        type: GET_META_COMMAND,
+        metaCommand
     };
 }

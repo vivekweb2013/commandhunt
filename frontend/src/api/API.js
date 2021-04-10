@@ -54,12 +54,12 @@ export const getUserProfile = (token) => {
 
 export const isManualAuthAllowed = () => fetch(`${API_URL}/auth/isManualAuthAllowed`).then(handleErrors).then(res => res.text()).catch(catchError);
 
-export const getCommands = (filter) => fetch(`${API_URL}/command` + getQueryParamsFromFilter(filter),
+export const getMetaCommands = (filter) => fetch(`${API_URL}/meta-command` + getQueryParamsFromFilter(filter),
     { headers: getHeaders() }).then(handleErrors).then(res => res.json()).catch(catchError);
 
-export const getCommand = commandName => {
+export const getMetaCommand = commandName => {
     commandName = encodeURIComponent(commandName);
-    return fetch(`${API_URL}/command/search?name=${commandName}`, { headers: getHeaders() }).then(handleErrors).then(res => res.json()).catch(catchError);
+    return fetch(`${API_URL}/meta-command/search?name=${commandName}`, { headers: getHeaders() }).then(handleErrors).then(res => res.json()).catch(catchError);
 };
 
 export const getUserCommands = (filter) => fetch(`${API_URL}/user/user-command` + getQueryParamsFromFilter(filter),
