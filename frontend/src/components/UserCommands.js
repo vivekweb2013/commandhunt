@@ -80,7 +80,7 @@ class UserCommands extends Component {
 
     handleDelete(e, userCommand) {
         e.preventDefault();
-        this.props.deleteUserCommand(userCommand).then(() => {
+        this.props.deleteUserCommand(userCommand.id).then(() => {
             ToastMaker('Deleted!');
             this.getUserCommands(this.state.filter);
         });
@@ -186,7 +186,7 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = dispatch => {
     return {
         getUserCommands: (filters) => API.getUserCommands(filters).then(userCommands => dispatch(getUserCommands(userCommands))),
-        deleteUserCommand: (userCommand) => API.deleteUserCommand(userCommand)
+        deleteUserCommand: (userCommandId) => API.deleteUserCommand(userCommandId)
     }
 }
 

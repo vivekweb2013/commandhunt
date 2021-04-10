@@ -19,7 +19,8 @@ class Builder extends Component {
             options: {}
         },
         saveInProgress: false,
-        publishInProgress: false
+        publishInProgress: false,
+        deleteInProgress: false
     }
 
     commandForm = React.createRef();
@@ -180,6 +181,17 @@ class Builder extends Component {
         });
     }
 
+    handlePublicCommandDelete(e) {
+        e.preventDefault();
+        const { match } = this.props;
+
+        this.setState({ deleteInProgress: true });
+        this.props.deletePublicCommand(match.params.commandId).then((res) => {
+            this.setState({ deleteInProgress: false });
+            this.props.history.push('/user/commands');
+        });
+    }
+
     onClosePublishModal() {
         const { location } = this.props;
         this.props.history.replace(location.pathname + location.search); // reset the action
@@ -197,8 +209,17 @@ class Builder extends Component {
     }
 
     isPublishButtonVisible() {
-        const { location } = this.props;
-        return getQueryParamByName('mode', location.search) === 'build';
+        const { location, match } = this.props;
+        return getQueryParamByName('mode', location.search) === 'build' || 
+        (location.pathname.startsWith('/user/command/') && match.params.commandId != null);
+    }
+
+    isDeleteButtonVisible() {
+        // Show delete button only in case of public command.
+        // Since for user commands, the delete action is provided in user-commands view.
+        const { location, match } = this.props;
+        return (location.pathname.startsWith('/public/command/') && match.params.commandId != null) &&
+            this.state.commandInstance.deletable;
     }
 
     render() {
@@ -206,6 +227,7 @@ class Builder extends Component {
         const enableEdit = this.isEditable();
         const showSaveButton = this.isSaveButtonVisible();
         const showPublishButton = this.isPublishButtonVisible();
+        const showDeleteButton = this.isDeleteButtonVisible();
 
         const commandInstance = this.state.commandInstance || { flags: {}, options: {} };
         const newlineRegex = /(?:\r\n|\r|\n)/g;
@@ -300,7 +322,10 @@ class Builder extends Component {
                         </div>
                         <div className="form-buttons no-print">
                             <button className="ripple" onClick={e => window.print()} type="button">PRINT</button>
-                            {showSaveButton && <button className="ripple tooltip-t" value="SAVE"
+                            {showDeleteButton && <button type="button" className="ripple tooltip-t" onClick={e => this.handlePublicCommandDelete(e)}>
+                                {this.state.deleteInProgress && <FontAwesomeIcon icon="circle-notch" spin />} DELETE
+                            </button>}
+                            {showSaveButton && <button className="ripple tooltip-t" title="Save to My Account"
                                 {...(!user ? { 'data-tooltip': 'Login to Save' } : {})} type="submit"
                                 disabled={!user || this.state.saveInProgress}>
                                 {this.state.saveInProgress && <FontAwesomeIcon icon="circle-notch" spin />} SAVE
@@ -353,6 +378,9 @@ const mapDispatchToProps = dispatch => {
         },
         savePublicCommand: (commandInstance) => {
             return API.savePublicCommand(commandInstance);
+        },
+        deletePublicCommand: (publicCommandId) => {
+            return API.deletePublicCommand(publicCommandId);
         }
     }
 }

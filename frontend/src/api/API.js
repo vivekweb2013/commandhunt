@@ -89,12 +89,12 @@ export const updateUserCommand = (userCommand) => fetch(`${API_URL}/user/user-co
     headers: getHeaders()
 }).then(handleErrors).then(res => res.text()).catch(catchError);
 
-export const deleteUserCommand = (userCommand) => fetch(`${API_URL}/user/user-command/${userCommand.id}`, {
+export const deleteUserCommand = (userCommandId) => fetch(`${API_URL}/user/user-command/${userCommandId}`, {
     method: 'DELETE',
     headers: getHeaders()
 }).then(handleErrors).then(res => res.text()).catch(catchError);
 
-export const deletePublicCommand = (publicCommand) => fetch(`${API_URL}/public/public-command/${publicCommand.id}`, {
+export const deletePublicCommand = (publicCommandId) => fetch(`${API_URL}/public/public-command/${publicCommandId}`, {
     method: 'DELETE',
     headers: getHeaders()
 }).then(handleErrors).then(res => res.text()).catch(catchError);
