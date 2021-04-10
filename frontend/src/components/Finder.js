@@ -123,7 +123,7 @@ class Finder extends Component {
                         </thead>
                         <tbody>
                             {metaCommands.records.map(metaCommand => <tr key={metaCommand.id}
-                                onClick={e => { e.preventDefault(); history.push(`/command/build/${metaCommand.properties.name}`) }}>
+                                onClick={e => { e.preventDefault(); history.push(`/public/command/${metaCommand.properties.name}?mode=build`) }}>
                                 <td className="name">{metaCommand.properties.name} </td>
                                 <td className="syntax">
                                     <code>{metaCommand.properties.syntax.replace(/\.\.\./g, '···') /* replacing dots to avoid confusion with ellipsis */}</code>

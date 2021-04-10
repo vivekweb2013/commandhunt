@@ -153,12 +153,12 @@ class UserCommands extends Component {
                                         </span>
                                     </CopyToClipboard>
                                     <span title="view" onClick={(e) =>
-                                        history.push(`/command/view/${userCommand.commandName}?userCommandId=${userCommand.id}`)
+                                        history.push(`/user/command/${userCommand.commandName}/${userCommand.id}`)
                                     } className="view-icon">
                                         <FontAwesomeIcon icon="eye" color="slateblue" size="lg" />
                                     </span>
                                     <span title="edit" onClick={() =>
-                                        history.push(`/command/build/${userCommand.commandName}?userCommandId=${userCommand.id}`)
+                                        history.push(`/user/command/${userCommand.commandName}/${userCommand.id}?mode=build`)
                                     } className="edit-icon">
                                         <FontAwesomeIcon icon="edit" color="slateblue" size="lg" />
                                     </span>

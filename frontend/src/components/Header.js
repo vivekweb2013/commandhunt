@@ -26,7 +26,7 @@ class Header extends Component {
 
     handleUserCommands(e) {
         e.preventDefault();
-        this.props.history.push('/command/user-commands');
+        this.props.history.push('/user/commands');
     }
 
     render() {

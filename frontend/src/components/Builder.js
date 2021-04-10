@@ -37,15 +37,14 @@ class Builder extends Component {
         window.scrollTo(0, 0);
         const { match, location } = this.props;
 
-        const publicCommandId = getQueryParamByName('publicCommandId', location.search);
-        const userCommandId = getQueryParamByName('userCommandId', location.search);
-        if (publicCommandId != null) {
-            this.props.getPublicCommand(publicCommandId).then((commandInstance) => {
+        const commandId = match.params.commandId;
+        if (commandId != null && location.pathname.startsWith('/public/command/')) {
+            this.props.getPublicCommand(commandId).then((commandInstance) => {
                 this.setState({ commandInstance });
                 this.props.getMetaCommand(match.params.commandName);
             });
-        } else if (userCommandId != null) {
-            this.props.getUserCommand(userCommandId).then((commandInstance) => {
+        } else if (commandId != null && location.pathname.startsWith('/user/command/')) {
+            this.props.getUserCommand(commandId).then((commandInstance) => {
                 this.setState({ commandInstance });
                 this.props.getMetaCommand(match.params.commandName);
             });
@@ -157,7 +156,7 @@ class Builder extends Component {
         this.setState({ saveInProgress: true });
         this.props.saveUserCommand(commandInstance).then(() => {
             this.setState({ saveInProgress: false });
-            this.props.history.push('/command/user-commands');
+            this.props.history.push('/user/commands');
         });
     }
 
@@ -174,9 +173,9 @@ class Builder extends Component {
             commandText: this.getGeneratedCommand(this.props.metaCommand)
         };
         this.setState({ publishInProgress: true });
-        this.props.savePublicCommand(commandInstance).then((commandInstance) => {
+        this.props.savePublicCommand(commandInstance).then((savedCommandInstance) => {
             this.setState({ publishInProgress: false });
-            const url = `/command/view/${commandInstance.commandName}?publicCommandId=${commandInstance.id}`;
+            const url = `/public/command/${savedCommandInstance.commandName}/${savedCommandInstance.id}`;
             this.props.history.push(url, { published: true });
         });
     }
@@ -188,27 +187,25 @@ class Builder extends Component {
 
     isEditable() {
         const { location } = this.props;
-        return location.pathname.startsWith('/command/build/') &&
-            !getQueryParamByName('publicCommandId', location.search);
+        return getQueryParamByName('mode', location.search) === 'build';
     }
 
-    isSaveAllowed() {
-        const { location } = this.props;
-        return location.pathname.startsWith('/command/build/') &&
-            !getQueryParamByName('publicCommandId', location.search);
+    isSaveButtonVisible() {
+        const { location, match } = this.props;
+        return getQueryParamByName('mode', location.search) === 'build' ||
+            (location.pathname.startsWith('/public/command/') && match.params.commandId != null);
     }
 
-    isPublishAllowed() {
+    isPublishButtonVisible() {
         const { location } = this.props;
-        return location.pathname.startsWith('/command/build/') &&
-            !getQueryParamByName('publicCommandId', location.search);
+        return getQueryParamByName('mode', location.search) === 'build';
     }
 
     render() {
         const { metaCommand, user, location } = this.props;
         const enableEdit = this.isEditable();
-        const showSaveButton = this.isSaveAllowed();
-        const showPublishButton = this.isPublishAllowed();
+        const showSaveButton = this.isSaveButtonVisible();
+        const showPublishButton = this.isPublishButtonVisible();
 
         const commandInstance = this.state.commandInstance || { flags: {}, options: {} };
         const newlineRegex = /(?:\r\n|\r|\n)/g;

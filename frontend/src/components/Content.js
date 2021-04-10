@@ -16,19 +16,21 @@ const ProtectedRoute = ({ component: Component, isLoggedIn, path, ...rest }) =>
 
 class Content extends Component {
     render() {
-        return (
-            <div className="main-content">
-                <Switch>
-                    <Route exact path="/" key={this.props.history.location.search} component={Finder} />
-                    <Route path="/login" component={Login} />
-                    <Route path="/signup" component={SignUp} />
-                    <Route path="/command/build/:commandName" key={this.props.history.location.search} component={Builder} />
-                    <Route path="/command/view/:commandName" key={this.props.history.location.search} component={Builder} />
-                    <ProtectedRoute isLoggedIn={!!this.props.user} path="/command/user-commands" key={this.props.history.location.search} component={UserCommands} />
-                    <Route component={PageNotFound} />
-                </Switch>
-            </div>
-        )
+        const { user, location } = this.props;
+        const relativeUrl = location.pathname + location.search;
+        return <div className="main-content">
+            <Switch>
+                <Route exact path="/" key={relativeUrl} component={Finder} />
+                <Route path="/login" component={Login} />
+                <Route path="/signup" component={SignUp} />
+
+                <Route exact path="/public/command/:commandName" key={relativeUrl} component={Builder} />
+                <Route path="/public/command/:commandName/:commandId" key={relativeUrl} component={Builder} />
+                <ProtectedRoute isLoggedIn={!!user} path="/user/command/:commandName/:commandId" key={relativeUrl} component={Builder} />
+                <ProtectedRoute isLoggedIn={!!user} path="/user/commands" key={relativeUrl} component={UserCommands} />
+                <Route component={PageNotFound} />
+            </Switch>
+        </div>
     }
 }
 
