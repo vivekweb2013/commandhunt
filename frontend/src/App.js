@@ -10,9 +10,9 @@ import { userLogin, userLogout } from './actions';
 import './App.scss';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faHome, faSignInAlt, faSignOutAlt, faUserCog, faEye, faCog, faCopy, faEdit, faTrashAlt, faSortUp, faSortDown, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faSignInAlt, faSignOutAlt, faUserCog, faEye, faCog, faCopy, faEdit, faTrashAlt, faSortUp, faSortDown, faCircleNotch, faBug, faHeart, faCodeBranch, faQuestion } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faHome, faSignInAlt, faSignOutAlt, faUserCog, faEye, faCog, faCopy, faEdit, faTrashAlt, faSortUp, faSortDown, faCircleNotch);
+library.add(faHome, faSignInAlt, faSignOutAlt, faUserCog, faEye, faCog, faCopy, faEdit, faTrashAlt, faSortUp, faSortDown, faCircleNotch, faBug, faHeart, faCodeBranch, faQuestion);
 
 class App extends Component {
   state = {
