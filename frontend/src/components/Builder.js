@@ -245,7 +245,7 @@ class Builder extends Component {
                     <CopyToClipboard text={generatedCommand}>
                         <button className="copy" type="button" onClick={(e) => ToastMaker("Copied!")}>
                             <span className="copy-icon" title="copy">
-                                <FontAwesomeIcon icon="copy" color="white" size="lg" />
+                                <FontAwesomeIcon icon="clipboard" color="white" size="lg" />
                             </span><br />
                             <span className="copy-label">COPY</span>
                         </button>
@@ -345,7 +345,7 @@ class Builder extends Component {
                             <input type="text" value={window.location.href} onFocus={e => e.target.select()} readOnly />
                             <CopyToClipboard text={window.location.href}>
                                 <button onClick={(e) => ToastMaker("Link Copied!")} type="button" style={{ width: '45px' }}>
-                                    <FontAwesomeIcon icon="copy" color="#666666" size="lg" />
+                                    <FontAwesomeIcon icon="clipboard" color="#666666" size="lg" />
                                 </button>
                             </CopyToClipboard>
                         </span>

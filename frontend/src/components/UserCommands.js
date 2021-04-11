@@ -149,7 +149,7 @@ class UserCommands extends Component {
                                 <td className="actions">
                                     <CopyToClipboard text={userCommand.commandText}>
                                         <span className="copy-icon" title="copy" onClick={(e) => ToastMaker("Copied!")}>
-                                            <FontAwesomeIcon icon="copy" color="slateblue" size="lg" />
+                                            <FontAwesomeIcon icon="clipboard" color="slateblue" size="lg" />
                                         </span>
                                     </CopyToClipboard>
                                     <span title="view" onClick={(e) =>
