@@ -29,12 +29,9 @@ spec:
           envFrom:
             - secretRef:
                 name: postgres-secret
-          env:
-            - name: POSTGRES_HOST
-              value: "{{ .Chart.Name }}-postgres"
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
               port: 8080
             initialDelaySeconds: 60
-            periodSeconds: 5
+            periodSeconds: 30
