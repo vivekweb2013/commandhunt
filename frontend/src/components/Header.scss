@@ -40,6 +40,7 @@ $avatar-size: 40px;
     height: inherit;
     min-width: 50px;
     text-align: center;
+    outline: none;
 
     &:not([disabled]):hover {
       filter: contrast(180%);
@@ -83,11 +84,7 @@ $avatar-size: 40px;
       width: 100%;
 
       .avatar {
-        background-size: cover;
-        border-radius: 50%;
-        display: inline-block;
         height: $avatar-size;
-        vertical-align: middle;
         width: $avatar-size;
       }
     }

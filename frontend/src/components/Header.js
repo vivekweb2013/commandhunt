@@ -7,8 +7,13 @@ import { userLogout } from '../actions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import userSVG from '../styles/icons/user.svg'
 import './Header.scss';
+import Modal from './common/Modal';
 
 class Header extends Component {
+    state = {
+        showProfileModal: false
+    }
+
     handleRootNavigation(e) {
         e.preventDefault();
         this.props.history.push('/');
@@ -22,6 +27,15 @@ class Header extends Component {
     handleLogout(e) {
         e.preventDefault();
         this.props.userLogout();
+    }
+
+    handleLViewProfile(e) {
+        e.preventDefault();
+        this.setState({ showProfileModal: true });
+    }
+
+    onCloseProfileModal() {
+        this.setState({ showProfileModal: false });
     }
 
     handleUserCommands(e) {
@@ -48,9 +62,8 @@ class Header extends Component {
                         }
                     </button>
                     {user && <div className="dropdown-content">
+                        <Link to="/" key="Profile" onClick={e => this.handleLViewProfile(e)}><FontAwesomeIcon icon="user-cog" />&nbsp;Profile</Link>
                         <button key="Logout" onClick={e => this.handleLogout(e)} type="button"><FontAwesomeIcon icon="sign-out-alt" />&nbsp;Logout</button>
-                        <Link to="/" key="Profile"><FontAwesomeIcon icon="user-cog" />&nbsp;Profile</Link>
-                        <Link to="/" key="Settings"><FontAwesomeIcon icon="cog" />&nbsp;Settings</Link>
                     </div>}
                 </div>
                 <button disabled={!user} {...(!user ? { 'data-tooltip': 'Login Required!' } : {})}
@@ -64,6 +77,14 @@ class Header extends Component {
                     <FontAwesomeIcon icon="bug" size="2x" /></a>
                 <a href="https://github.com/vivekweb2013/commandhunt/wiki/Help" target="_blank" rel="noopener noreferrer" className="nav-icon" title="Help">
                     <FontAwesomeIcon icon="question" size="2x" /></a>
+
+                {this.state.showProfileModal && <Modal title="Profile" style={{ width: '90%', maxWidth: '500px' }} type="info" onClose={this.onCloseProfileModal.bind(this)}>
+                    <div className="profile-modal">
+                        <span alt="avatar" style={{ backgroundImage: `url(${imageUrl})` }} className="avatar" />
+                        <span className="name">{user.name}</span>
+                        <span className="email">{user.email}</span>
+                    </div>
+                </Modal>}
             </header>
         )
     }
