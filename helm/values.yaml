@@ -1,6 +1,8 @@
-# Default values for commandhunt.
+# Default values for CommandHunt chart deployment.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+
+email: support@commandhunt.com
 
 replicaCount: 2
 
@@ -47,26 +49,18 @@ service:
   backend:
     type: ClusterIP
     port: 8080
-  ingress:
-    port: 80
 
 ingress:
   enabled: true
   annotations:
     kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
   hosts:
     - host: commandhunt.com
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - commandhunt.com
-
-storageClassName: do-block-storage
-
-statefulset:
-  postgres:
-    image: postgres:13
+  tls:
+    - secretName: commandhunt-tls
+      hosts:
+        - commandhunt.com
 
 resources:
   {}
