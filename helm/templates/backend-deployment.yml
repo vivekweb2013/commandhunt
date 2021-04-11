@@ -29,6 +29,8 @@ spec:
           envFrom:
             - secretRef:
                 name: postgres-secret
+            - secretRef:
+                name: oauth-api-secret
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
