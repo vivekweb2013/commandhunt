@@ -11,7 +11,7 @@
     </changeSet>
 
     <changeSet author="commandhunt-tbl" id="changelog-1.0.0">
-        <createTable tableName="appuser">
+        <createTable tableName="app_user">
             <column name="email" type="varchar(255)">
                 <constraints primaryKey="true"/>
             </column>
@@ -40,7 +40,7 @@
               <constraints nullable="false"/>
             </column>
             <column name="user_email" type="varchar(255)">
-                <constraints foreignKeyName="fk_ucemail_auemail" referencedTableName="appuser"
+                <constraints foreignKeyName="fk_ucemail_auemail" referencedTableName="app_user"
                              referencedColumnNames="email" nullable="false" deleteCascade="false"/>
             </column>
             <column name="created_on" type="datetime">
@@ -64,7 +64,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="user_email" type="varchar(255)">
-                <constraints foreignKeyName="fk_pcemail_auemail" referencedTableName="appuser"
+                <constraints foreignKeyName="fk_pcemail_auemail" referencedTableName="app_user"
                              referencedColumnNames="email" nullable="false" deleteCascade="false"/>
             </column>
             <column name="created_on" type="datetime">

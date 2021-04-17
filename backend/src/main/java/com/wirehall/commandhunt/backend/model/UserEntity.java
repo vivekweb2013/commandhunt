@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "appuser") // 'User' is a reserved keyword in postgres
+@Table(name = "app_user") // 'User' is a reserved keyword in postgres
 public class UserEntity {
 
   @Id
