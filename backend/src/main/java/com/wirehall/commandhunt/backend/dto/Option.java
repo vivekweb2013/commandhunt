@@ -1,6 +1,7 @@
 package com.wirehall.commandhunt.backend.dto;
 
 import com.wirehall.commandhunt.backend.model.graph.props.OptionProperty;
+
 import java.util.EnumMap;
 import java.util.Map;
 

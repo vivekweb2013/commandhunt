@@ -41,28 +41,25 @@ public class AuthController {
   @Value("${app.isManualAuthAllowed}")
   private boolean isManualAuthAllowed;
 
-  @Autowired
-  private AuthenticationManager authenticationManager;
+  @Autowired private AuthenticationManager authenticationManager;
 
-  @Autowired
-  private UserService userService;
+  @Autowired private UserService userService;
 
-  @Autowired
-  private JwtUtil jwtUtil;
+  @Autowired private JwtUtil jwtUtil;
 
   /**
-   * The endpoint used by clients to login into the application with user credentials.
-   * This is driven by the isManualAuthAllowed flag. If set false this manual login won't work.
-   * This is intentionally kept as form-login type instead of json post since it needs to be
-   * aligned with the OAuth style response mechanism of sending token/error using redirect.
+   * The endpoint used by clients to login into the application with user credentials. This is
+   * driven by the isManualAuthAllowed flag. If set false this manual login won't work. This is
+   * intentionally kept as form-login type instead of json post since it needs to be aligned with
+   * the OAuth style response mechanism of sending token/error using redirect.
    *
    * @param loginRequest Login request from the client.
-   * @param redirectUri  The redirect url where token/error are processed on gui.
+   * @param redirectUri The redirect url where token/error are processed on gui.
    * @return Response indicating the authentication status.
    */
   @PostMapping("/login")
-  public ModelAndView authenticateUser(@Valid @ModelAttribute Login loginRequest,
-                                       @RequestParam("redirect_uri") String redirectUri) {
+  public ModelAndView authenticateUser(
+      @Valid @ModelAttribute Login loginRequest, @RequestParam("redirect_uri") String redirectUri) {
     LOGGER.debug("Login requested: {}", loginRequest);
 
     if (!isManualAuthAllowed) {
@@ -76,9 +73,10 @@ public class AuthController {
       if (!AuthUtil.isAuthorizedRedirectUri(redirectUri, authorizedRedirectUris)) {
         throw new BadRequestException("Invalid redirect_uri provided: " + redirectUri);
       }
-      Authentication authentication = authenticationManager.authenticate(
-              new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),
-                      loginRequest.getPassword()));
+      Authentication authentication =
+          authenticationManager.authenticate(
+              new UsernamePasswordAuthenticationToken(
+                  loginRequest.getEmail(), loginRequest.getPassword()));
 
       SecurityContextHolder.getContext().setAuthentication(authentication);
       String token = jwtUtil.createToken(authentication, 864000000L);
@@ -105,8 +103,11 @@ public class AuthController {
     }
 
     User user = userService.registerUser(signUpRequest);
-    URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/me")
-            .buildAndExpand().toUri();
+    URI location =
+        ServletUriComponentsBuilder.fromCurrentContextPath()
+            .path("/user/me")
+            .buildAndExpand()
+            .toUri();
 
     return ResponseEntity.created(location).body(user);
   }
@@ -125,10 +126,9 @@ public class AuthController {
   }
 
   /**
-   * Allows clients to enquire if manual signup and login is allowed.
-   * This behaviour is driven by app.isManualAuthAllowed property.
-   * If the property is set false then only OAuth login should be allowed and
-   * both manual sign-up and login should be disabled by client.
+   * Allows clients to enquire if manual signup and login is allowed. This behaviour is driven by
+   * app.isManualAuthAllowed property. If the property is set false then only OAuth login should be
+   * allowed and both manual sign-up and login should be disabled by client.
    *
    * @return True or false depending on the value of app.isManualAuthAllowed property
    */

@@ -25,57 +25,56 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
-    @Mock
-    UserRepository userRepository;
+  @Mock UserRepository userRepository;
 
-    UserService userService;
+  UserService userService;
 
-    @BeforeEach
-    void setUp() {
-        userService = new UserService(userRepository, new BCryptPasswordEncoder());
-    }
+  @BeforeEach
+  void setUp() {
+    userService = new UserService(userRepository, new BCryptPasswordEncoder());
+  }
 
-    @Test
-    void should_AddUser_When_SignUpRequested() {
-        // Given
-        SignUp signUp = new SignUp();
-        signUp.setName("John Doe");
-        signUp.setEmail("abc@xyz.com");
-        signUp.setPassword("secret");
-        when(userRepository.save(ArgumentMatchers.isA(UserEntity.class))).thenReturn(new UserEntity());
+  @Test
+  void should_AddUser_When_SignUpRequested() {
+    // Given
+    SignUp signUp = new SignUp();
+    signUp.setName("John Doe");
+    signUp.setEmail("abc@xyz.com");
+    signUp.setPassword("secret");
+    when(userRepository.save(ArgumentMatchers.isA(UserEntity.class))).thenReturn(new UserEntity());
 
-        // When
-        User user = userService.registerUser(signUp);
+    // When
+    User user = userService.registerUser(signUp);
 
-        // Then
-        ArgumentCaptor<UserEntity> arg = ArgumentCaptor.forClass(UserEntity.class);
-        verify(userRepository).save(arg.capture());
-        UserEntity ue = arg.getValue();
-        Assertions.assertEquals(signUp.getName(), ue.getName());
-        Assertions.assertEquals(signUp.getEmail(), ue.getEmail());
-        Assertions.assertNotNull(ue.getPassword());
-        Assertions.assertNotEquals(signUp.getPassword(), ue.getPassword());
-        Assertions.assertNotNull(ue.getJoinedOn());
-        Assertions.assertEquals(UserEntity.OAuthProvider.LOCAL, ue.getProvider());
+    // Then
+    ArgumentCaptor<UserEntity> arg = ArgumentCaptor.forClass(UserEntity.class);
+    verify(userRepository).save(arg.capture());
+    UserEntity ue = arg.getValue();
+    Assertions.assertEquals(signUp.getName(), ue.getName());
+    Assertions.assertEquals(signUp.getEmail(), ue.getEmail());
+    Assertions.assertNotNull(ue.getPassword());
+    Assertions.assertNotEquals(signUp.getPassword(), ue.getPassword());
+    Assertions.assertNotNull(ue.getJoinedOn());
+    Assertions.assertEquals(UserEntity.OAuthProvider.LOCAL, ue.getProvider());
 
-        Assertions.assertEquals(signUp.getName(), user.getName());
-        Assertions.assertEquals(signUp.getEmail(), user.getEmail());
-        Assertions.assertEquals(UserEntity.OAuthProvider.LOCAL.toString(), user.getProvider());
-    }
+    Assertions.assertEquals(signUp.getName(), user.getName());
+    Assertions.assertEquals(signUp.getEmail(), user.getEmail());
+    Assertions.assertEquals(UserEntity.OAuthProvider.LOCAL.toString(), user.getProvider());
+  }
 
-    @Test
-    void should_ThrowException_When_UserWithEmailExist() {
-        // Given
-        SignUp signUp = new SignUp();
-        signUp.setName("John Doe");
-        signUp.setEmail("abc@xyz.com");
-        signUp.setPassword("secret");
-        when(userRepository.findById(anyString())).thenReturn(Optional.of(new UserEntity()));
+  @Test
+  void should_ThrowException_When_UserWithEmailExist() {
+    // Given
+    SignUp signUp = new SignUp();
+    signUp.setName("John Doe");
+    signUp.setEmail("abc@xyz.com");
+    signUp.setPassword("secret");
+    when(userRepository.findById(anyString())).thenReturn(Optional.of(new UserEntity()));
 
-        // When
-        Executable e = () -> userService.registerUser(signUp);
+    // When
+    Executable e = () -> userService.registerUser(signUp);
 
-        // Then
-        assertThrows(BadRequestException.class, e);
-    }
+    // Then
+    assertThrows(BadRequestException.class, e);
+  }
 }

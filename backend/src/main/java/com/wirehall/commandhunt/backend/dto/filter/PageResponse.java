@@ -58,7 +58,15 @@ public class PageResponse<T> {
 
   @Override
   public String toString() {
-    return "PageResponse{" + "pageNumber=" + pageNumber + ", totalSize=" + totalSize
-        + ", pageSize=" + pageSize + ", records=" + records + '}';
+    return "PageResponse{"
+        + "pageNumber="
+        + pageNumber
+        + ", totalSize="
+        + totalSize
+        + ", pageSize="
+        + pageSize
+        + ", records="
+        + records
+        + '}';
   }
 }

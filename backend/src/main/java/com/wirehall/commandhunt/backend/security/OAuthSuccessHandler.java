@@ -29,8 +29,7 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
   @Value("${app.oauth2.authorizedRedirectUris}")
   private String[] authorizedRedirectUris;
 
-  @Autowired
-  private JwtUtil jwtUtil;
+  @Autowired private JwtUtil jwtUtil;
 
   @Autowired
   OAuthSuccessHandler(CustomOAuthRequestRepository customOAuthRequestRepository) {
@@ -38,8 +37,9 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
   }
 
   @Override
-  public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-      Authentication authentication) throws IOException {
+  public void onAuthenticationSuccess(
+      HttpServletRequest request, HttpServletResponse response, Authentication authentication)
+      throws IOException {
     String targetUrl = determineTargetUrl(request, response, authentication);
 
     if (response.isCommitted()) {
@@ -52,13 +52,16 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
   }
 
   @Override
-  protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
-      Authentication authentication) {
-    Optional<String> redirectUri = CookieUtil.getCookie(request,
-            CustomOAuthRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME).map(Cookie::getValue);
+  protected String determineTargetUrl(
+      HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+    Optional<String> redirectUri =
+        CookieUtil.getCookie(request, CustomOAuthRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME)
+            .map(Cookie::getValue);
 
-    if (redirectUri.isPresent() && !AuthUtil.isAuthorizedRedirectUri(redirectUri.get(), authorizedRedirectUris)) {
-      throw new BadRequestException("Unauthorized Redirect URI, Can't proceed with the authentication");
+    if (redirectUri.isPresent()
+        && !AuthUtil.isAuthorizedRedirectUri(redirectUri.get(), authorizedRedirectUris)) {
+      throw new BadRequestException(
+          "Unauthorized Redirect URI, Can't proceed with the authentication");
     }
 
     String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
@@ -66,14 +69,14 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     String token = jwtUtil.createToken(authentication, 864000000L);
 
     return UriComponentsBuilder.fromUriString(targetUrl)
-            .queryParam("token", token)
-            .build().toUriString();
+        .queryParam("token", token)
+        .build()
+        .toUriString();
   }
 
-  protected void clearAuthenticationAttributes(HttpServletRequest request,
-      HttpServletResponse response) {
+  protected void clearAuthenticationAttributes(
+      HttpServletRequest request, HttpServletResponse response) {
     super.clearAuthenticationAttributes(request);
     customOAuthRequestRepository.removeAuthorizationRequestCookies(request, response);
   }
-
 }

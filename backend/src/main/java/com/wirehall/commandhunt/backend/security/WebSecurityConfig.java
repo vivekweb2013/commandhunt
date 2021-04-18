@@ -22,17 +22,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-  @Autowired
-  private CustomUserDetailsService customUserDetailsService;
+  @Autowired private CustomUserDetailsService customUserDetailsService;
 
-  @Autowired
-  private CustomOAuthUserService customOAuthUserService;
+  @Autowired private CustomOAuthUserService customOAuthUserService;
 
-  @Autowired
-  private OAuthSuccessHandler oauthSuccessHandler;
+  @Autowired private OAuthSuccessHandler oauthSuccessHandler;
 
-  @Autowired
-  private OAuthFailureHandler oauthFailureHandler;
+  @Autowired private OAuthFailureHandler oauthFailureHandler;
 
   @Bean
   public CustomJwtAuthFilter customJwtAuthFilter() {
@@ -63,19 +59,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     http.cors()
         .and()
         .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            .csrf()
-            .disable()
-            .formLogin()
-            .disable()
-            .httpBasic()
-            .disable()
-            .exceptionHandling()
-            .authenticationEntryPoint(new RestAuthenticationEntryPoint())
-            .and().headers().frameOptions().disable().and()
-            .authorizeRequests()
-            .antMatchers("/actuator/**", "/api/**")
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .csrf()
+        .disable()
+        .formLogin()
+        .disable()
+        .httpBasic()
+        .disable()
+        .exceptionHandling()
+        .authenticationEntryPoint(new RestAuthenticationEntryPoint())
+        .and()
+        .headers()
+        .frameOptions()
+        .disable()
+        .and()
+        .authorizeRequests()
+        .antMatchers("/actuator/**", "/api/**")
         .permitAll()
         .anyRequest()
         .authenticated()
@@ -97,7 +97,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // Add our custom Token based authentication filter
     http.addFilterBefore(customJwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
   }
-
 
   /**
    * By default, Spring OAuth2 uses HttpSessionOAuth2AuthorizationRequestRepository to save the

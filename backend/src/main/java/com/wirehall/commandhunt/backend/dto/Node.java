@@ -1,6 +1,7 @@
 package com.wirehall.commandhunt.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+
 import java.util.Map;
 
 public abstract class Node<E extends Enum<E>> {

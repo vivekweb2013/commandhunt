@@ -3,8 +3,8 @@ package com.wirehall.commandhunt.backend.mapper;
 import com.wirehall.commandhunt.backend.dto.Flag;
 import com.wirehall.commandhunt.backend.dto.MetaCommand;
 import com.wirehall.commandhunt.backend.dto.Option;
-import com.wirehall.commandhunt.backend.model.graph.props.MetaCommandProperty;
 import com.wirehall.commandhunt.backend.model.graph.props.FlagProperty;
+import com.wirehall.commandhunt.backend.model.graph.props.MetaCommandProperty;
 import com.wirehall.commandhunt.backend.model.graph.props.OptionProperty;
 import org.apache.tinkerpop.gremlin.structure.T;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
@@ -25,9 +25,9 @@ public final class MetaCommandMapper {
 
     for (MetaCommandProperty metaCommandProperty : MetaCommandProperty.values()) {
       if (metaCommandProperty.isMandatory()
-              || commandVertex.property(metaCommandProperty.toLowerCase()).isPresent()) {
+          || commandVertex.property(metaCommandProperty.toLowerCase()).isPresent()) {
         metaCommand.addProperty(
-                metaCommandProperty, commandVertex.property(metaCommandProperty.toLowerCase()).value());
+            metaCommandProperty, commandVertex.property(metaCommandProperty.toLowerCase()).value());
       }
     }
     return metaCommand;
@@ -37,7 +37,7 @@ public final class MetaCommandMapper {
    * Used to map the vertex to Flag dto.
    *
    * @param flagVertexProps Properties of flag's vertex.
-   * @param flagEdgeProps   Properties of flag's edge.
+   * @param flagEdgeProps Properties of flag's edge.
    * @return Flag dto.
    */
   public Flag mapToFlag(Map<Object, Object> flagVertexProps, Map<Object, Object> flagEdgeProps) {
@@ -64,7 +64,7 @@ public final class MetaCommandMapper {
    * Used to map the vertex to option dto.
    *
    * @param optionVertexProps Properties of options's vertex.
-   * @param optionEdgeProps   Properties of options's edge.
+   * @param optionEdgeProps Properties of options's edge.
    * @return Option dto.
    */
   public Option mapToOption(

@@ -39,10 +39,7 @@ public class GraphIO {
     this.gt = gt;
   }
 
-
-  /**
-   * Export the database in graphml format.
-   */
+  /** Export the database in graphml format. */
   @Scheduled(cron = "${app.graph.export.cronExpression}")
   public void exportGraphMl() throws IOException {
     Files.createDirectories(Paths.get(exportPath));
@@ -60,10 +57,10 @@ public class GraphIO {
 
   /**
    * Import the database from graphml file.
-   * <p>
-   * This method can only import graph file from disk path.
-   * It will not support loading graph file from resources.
-   * Since the GraphTraversal.io() api does not support importing from classpath resources.
+   *
+   * <p>This method can only import graph file from disk path. It will not support loading graph
+   * file from resources. Since the GraphTraversal.io() api does not support importing from
+   * classpath resources.
    */
   public void importGraphMl() {
     try {

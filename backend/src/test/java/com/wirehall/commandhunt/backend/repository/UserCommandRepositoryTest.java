@@ -8,8 +8,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.jdbc.Sql;
 
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceUtil;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -18,8 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 class UserCommandRepositoryTest {
 
-  @Autowired
-  private UserCommandRepository userCommandRepository;
+  @Autowired private UserCommandRepository userCommandRepository;
 
   @Test
   void should_ReturnEmptyList_When_FindAllOnEmptyTable() {
@@ -46,18 +43,17 @@ class UserCommandRepositoryTest {
     UserCommandEntity uceRetrieved = userCommandEntities.get(0);
 
     assertAll(
-            () -> assertEquals(1, userCommandEntities.size()),
-            () -> assertNotNull(userCommandEntity.getId()),
-            () -> assertEquals(userCommandEntity.getId(), uceRetrieved.getId()),
-            () -> assertEquals(userCommandEntity.getCommandName(), uceRetrieved.getCommandName()),
-            () -> assertEquals(userCommandEntity.getCommandText(), uceRetrieved.getCommandText()),
-            () -> assertEquals(userCommandEntity.getUserEmail(), uceRetrieved.getUserEmail()),
-            () -> assertEquals(userCommandEntity.getCreatedOn(), uceRetrieved.getCreatedOn()),
-            () -> assertEquals(userCommandEntity.getOperatedOn(), uceRetrieved.getOperatedOn()),
-            () -> assertNull(userCommandEntity.getModifiedOn()),
-            () -> assertEquals(userCommandEntity.getOptions(), uceRetrieved.getOptions()),
-            () -> assertEquals(userCommandEntity.getFlags(), uceRetrieved.getFlags())
-    );
+        () -> assertEquals(1, userCommandEntities.size()),
+        () -> assertNotNull(userCommandEntity.getId()),
+        () -> assertEquals(userCommandEntity.getId(), uceRetrieved.getId()),
+        () -> assertEquals(userCommandEntity.getCommandName(), uceRetrieved.getCommandName()),
+        () -> assertEquals(userCommandEntity.getCommandText(), uceRetrieved.getCommandText()),
+        () -> assertEquals(userCommandEntity.getUserEmail(), uceRetrieved.getUserEmail()),
+        () -> assertEquals(userCommandEntity.getCreatedOn(), uceRetrieved.getCreatedOn()),
+        () -> assertEquals(userCommandEntity.getOperatedOn(), uceRetrieved.getOperatedOn()),
+        () -> assertNull(userCommandEntity.getModifiedOn()),
+        () -> assertEquals(userCommandEntity.getOptions(), uceRetrieved.getOptions()),
+        () -> assertEquals(userCommandEntity.getFlags(), uceRetrieved.getFlags()));
   }
 
   @Test
@@ -71,18 +67,17 @@ class UserCommandRepositoryTest {
     UserCommandEntity uceRetrieved = userCommandEntities.get(0);
 
     assertAll(
-            () -> assertEquals(1, userCommandEntities.size()),
-            () -> assertNotNull(userCommandEntity.getId()),
-            () -> assertEquals(userCommandEntity.getId(), uceRetrieved.getId()),
-            () -> assertEquals(userCommandEntity.getCommandName(), uceRetrieved.getCommandName()),
-            () -> assertEquals(userCommandEntity.getCommandText(), uceRetrieved.getCommandText()),
-            () -> assertEquals(userCommandEntity.getUserEmail(), uceRetrieved.getUserEmail()),
-            () -> assertEquals(userCommandEntity.getCreatedOn(), uceRetrieved.getCreatedOn()),
-            () -> assertEquals(userCommandEntity.getModifiedOn(), uceRetrieved.getModifiedOn()),
-            () -> assertEquals(userCommandEntity.getOperatedOn(), uceRetrieved.getOperatedOn()),
-            () -> assertEquals(userCommandEntity.getOptions(), uceRetrieved.getOptions()),
-            () -> assertEquals(userCommandEntity.getFlags(), uceRetrieved.getFlags())
-    );
+        () -> assertEquals(1, userCommandEntities.size()),
+        () -> assertNotNull(userCommandEntity.getId()),
+        () -> assertEquals(userCommandEntity.getId(), uceRetrieved.getId()),
+        () -> assertEquals(userCommandEntity.getCommandName(), uceRetrieved.getCommandName()),
+        () -> assertEquals(userCommandEntity.getCommandText(), uceRetrieved.getCommandText()),
+        () -> assertEquals(userCommandEntity.getUserEmail(), uceRetrieved.getUserEmail()),
+        () -> assertEquals(userCommandEntity.getCreatedOn(), uceRetrieved.getCreatedOn()),
+        () -> assertEquals(userCommandEntity.getModifiedOn(), uceRetrieved.getModifiedOn()),
+        () -> assertEquals(userCommandEntity.getOperatedOn(), uceRetrieved.getOperatedOn()),
+        () -> assertEquals(userCommandEntity.getOptions(), uceRetrieved.getOptions()),
+        () -> assertEquals(userCommandEntity.getFlags(), uceRetrieved.getFlags()));
   }
 
   @Test

@@ -1,14 +1,15 @@
 package com.wirehall.commandhunt.backend.model.auth;
 
 import com.wirehall.commandhunt.backend.model.UserEntity;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class CustomUserPrincipal implements OAuth2User, UserDetails {
 
@@ -20,11 +21,11 @@ public class CustomUserPrincipal implements OAuth2User, UserDetails {
   /**
    * Custom User Principal.
    *
-   * @param userEntity  User DTO.
+   * @param userEntity User DTO.
    * @param authorities Collection of authorities.
    */
-  public CustomUserPrincipal(UserEntity userEntity,
-      Collection<? extends GrantedAuthority> authorities) {
+  public CustomUserPrincipal(
+      UserEntity userEntity, Collection<? extends GrantedAuthority> authorities) {
     this.password = userEntity.getPassword();
     this.userEntity = userEntity;
     this.authorities = authorities;

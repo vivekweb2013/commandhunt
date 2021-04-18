@@ -15,11 +15,11 @@ public class OAuthUserFactory {
    * Factory used to get the user entity with the info received from OAuth provider.
    *
    * @param oAuthProvider The user's oAuth provider.
-   * @param attributes    User attributes received from provider.
+   * @param attributes User attributes received from provider.
    * @return User entity.
    */
-  public static UserEntity getOAuth2UserInfo(OAuthProvider oAuthProvider,
-                                             Map<String, Object> attributes) {
+  public static UserEntity getOAuth2UserInfo(
+      OAuthProvider oAuthProvider, Map<String, Object> attributes) {
     UserEntity userEntity = new UserEntity();
     userEntity.setProvider(oAuthProvider);
     userEntity.setName((String) attributes.get("name"));

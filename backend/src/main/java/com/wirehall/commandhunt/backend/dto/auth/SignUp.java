@@ -5,15 +5,11 @@ import javax.validation.constraints.NotBlank;
 
 public class SignUp {
 
-  @NotBlank
-  private String name;
+  @NotBlank private String name;
 
-  @NotBlank
-  @Email
-  private String email;
+  @NotBlank @Email private String email;
 
-  @NotBlank
-  private String password;
+  @NotBlank private String password;
 
   public String getName() {
     return name;

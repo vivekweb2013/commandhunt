@@ -19,27 +19,26 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CustomUserDetailsServiceTest {
-    @Mock
-    UserRepository userRepository;
+  @Mock UserRepository userRepository;
 
-    CustomUserDetailsService customUserDetailsService;
+  CustomUserDetailsService customUserDetailsService;
 
-    @BeforeEach
-    void setUp() {
-        customUserDetailsService = new CustomUserDetailsService(userRepository);
-    }
+  @BeforeEach
+  void setUp() {
+    customUserDetailsService = new CustomUserDetailsService(userRepository);
+  }
 
-    @Test
-    void should_LoadUser_When_ValidEmailProvided() {
-        when(userRepository.findById(anyString())).thenReturn(Optional.of(new UserEntity()));
-        Executable e = () -> customUserDetailsService.loadUserByUsername(anyString());
-        assertDoesNotThrow(e);
-    }
+  @Test
+  void should_LoadUser_When_ValidEmailProvided() {
+    when(userRepository.findById(anyString())).thenReturn(Optional.of(new UserEntity()));
+    Executable e = () -> customUserDetailsService.loadUserByUsername(anyString());
+    assertDoesNotThrow(e);
+  }
 
-    @Test
-    void should_ThrowException_When_NoUserWithEmailFound() {
-        when(userRepository.findById(anyString())).thenReturn(Optional.empty());
-        Executable e = () -> customUserDetailsService.loadUserByUsername(anyString());
-        assertThrows(BadCredentialsException.class, e);
-    }
+  @Test
+  void should_ThrowException_When_NoUserWithEmailFound() {
+    when(userRepository.findById(anyString())).thenReturn(Optional.empty());
+    Executable e = () -> customUserDetailsService.loadUserByUsername(anyString());
+    assertThrows(BadCredentialsException.class, e);
+  }
 }

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-  <!-- Inherit Properties -->
-  <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <!-- Inherit Properties -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-  <!-- Override Properties -->
-  <property name="LOG_FILE" value="./logs/commandhunt.log"/>
+    <!-- Override Properties -->
+    <property name="LOG_FILE" value="./logs/commandhunt.log"/>
 
-  <!-- Inherit Appender -->
-  <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
-  <include resource="org/springframework/boot/logging/logback/file-appender.xml"/>
+    <!-- Inherit Appender -->
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+    <include resource="org/springframework/boot/logging/logback/file-appender.xml"/>
 
-  <!-- Loggers -->
-  <logger name="com.wirehall.commandhunt" level="DEBUG"/>
+    <!-- Loggers -->
+    <logger name="com.wirehall.commandhunt" level="DEBUG"/>
 
-  <root level="INFO">
-    <appender-ref ref="CONSOLE"/>
-    <appender-ref ref="FILE"/>
-  </root>
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
 </configuration>

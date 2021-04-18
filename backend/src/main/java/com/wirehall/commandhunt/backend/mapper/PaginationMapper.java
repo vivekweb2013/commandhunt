@@ -6,9 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 public class PaginationMapper {
-    public Pageable mapToPageable(Filter filter) {
-        return PageRequest.of(filter.getPagination().getPageNumber() -1, filter.getPagination().getPageSize(),
-                Sort.by(Sort.Direction.fromString(filter.getPagination().getSort().getOrder().toString()),
-                        filter.getPagination().getSort().getBy()));
-    }
+  public Pageable mapToPageable(Filter filter) {
+    return PageRequest.of(
+        filter.getPagination().getPageNumber() - 1,
+        filter.getPagination().getPageSize(),
+        Sort.by(
+            Sort.Direction.fromString(filter.getPagination().getSort().getOrder().toString()),
+            filter.getPagination().getSort().getBy()));
+  }
 }

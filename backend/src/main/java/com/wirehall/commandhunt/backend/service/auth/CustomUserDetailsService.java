@@ -14,8 +14,8 @@ import java.util.Optional;
 /**
  * The principal is always the result of the UserDetailsService that returned the object
  *
- * <p>NOTE: There is often some confusion about UserDetailsService. It is purely a DAO for user
- * data and performs no other function other than to supply that data to other components within the
+ * <p>NOTE: There is often some confusion about UserDetailsService. It is purely a DAO for user data
+ * and performs no other function other than to supply that data to other components within the
  * framework. In particular, it does not authenticate the user, which is done by the
  * AuthenticationManager. In many cases it makes more sense to implement AuthenticationProvider
  * directly if you require a custom authentication process.
@@ -31,8 +31,8 @@ public class CustomUserDetailsService implements UserDetailsService {
   }
 
   /**
-   * Returns the user instance by username (i.e. email).
-   * Email is used as the primary key for user entity so username will always refer to the email.
+   * Returns the user instance by username (i.e. email). Email is used as the primary key for user
+   * entity so username will always refer to the email.
    *
    * @param email The email address of user.
    * @return Returns the user.

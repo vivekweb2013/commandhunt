@@ -1,19 +1,14 @@
 package com.wirehall.commandhunt.backend.util;
 
 import com.wirehall.commandhunt.backend.model.auth.CustomUserPrincipal;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.UnsupportedJwtException;
-import java.util.Date;
+import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 @Component
 public class JwtUtil {
@@ -27,7 +22,7 @@ public class JwtUtil {
    * Creates a JWT token with specified information.
    *
    * @param authentication Used to get the principal required in token creation.
-   * @param expiry         Token expiry duration.
+   * @param expiry Token expiry duration.
    * @return JWT token.
    */
   public String createToken(Authentication authentication, Long expiry) {

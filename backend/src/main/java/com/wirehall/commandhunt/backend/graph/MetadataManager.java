@@ -28,8 +28,8 @@ public class MetadataManager {
 
   /**
    * Import the database from graphml file.
-   * <p>
-   * This method supports importing graph file from resources path.
+   *
+   * <p>This method supports importing graph file from resources path.
    */
   public void load() {
     try {

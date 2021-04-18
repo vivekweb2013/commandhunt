@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
@@ -31,13 +31,13 @@
         </createTable>
         <createTable tableName="user_command">
             <column name="id" type="bigint">
-              <constraints primaryKey="true"/>
+                <constraints primaryKey="true"/>
             </column>
             <column name="command_name" type="varchar(255)">
-              <constraints nullable="false"/>
+                <constraints nullable="false"/>
             </column>
             <column name="command_text" type="clob">
-              <constraints nullable="false"/>
+                <constraints nullable="false"/>
             </column>
             <column name="user_email" type="varchar(255)">
                 <constraints foreignKeyName="fk_ucemail_auemail" referencedTableName="app_user"

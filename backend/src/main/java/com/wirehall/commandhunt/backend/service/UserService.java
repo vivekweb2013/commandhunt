@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
@@ -20,33 +19,33 @@ import java.sql.Timestamp;
 @Transactional
 public class UserService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final UserMapper mapper = new UserMapper();
+  private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
+  private final UserMapper mapper = new UserMapper();
 
-    @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+  @Autowired
+  public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    this.userRepository = userRepository;
+    this.passwordEncoder = passwordEncoder;
+  }
+
+  /**
+   * Adds the user created as a result of sign up request.
+   *
+   * @param signUpRequest Sign up request payload.
+   * @return User DTO.
+   */
+  public User registerUser(SignUp signUpRequest) {
+    if (userRepository.findById(signUpRequest.getEmail()).isPresent()) {
+      LOGGER.error("Email: {} is already in use", signUpRequest.getEmail());
+      throw new BadRequestException("Email address already in use.");
     }
 
-    /**
-     * Adds the user created as a result of sign up request.
-     *
-     * @param signUpRequest Sign up request payload.
-     * @return User DTO.
-     */
-    public User registerUser(SignUp signUpRequest) {
-        if (userRepository.findById(signUpRequest.getEmail()).isPresent()) {
-            LOGGER.error("Email: {} is already in use", signUpRequest.getEmail());
-            throw new BadRequestException("Email address already in use.");
-        }
-
-        UserEntity userEntity = mapper.mapToUserEntity(signUpRequest, passwordEncoder);
-        userEntity.setJoinedOn(new Timestamp(System.currentTimeMillis()));
-        userRepository.save(userEntity);
-        return mapper.mapToUser(userEntity);
-    }
+    UserEntity userEntity = mapper.mapToUserEntity(signUpRequest, passwordEncoder);
+    userEntity.setJoinedOn(new Timestamp(System.currentTimeMillis()));
+    userRepository.save(userEntity);
+    return mapper.mapToUser(userEntity);
+  }
 }

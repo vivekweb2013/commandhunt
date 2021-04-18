@@ -33,8 +33,10 @@ public class GlobalExceptionHandler {
   @ResponseBody
   private ErrorResponse handleValidationExceptions(MethodArgumentNotValidException ex) {
     // Get all the field validation error messages
-    List<String> errorMessages = ex.getBindingResult().getFieldErrors().stream()
-            .map(f -> f.getField() + " : " + f.getDefaultMessage()).collect(Collectors.toList());
+    List<String> errorMessages =
+        ex.getBindingResult().getFieldErrors().stream()
+            .map(f -> f.getField() + " : " + f.getDefaultMessage())
+            .collect(Collectors.toList());
 
     ErrorResponse errorResponse = new ErrorResponse("Validation Failed");
     errorResponse.setDetails(errorMessages);
@@ -62,7 +64,8 @@ public class GlobalExceptionHandler {
     // Never pass error details of this unknown exception to client
     // Since these exceptions are unknown, sending the details to client may leak sensitive info
 
-    // Logging the exception here, since this is an unknown exception & we are suppressing the details
+    // Logging the exception here, since this is an unknown exception & we are suppressing the
+    // details
     LOGGER.error("Unknown error occurred,", ex);
 
     return new ErrorResponse("Something went wrong. Contact Support.");

@@ -37,7 +37,9 @@ public class MetaCommandController {
     return metaCommandService.getMetaCommandByName(name);
   }
 
-  @GetMapping(value = "/meta-command/search", params = {"query"})
+  @GetMapping(
+      value = "/meta-command/search",
+      params = {"query"})
   public List<MetaCommand> getMatchingMetaCommands(@RequestParam(name = "query") String query) {
     return metaCommandService.getMatchingMetaCommands(query);
   }

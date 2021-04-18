@@ -25,9 +25,12 @@ public class UserCommand extends BaseCommand {
 
   @Override
   public String toString() {
-    return "UserCommand{" +
-            "modifiedOn=" + modifiedOn +
-            ", operatedOn=" + operatedOn +
-            "} " + super.toString();
+    return "UserCommand{"
+        + "modifiedOn="
+        + modifiedOn
+        + ", operatedOn="
+        + operatedOn
+        + "} "
+        + super.toString();
   }
 }

@@ -37,25 +37,32 @@ public class UserCommandController {
 
   @GetMapping(value = "/user-command/{id}")
   public UserCommand getUserCommandById(@PathVariable(name = "id") Long id, Principal principal) {
-    LOGGER.info("Request from user: {} for retrieving user-command with id: {}", principal.getName(), id);
+    LOGGER.info(
+        "Request from user: {} for retrieving user-command with id: {}", principal.getName(), id);
     return userCommandService.getUserCommandById(id, principal.getName());
   }
 
   @PostMapping(value = "/user-command")
   public void addUserCommand(@RequestBody UserCommand userCommand, Principal principal) {
-    LOGGER.info("Request from user: {} for adding user-command: {}", principal.getName(), userCommand);
+    LOGGER.info(
+        "Request from user: {} for adding user-command: {}", principal.getName(), userCommand);
     userCommandService.addUserCommand(userCommand, principal.getName());
   }
 
   @PutMapping(value = "/user-command/{id}")
   public void updateUserCommand(@RequestBody UserCommand userCommand, Principal principal) {
-    LOGGER.info("Request from user: {} for updating user-command: {}", principal.getName(), userCommand);
+    LOGGER.info(
+        "Request from user: {} for updating user-command: {}", principal.getName(), userCommand);
     userCommandService.updateUserCommand(userCommand, principal.getName());
   }
 
   @DeleteMapping(value = "/user-command/{id}")
-  public void deleteUserCommand(@PathVariable(name = "id") Long userCommandId, Principal principal) {
-    LOGGER.info("Request from user: {} for deleting user-command with id: {}", principal.getName(), userCommandId);
+  public void deleteUserCommand(
+      @PathVariable(name = "id") Long userCommandId, Principal principal) {
+    LOGGER.info(
+        "Request from user: {} for deleting user-command with id: {}",
+        principal.getName(),
+        userCommandId);
     userCommandService.deleteUserCommand(userCommandId, principal.getName());
   }
 }

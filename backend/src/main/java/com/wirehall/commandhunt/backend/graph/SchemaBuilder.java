@@ -30,8 +30,8 @@ public class SchemaBuilder {
       management.rollback();
       return;
     }
-    LOGGER
-        .info("################################ creating schema ################################");
+    LOGGER.info(
+        "################################ creating schema ################################");
     createProperties(management);
     createVertexLabels(management);
     createEdgeLabels(management);
@@ -39,8 +39,8 @@ public class SchemaBuilder {
 
     createCompositeIndexes(graph);
 
-    LOGGER
-        .info("########################### finished creating schema ############################");
+    LOGGER.info(
+        "########################### finished creating schema ############################");
   }
 
   private static void createVertexLabels(final JanusGraphManagement management) {
@@ -54,12 +54,9 @@ public class SchemaBuilder {
   }
 
   private static void createEdgeLabels(final JanusGraphManagement management) {
-    management.makeEdgeLabel("belongs_to").multiplicity(Multiplicity.MANY2ONE)
-        .make();
-    management.makeEdgeLabel("has_option").multiplicity(Multiplicity.ONE2MANY)
-        .make();
-    management.makeEdgeLabel("has_flag").multiplicity(Multiplicity.ONE2MANY)
-        .make();
+    management.makeEdgeLabel("belongs_to").multiplicity(Multiplicity.MANY2ONE).make();
+    management.makeEdgeLabel("has_option").multiplicity(Multiplicity.ONE2MANY).make();
+    management.makeEdgeLabel("has_flag").multiplicity(Multiplicity.ONE2MANY).make();
   }
 
   private static void createProperties(final JanusGraphManagement management) {
@@ -97,12 +94,16 @@ public class SchemaBuilder {
 
   private static void createCompositeIndexes(JanusGraph graph) throws InterruptedException {
     JanusGraphManagement management = graph.openManagement();
-    management.buildIndex("commandnameindex", Vertex.class)
+    management
+        .buildIndex("commandnameindex", Vertex.class)
         .addKey(management.getPropertyKey("name"))
-        .indexOnly(management.getVertexLabel("command")).buildCompositeIndex();
+        .indexOnly(management.getVertexLabel("command"))
+        .buildCompositeIndex();
 
-    management.buildIndex("usercommandnameindex", Vertex.class)
-        .addKey(management.getPropertyKey("command_name")).buildCompositeIndex();
+    management
+        .buildIndex("usercommandnameindex", Vertex.class)
+        .addKey(management.getPropertyKey("command_name"))
+        .buildCompositeIndex();
     management.commit();
 
     // Wait for the index to become available

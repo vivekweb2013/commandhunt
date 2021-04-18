@@ -2,11 +2,6 @@ package com.wirehall.commandhunt.backend.security;
 
 import com.wirehall.commandhunt.backend.service.auth.CustomUserDetailsService;
 import com.wirehall.commandhunt.backend.util.JwtUtil;
-import java.io.IOException;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +12,19 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 public class CustomJwtAuthFilter extends OncePerRequestFilter {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CustomJwtAuthFilter.class);
 
-  @Autowired
-  private CustomUserDetailsService customUserDetailsService;
+  @Autowired private CustomUserDetailsService customUserDetailsService;
 
-  @Autowired
-  private JwtUtil jwtUtil;
+  @Autowired private JwtUtil jwtUtil;
 
   @Override
   protected void doFilterInternal(
@@ -39,8 +38,9 @@ public class CustomJwtAuthFilter extends OncePerRequestFilter {
         String email = jwtUtil.getUserEmailFromToken(jwt);
 
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-            userDetails, null, userDetails.getAuthorities());
+        UsernamePasswordAuthenticationToken auth =
+            new UsernamePasswordAuthenticationToken(
+                userDetails, null, userDetails.getAuthorities());
         auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
         SecurityContextHolder.getContext().setAuthentication(auth);

@@ -1,6 +1,5 @@
 package com.wirehall.commandhunt.backend.service.auth;
 
-
 import com.wirehall.commandhunt.backend.exception.OAuthException;
 import com.wirehall.commandhunt.backend.model.UserEntity;
 import com.wirehall.commandhunt.backend.model.UserEntity.OAuthProvider;
@@ -38,16 +37,19 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
 
   private OAuth2User processOAuth2User(OAuth2UserRequest oauth2UserRequest, OAuth2User oauth2User) {
     try {
-      String oAuthProviderString = oauth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase();
+      String oAuthProviderString =
+          oauth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase();
       if (!EnumUtils.isValidEnum(UserEntity.OAuthProvider.class, oAuthProviderString)) {
         throw new OAuthException("Sorry! Login with " + oAuthProviderString + " is not supported.");
       }
       OAuthProvider oAuthProvider = OAuthProvider.valueOf(oAuthProviderString);
-      UserEntity oAuthUserEntity = OAuthUserFactory.getOAuth2UserInfo(oAuthProvider, oauth2User.getAttributes());
+      UserEntity oAuthUserEntity =
+          OAuthUserFactory.getOAuth2UserInfo(oAuthProvider, oauth2User.getAttributes());
 
       String userEmail = oAuthUserEntity.getEmail();
       if (!StringUtils.hasLength(userEmail)) {
-        throw new OAuthException("Can't retrieve email from " + oAuthProviderString + " OAuth provider");
+        throw new OAuthException(
+            "Can't retrieve email from " + oAuthProviderString + " OAuth provider");
       }
       syncUserWithDatabase(oAuthProvider, oAuthUserEntity, userEmail);
 
@@ -61,14 +63,19 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
     }
   }
 
-  private void syncUserWithDatabase(OAuthProvider oAuthProvider, UserEntity oAuthUserEntity, String userEmail) {
+  private void syncUserWithDatabase(
+      OAuthProvider oAuthProvider, UserEntity oAuthUserEntity, String userEmail) {
     Optional<UserEntity> existingUserOptional = userRepository.findById(userEmail);
     if (existingUserOptional.isPresent()) {
       UserEntity existingUser = existingUserOptional.get();
       // User already exists with same email id.
       if (!oAuthProvider.equals(existingUser.getProvider())) {
-        throw new OAuthException("Looks like you've already signed up with " + existingUser.getProvider()
-                + " account. Please use your " + existingUser.getProvider() + " account to login.");
+        throw new OAuthException(
+            "Looks like you've already signed up with "
+                + existingUser.getProvider()
+                + " account. Please use your "
+                + existingUser.getProvider()
+                + " account to login.");
       }
 
       // Check if user info is updated at provider
@@ -86,8 +93,7 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
   }
 
   private boolean userUpdateRequired(UserEntity existingUser, UserEntity oauthUser) {
-    return !existingUser.getName()
-        .equals(oauthUser.getName()) || !existingUser
-        .getImageUrl().equals(oauthUser.getImageUrl());
+    return !existingUser.getName().equals(oauthUser.getName())
+        || !existingUser.getImageUrl().equals(oauthUser.getImageUrl());
   }
 }

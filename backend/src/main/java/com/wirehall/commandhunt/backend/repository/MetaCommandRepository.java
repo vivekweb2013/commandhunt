@@ -10,8 +10,8 @@ import com.wirehall.commandhunt.backend.dto.filter.Pagination;
 import com.wirehall.commandhunt.backend.mapper.MetaCommandMapper;
 import com.wirehall.commandhunt.backend.model.graph.EdgeType;
 import com.wirehall.commandhunt.backend.model.graph.VertexType;
-import com.wirehall.commandhunt.backend.model.graph.props.MetaCommandProperty;
 import com.wirehall.commandhunt.backend.model.graph.props.FlagProperty;
+import com.wirehall.commandhunt.backend.model.graph.props.MetaCommandProperty;
 import com.wirehall.commandhunt.backend.model.graph.props.OptionProperty;
 import org.apache.tinkerpop.gremlin.process.traversal.Order;
 import org.apache.tinkerpop.gremlin.process.traversal.Scope;
@@ -75,17 +75,28 @@ public class MetaCommandRepository {
 
     Pagination pagination = filter.getPagination();
 
-    GraphTraversal<Vertex, Vertex> commandGT = gt.V().hasLabel(VertexType.METACOMMAND.toLowerCase());
+    GraphTraversal<Vertex, Vertex> commandGT =
+        gt.V().hasLabel(VertexType.METACOMMAND.toLowerCase());
     applyConditions(commandGT, filter.getConditions());
 
     final String listKey = "list";
     final String countKey = "count";
-    Map<String, Object> result = commandGT.order().by(pagination.getSort().getBy()[0],
-        Order.valueOf(pagination.getSort().getOrder().toLowerCase()))
-        .fold().as(listKey, countKey).select(listKey, countKey)
-        .by(__.range(Scope.local, pagination.getOffset(),
-                (long) pagination.getPageSize() + pagination.getOffset()))
-        .by(__.count(Scope.local)).next();
+    Map<String, Object> result =
+        commandGT
+            .order()
+            .by(
+                pagination.getSort().getBy()[0],
+                Order.valueOf(pagination.getSort().getOrder().toLowerCase()))
+            .fold()
+            .as(listKey, countKey)
+            .select(listKey, countKey)
+            .by(
+                __.range(
+                    Scope.local,
+                    pagination.getOffset(),
+                    (long) pagination.getPageSize() + pagination.getOffset()))
+            .by(__.count(Scope.local))
+            .next();
 
     @SuppressWarnings("unchecked")
     List<Vertex> vertices = (List<Vertex>) result.get(listKey);
@@ -97,7 +108,8 @@ public class MetaCommandRepository {
       metaCommands.add(metaCommand);
     }
 
-    return new PageResponse<>(pagination.getPageNumber(), pagination.getPageSize(), totalSize, metaCommands);
+    return new PageResponse<>(
+        pagination.getPageNumber(), pagination.getPageSize(), totalSize, metaCommands);
   }
 
   /**
@@ -122,28 +134,30 @@ public class MetaCommandRepository {
   public MetaCommand getMetaCommandByName(String name) {
     LOGGER.debug("Retrieving command with name: {}", name);
 
-    Vertex commandVertex = gt.V().hasLabel(VertexType.METACOMMAND.toLowerCase()).has("name", name)
-            .next();
+    Vertex commandVertex =
+        gt.V().hasLabel(VertexType.METACOMMAND.toLowerCase()).has("name", name).next();
     return getCommand(commandVertex);
   }
 
   private MetaCommand getCommand(Vertex commandVertex) {
     MetaCommand metaCommand = mapper.mapToCommand(commandVertex);
 
-    List<Map<String, Object>> flagList = gt.V(commandVertex)
+    List<Map<String, Object>> flagList =
+        gt.V(commandVertex)
             .outE()
             .hasLabel(EdgeType.HAS_FLAG.toLowerCase())
             .as("E")
             .inV()
             .as("V")
             .select("E", "V")
-            .by(__.valueMap()
+            .by(
+                __.valueMap()
                     .with(WithOptions.tokens)
-            .unfold()
-            .group()
-            .by(Column.keys)
-            .by(__.select(Column.values).unfold()))
-        .toList();
+                    .unfold()
+                    .group()
+                    .by(Column.keys)
+                    .by(__.select(Column.values).unfold()))
+            .toList();
 
     for (Map<String, Object> flagProps : flagList) {
       Map<Object, Object> flagVertexProps = (Map<Object, Object>) flagProps.get("V");
@@ -152,19 +166,21 @@ public class MetaCommandRepository {
       metaCommand.addFlag(flag);
     }
 
-    List<Map<String, Object>> optionList = gt.V(commandVertex)
-        .outE()
-        .hasLabel(EdgeType.HAS_OPTION.toLowerCase())
-        .as("E")
-        .inV()
-        .as("V")
-        .select("E", "V")
-        .by(__.valueMap()
-            .with(WithOptions.tokens)
-                .unfold()
-                .group()
-                .by(Column.keys)
-                .by(__.select(Column.values).unfold()))
+    List<Map<String, Object>> optionList =
+        gt.V(commandVertex)
+            .outE()
+            .hasLabel(EdgeType.HAS_OPTION.toLowerCase())
+            .as("E")
+            .inV()
+            .as("V")
+            .select("E", "V")
+            .by(
+                __.valueMap()
+                    .with(WithOptions.tokens)
+                    .unfold()
+                    .group()
+                    .by(Column.keys)
+                    .by(__.select(Column.values).unfold()))
             .toList();
 
     for (Map<String, Object> optionProps : optionList) {
@@ -193,11 +209,13 @@ public class MetaCommandRepository {
     LOGGER.debug("Retrieving matching meta-commands by query: {}", query);
 
     List<Vertex> vertices =
-            gt.V().hasLabel(VertexType.METACOMMAND.toLowerCase())
-                    .or(__.has(MetaCommandProperty.NAME.toLowerCase(), Text.textContainsFuzzy(query)),
-                            __.has(MetaCommandProperty.DESC.toLowerCase(), Text.textContainsFuzzy(query)),
-                            __.has(MetaCommandProperty.LONG_DESC.toLowerCase(), Text.textContainsFuzzy(query)))
-                    .toList();
+        gt.V()
+            .hasLabel(VertexType.METACOMMAND.toLowerCase())
+            .or(
+                __.has(MetaCommandProperty.NAME.toLowerCase(), Text.textContainsFuzzy(query)),
+                __.has(MetaCommandProperty.DESC.toLowerCase(), Text.textContainsFuzzy(query)),
+                __.has(MetaCommandProperty.LONG_DESC.toLowerCase(), Text.textContainsFuzzy(query)))
+            .toList();
 
     List<MetaCommand> metaCommands = new ArrayList<>();
     for (Vertex commandVertex : vertices) {
@@ -268,14 +286,19 @@ public class MetaCommandRepository {
     edgeGraphTraversal.from("a").next();
   }
 
-  private void applyConditions(GraphTraversal<Vertex, Vertex> gt,
-      List<Condition> conditions) {
-    conditions.forEach(c -> {
-      if (c.getOperator().equals(Condition.Operator.CONTAINS)) {
-        gt.or(__.has(MetaCommandProperty.NAME.toLowerCase(), Text.textContainsFuzzy(c.getValue())),
-            __.has(MetaCommandProperty.DESC.toLowerCase(), Text.textContainsFuzzy(c.getValue())),
-            __.has(MetaCommandProperty.LONG_DESC.toLowerCase(), Text.textContainsFuzzy(c.getValue())));
-      }
-    });
+  private void applyConditions(GraphTraversal<Vertex, Vertex> gt, List<Condition> conditions) {
+    conditions.forEach(
+        c -> {
+          if (c.getOperator().equals(Condition.Operator.CONTAINS)) {
+            gt.or(
+                __.has(
+                    MetaCommandProperty.NAME.toLowerCase(), Text.textContainsFuzzy(c.getValue())),
+                __.has(
+                    MetaCommandProperty.DESC.toLowerCase(), Text.textContainsFuzzy(c.getValue())),
+                __.has(
+                    MetaCommandProperty.LONG_DESC.toLowerCase(),
+                    Text.textContainsFuzzy(c.getValue())));
+          }
+        });
   }
 }

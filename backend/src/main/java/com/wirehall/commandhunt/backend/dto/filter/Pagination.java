@@ -4,11 +4,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
-import java.util.List;
 
 public class Pagination {
 
@@ -20,9 +18,7 @@ public class Pagination {
   @NotNull
   private int pageSize;
 
-  @Valid
-  @NotNull
-  private Sort sort;
+  @Valid @NotNull private Sort sort;
 
   public int getOffset() {
     return (this.pageNumber - 1) * this.pageSize;
@@ -54,14 +50,19 @@ public class Pagination {
 
   @Override
   public String toString() {
-    return "Pagination{" + "pageNumber=" + pageNumber
-            + ", pageSize=" + pageSize + ", sort=" + sort + '}';
+    return "Pagination{"
+        + "pageNumber="
+        + pageNumber
+        + ", pageSize="
+        + pageSize
+        + ", sort="
+        + sort
+        + '}';
   }
 
   public static class Sort {
 
-    @NotEmpty
-    private String[] by;
+    @NotEmpty private String[] by;
 
     private SortOrder order = SortOrder.ASC;
 
@@ -95,6 +96,5 @@ public class Pagination {
         return name().toLowerCase();
       }
     }
-
   }
 }

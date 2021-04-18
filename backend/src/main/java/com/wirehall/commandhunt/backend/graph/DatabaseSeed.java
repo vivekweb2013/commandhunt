@@ -7,9 +7,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-/**
- * This component is can be to seed the database on startup.
- */
+/** This component is can be to seed the database on startup. */
 @Component
 public class DatabaseSeed implements ApplicationRunner {
 

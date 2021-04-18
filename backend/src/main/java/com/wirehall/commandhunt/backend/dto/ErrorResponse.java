@@ -2,6 +2,7 @@ package com.wirehall.commandhunt.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+
 import java.util.List;
 
 @JsonTypeName("error")

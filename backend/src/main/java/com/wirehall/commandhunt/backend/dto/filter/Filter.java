@@ -6,20 +6,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class is used to receive the filter criteria from the client.
- * It contains the pagination, sort and conditions filters.
- * <p>
- * Business logic should validate the condition list and decide how the conditions should be applied.
- * e.g. for a specific entity, business logic should decide which operator (AND/OR)
- * will be applied between conditions.
+ * This class is used to receive the filter criteria from the client. It contains the pagination,
+ * sort and conditions filters.
+ *
+ * <p>Business logic should validate the condition list and decide how the conditions should be
+ * applied. e.g. for a specific entity, business logic should decide which operator (AND/OR) will be
+ * applied between conditions.
  */
 public class Filter {
 
   private List<Condition> conditions = new ArrayList<>();
 
-  @Valid
-  @NotNull
-  private Pagination pagination;
+  @Valid @NotNull private Pagination pagination;
 
   public List<Condition> getConditions() {
     return conditions;

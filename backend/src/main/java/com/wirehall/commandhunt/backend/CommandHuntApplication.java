@@ -9,5 +9,4 @@ public class CommandHuntApplication {
   public static void main(String[] args) {
     SpringApplication.run(CommandHuntApplication.class, args);
   }
-
 }

@@ -1,29 +1,27 @@
 package com.wirehall.commandhunt.backend.model;
 
+import javax.persistence.*;
 import java.sql.Timestamp;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Entity
 @Table(name = "app_user") // 'User' is a reserved keyword in postgres
 public class UserEntity {
 
-  @Id
-  private String email;
+  @Id private String email;
+
   @Column(nullable = false)
   private String name;
 
   private boolean emailVerified;
+
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private OAuthProvider provider;
+
   private String providerId;
   private String imageUrl;
   private String password;
+
   @Column(nullable = false)
   private Timestamp joinedOn;
 
@@ -93,18 +91,35 @@ public class UserEntity {
 
   @Override
   public String toString() {
-    return "UserEntity{" +
-        "email='" + email + '\'' +
-        ", name='" + name + '\'' +
-        ", emailVerified=" + emailVerified +
-        ", provider=" + provider +
-        ", providerId='" + providerId + '\'' +
-        ", imageUrl='" + imageUrl + '\'' +
-        ", password='" + password + '\'' +
-        ", joinedOn=" + joinedOn +
-        '}';
+    return "UserEntity{"
+        + "email='"
+        + email
+        + '\''
+        + ", name='"
+        + name
+        + '\''
+        + ", emailVerified="
+        + emailVerified
+        + ", provider="
+        + provider
+        + ", providerId='"
+        + providerId
+        + '\''
+        + ", imageUrl='"
+        + imageUrl
+        + '\''
+        + ", password='"
+        + password
+        + '\''
+        + ", joinedOn="
+        + joinedOn
+        + '}';
   }
 
-  public enum OAuthProvider {LOCAL, FACEBOOK, GOOGLE, GITHUB}
+  public enum OAuthProvider {
+    LOCAL,
+    FACEBOOK,
+    GOOGLE,
+    GITHUB
+  }
 }
-

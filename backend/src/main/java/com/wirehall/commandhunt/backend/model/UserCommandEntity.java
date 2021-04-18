@@ -12,29 +12,29 @@ import java.util.*;
 @Table(name = "user_command")
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class UserCommandEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
-
   @Type(type = "jsonb")
   @Column(columnDefinition = "jsonb")
   Set<String> flags = new HashSet<>();
-
   @Type(type = "jsonb")
   @Column(columnDefinition = "jsonb")
   Map<String, List<String>> options = new HashMap<>();
-
-
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
   @Column(nullable = false, updatable = false)
   private String commandName;
+
   @Column(nullable = false)
   private String commandText;
+
   @Column(nullable = false, updatable = false)
   private String userEmail;
+
   @Column(nullable = false, updatable = false)
   private Timestamp createdOn;
 
   private Timestamp modifiedOn;
+
   @Column(nullable = false)
   private Timestamp operatedOn;
 
@@ -112,16 +112,28 @@ public class UserCommandEntity {
 
   @Override
   public String toString() {
-    return "UserCommand{" +
-        "id=" + id +
-        ", commandName='" + commandName + '\'' +
-        ", commandText='" + commandText + '\'' +
-        ", userEmail='" + userEmail + '\'' +
-        ", createdOn=" + createdOn +
-        ", modifiedOn=" + modifiedOn +
-        ", operatedOn=" + operatedOn +
-        ", flags=" + flags +
-        ", options=" + options +
-        '}';
+    return "UserCommand{"
+        + "id="
+        + id
+        + ", commandName='"
+        + commandName
+        + '\''
+        + ", commandText='"
+        + commandText
+        + '\''
+        + ", userEmail='"
+        + userEmail
+        + '\''
+        + ", createdOn="
+        + createdOn
+        + ", modifiedOn="
+        + modifiedOn
+        + ", operatedOn="
+        + operatedOn
+        + ", flags="
+        + flags
+        + ", options="
+        + options
+        + '}';
   }
 }

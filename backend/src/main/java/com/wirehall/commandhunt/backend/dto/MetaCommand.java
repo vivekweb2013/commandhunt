@@ -7,9 +7,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * This class holds the metadata of a specific command.
- */
+/** This class holds the metadata of a specific command. */
 public class MetaCommand extends Node<MetaCommandProperty> {
 
   private List<Flag> flags;
@@ -75,12 +73,12 @@ public class MetaCommand extends Node<MetaCommandProperty> {
   @Override
   public String toString() {
     return "MetaCommand{"
-            + "flags="
-            + flags
-            + ", options="
-            + options
-            + ", properties="
-            + properties
-            + '}';
+        + "flags="
+        + flags
+        + ", options="
+        + options
+        + ", properties="
+        + properties
+        + '}';
   }
 }

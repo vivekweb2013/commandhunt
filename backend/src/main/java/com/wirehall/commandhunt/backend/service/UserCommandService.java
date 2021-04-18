@@ -45,28 +45,33 @@ public class UserCommandService {
   public List<UserCommand> getAllUserCommands() {
     List<UserCommandEntity> userCommandEntity = userCommandRepository.findAll();
     LOGGER.debug("Retrieved {} user-command entities", userCommandEntity.size());
-    return userCommandEntity.stream().map(userCommandEntity1 ->
-            mapper.mapToUserCommand(userCommandEntity1, false)).collect(Collectors.toList());
+    return userCommandEntity.stream()
+        .map(userCommandEntity1 -> mapper.mapToUserCommand(userCommandEntity1, false))
+        .collect(Collectors.toList());
   }
 
   /**
    * Retrieves all the user commands matching the filter criteria.
    *
-   * @param filter    Filter criteria.
+   * @param filter Filter criteria.
    * @param userEmail Logged-in user's email id.
    * @return Page response of user-command DTOs.
    */
   public PageResponse<UserCommand> getAllUserCommands(Filter filter, String userEmail) {
     Pageable pageable = paginationMapper.mapToPageable(filter);
     List<Condition> conditions = filter.getConditions();
-    Specification<UserCommandEntity> spec = Specification.where(UserCommandSpecification.equalsUserEmail(userEmail));
+    Specification<UserCommandEntity> spec =
+        Specification.where(UserCommandSpecification.equalsUserEmail(userEmail));
 
     Specification<UserCommandEntity> optionalSpec = null;
     for (Condition c : conditions) {
-      if (c.getKey().equals("commandName") && c.getOperator().name().equals(Condition.Operator.EQUALS.name())) {
-        Specification<UserCommandEntity> s = UserCommandSpecification.equalsCommandName(c.getValue());
+      if (c.getKey().equals("commandName")
+          && c.getOperator().name().equals(Condition.Operator.EQUALS.name())) {
+        Specification<UserCommandEntity> s =
+            UserCommandSpecification.equalsCommandName(c.getValue());
         optionalSpec = optionalSpec == null ? s : optionalSpec.or(s);
-      } else if (c.getKey().equals("commandText") && c.getOperator().name().equals(Condition.Operator.CONTAINS.name())) {
+      } else if (c.getKey().equals("commandText")
+          && c.getOperator().name().equals(Condition.Operator.CONTAINS.name())) {
         Specification<UserCommandEntity> s = UserCommandSpecification.likeCommandText(c.getValue());
         optionalSpec = optionalSpec == null ? s : optionalSpec.or(s);
       }
@@ -76,10 +81,13 @@ public class UserCommandService {
     Page<UserCommandEntity> ucePage = userCommandRepository.findAll(spec, pageable);
     LOGGER.debug("Total {} user-command entities matching the filter", ucePage.getTotalElements());
 
-    List<UserCommand> userCommands = ucePage.getContent().stream().map(uce ->
-            mapper.mapToUserCommand(uce, false)).collect(Collectors.toList());
+    List<UserCommand> userCommands =
+        ucePage.getContent().stream()
+            .map(uce -> mapper.mapToUserCommand(uce, false))
+            .collect(Collectors.toList());
 
-    return new PageResponse<>(ucePage.getNumber(), pageable.getPageSize(), ucePage.getTotalElements(), userCommands);
+    return new PageResponse<>(
+        ucePage.getNumber(), pageable.getPageSize(), ucePage.getTotalElements(), userCommands);
   }
 
   /**
@@ -90,7 +98,8 @@ public class UserCommandService {
    * @return The user-command dto.
    */
   public UserCommand getUserCommandById(Long userCommandId, String userEmail) {
-    UserCommandEntity userCommandEntity = userCommandRepository.findOneByIdAndUserEmail(userCommandId, userEmail);
+    UserCommandEntity userCommandEntity =
+        userCommandRepository.findOneByIdAndUserEmail(userCommandId, userEmail);
     LOGGER.debug("Retrieved user-command entity: {}", userCommandEntity);
     return mapper.mapToUserCommand(userCommandEntity, true);
   }
