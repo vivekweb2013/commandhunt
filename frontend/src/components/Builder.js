@@ -36,17 +36,18 @@ class Builder extends Component {
 
     componentDidMount() {
         window.scrollTo(0, 0);
+        this._isMounted = true;
         const { match, location } = this.props;
 
         const commandId = match.params.commandId;
         if (commandId != null && location.pathname.startsWith('/public/command/')) {
             this.props.getPublicCommand(commandId).then((commandInstance) => {
-                this.setState({ commandInstance });
+                this._isMounted && this.setState({ commandInstance });
                 this.props.getMetaCommand(match.params.commandName);
             });
         } else if (commandId != null && location.pathname.startsWith('/user/command/')) {
             this.props.getUserCommand(commandId).then((commandInstance) => {
-                this.setState({ commandInstance });
+                this._isMounted && this.setState({ commandInstance });
                 this.props.getMetaCommand(match.params.commandName);
             });
         } else {
@@ -210,8 +211,8 @@ class Builder extends Component {
 
     isPublishButtonVisible() {
         const { location, match } = this.props;
-        return getQueryParamByName('mode', location.search) === 'build' || 
-        (location.pathname.startsWith('/user/command/') && match.params.commandId != null);
+        return getQueryParamByName('mode', location.search) === 'build' ||
+            (location.pathname.startsWith('/user/command/') && match.params.commandId != null);
     }
 
     isDeleteButtonVisible() {
@@ -352,6 +353,10 @@ class Builder extends Component {
                     </Modal>}
             </div>
         ) : '';
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 }
 

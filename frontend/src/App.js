@@ -20,7 +20,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.props.getUserProfile().then(() => this.setState({ loading: false }));
+    this._isMounted = true;
+    this.props.getUserProfile().then(() => this._isMounted && this.setState({ loading: false }));
   }
 
   render() {
@@ -34,6 +35,10 @@ class App extends Component {
           <Footer />
         </React.Fragment>
     );
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 }
 

@@ -27,6 +27,7 @@ class Finder extends Component {
     }
 
     componentDidMount() {
+        this._isMounted = true;
         this.getMetaCommands(this.state.filter);
     }
 
@@ -38,10 +39,11 @@ class Finder extends Component {
             const { filter } = this.state;
 
             if (metaCommands.pageNumber !== 0 && (filter.pagination.pageNumber > metaCommands.totalPages)) {
-                this.setState({ filter: { ...filter, pagination: { ...filter.pagination, pageNumber: metaCommands.totalPages } } }, () => {
-                    const { filter } = this.state;
-                    history.push(getQueryParamsFromFilter(filter));
-                });
+                this._isMounted &&
+                    this.setState({ filter: { ...filter, pagination: { ...filter.pagination, pageNumber: metaCommands.totalPages } } }, () => {
+                        const { filter } = this.state;
+                        history.push(getQueryParamsFromFilter(filter));
+                    });
             }
         });
     }
@@ -142,6 +144,10 @@ class Finder extends Component {
                 }
             </div>
         )
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 }
 

@@ -29,7 +29,7 @@ class Header extends Component {
         this.props.userLogout();
     }
 
-    handleLViewProfile(e) {
+    handleViewProfile(e) {
         e.preventDefault();
         this.setState({ showProfileModal: true });
     }
@@ -62,7 +62,7 @@ class Header extends Component {
                         }
                     </button>
                     {user && <div className="dropdown-content">
-                        <Link to="/" key="Profile" onClick={e => this.handleLViewProfile(e)}><FontAwesomeIcon icon="user-cog" />&nbsp;Profile</Link>
+                        <Link to="/" key="Profile" onClick={e => this.handleViewProfile(e)}><FontAwesomeIcon icon="user-cog" />&nbsp;Profile</Link>
                         <button key="Logout" onClick={e => this.handleLogout(e)} type="button"><FontAwesomeIcon icon="sign-out-alt" />&nbsp;Logout</button>
                     </div>}
                 </div>

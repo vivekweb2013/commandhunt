@@ -17,6 +17,7 @@ class Login extends Component {
         postLoginRedirectUrl: '/'
     }
     componentDidMount() {
+        this._isMounted = true;
         const token = getQueryParamByName('token', window.location.search);
         const error = getQueryParamByName('error', window.location.search);
         const referer = getQueryParamByName('referer', window.location.search);
@@ -24,9 +25,9 @@ class Login extends Component {
             window.history.replaceState(null, null, window.location.origin + window.location.pathname); // URL Cleanup
             if (token) {
                 this.props.getUserProfile(token);
-                referer && this.setState({ postLoginRedirectUrl: referer });
+                referer && this._isMounted && this.setState({ postLoginRedirectUrl: referer });
             } else {
-                this.setState({ loginError: error });
+                this._isMounted && this.setState({ loginError: error });
             }
         }
         this.props.isManualAuthAllowed();
@@ -93,6 +94,10 @@ class Login extends Component {
                         <span>{loginError}</span></Modal>}
                 </div>
         )
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 }
 

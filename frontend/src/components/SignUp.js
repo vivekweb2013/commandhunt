@@ -21,7 +21,7 @@ class SignUp extends Component {
     handleSignUp(e) {
         e.preventDefault();
         const { signUpRequest } = this.state;
-        this.props.userSignUp(signUpRequest).then(()=>{
+        this.props.userSignUp(signUpRequest).then(() => {
             this.props.history.push('/login');
         });
     }
@@ -56,13 +56,13 @@ class SignUp extends Component {
     }
 }
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = (state) => {
     return {
         user: state.authReducer.user
     }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = () => {
     return {
         userSignUp: (signUpRequest) => {
             return API.userSignUp(signUpRequest);

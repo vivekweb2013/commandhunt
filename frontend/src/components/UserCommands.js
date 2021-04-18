@@ -32,6 +32,7 @@ class UserCommands extends Component {
 
     componentDidMount() {
         window.scrollTo(0, 0);
+        this._isMounted = true;
         this.getUserCommands(this.state.filter);
     }
 
@@ -42,7 +43,7 @@ class UserCommands extends Component {
             const { userCommands } = this.props;
             const { filter } = this.state;
 
-            if (userCommands.pageNumber !== 0 && (filter.pagination.pageNumber > userCommands.totalPages)) {
+            if (userCommands.pageNumber !== 0 && (filter.pagination.pageNumber > userCommands.totalPages && this._isMounted)) {
                 this.setState({ filter: { ...filter, pagination: { ...filter.pagination, pageNumber: userCommands.totalPages } } }, () => {
                     const { filter } = this.state;
                     history.push(getQueryParamsFromFilter(filter))
@@ -173,6 +174,10 @@ class UserCommands extends Component {
                     totalPages={userCommands.totalPages} maxPagesToShow={5} handlePageChange={this.handlePageChange.bind(this)} />}
             </div>
         )
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 }
 
