@@ -1,6 +1,7 @@
 HELP.md
 target/
 logs/
+.flattened-pom.xml
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
 !**/src/test/**
