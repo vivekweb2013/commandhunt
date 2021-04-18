@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.wirehall</groupId>
+        <artifactId>commandhunt</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <packaging>helm</packaging>
+
+    <groupId>com.wirehall.commandhunt</groupId>
+    <artifactId>commandhunt-helm</artifactId>
+
+    <name>commandhunt-helm</name>
+    <description>CommandHunt Helm</description>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.kiwigrid</groupId>
+                <artifactId>helm-maven-plugin</artifactId>
+                <version>5.7</version>
+                <!-- Mandatory when you use a custom lifecycle -->
+                <extensions>true</extensions>
+                <configuration>
+                    <chartDirectory>${project.basedir}</chartDirectory>
+                    <chartVersion>${project.version}</chartVersion>
+                    <skipUpload>true</skipUpload><!-- Skip upload till oci support is added to plugin -->
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <configuration>
+                    <file>${project.basedir}/Chart.yaml</file>
+                    <replacements>
+                        <replacement>
+                            <!-- This version should not contain `-SNAPSHOT` -->
+                            <token>(^version:)\s(.*)</token>
+                            <value>
+                                <!-- Added <![CDATA[]]> to prevent formatting be IDE -->
+                                <![CDATA[$1 ${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}]]>
+                            </value>
+                        </replacement>
+                        <replacement>
+                            <token>(^appVersion:)\s(.*)</token>
+                            <value><![CDATA[$1 ${project.version}]]></value>
+                        </replacement>
+                    </replacements>
+                    <regexFlags>
+                        <regexFlag>MULTILINE</regexFlag>
+                    </regexFlags>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

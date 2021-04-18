@@ -139,6 +139,28 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <configuration>
+                    <filesToInclude>
+                        ${project.basedir}/package.json,${project.basedir}/package-lock.json
+                    </filesToInclude>
+                    <replacements>
+                        <replacement>
+                            <!-- This version should not contain `-SNAPSHOT` -->
+                            <token>("name": "frontend",\n\s*"version":\s").*(",$)</token>
+                            <value>
+                                <!-- Added <![CDATA[]]> to prevent formatting be IDE -->
+                                <![CDATA[$1${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}$2]]>
+                            </value>
+                        </replacement>
+                    </replacements>
+                    <regexFlags>
+                        <regexFlag>MULTILINE</regexFlag>
+                    </regexFlags>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
