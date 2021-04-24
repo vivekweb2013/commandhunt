@@ -17,6 +17,14 @@
 
     <properties>
         <node.version>v13.11.0</node.version>
+
+        <sonar.language>js</sonar.language>
+        <sonar.sources>src</sonar.sources>
+        <sonar.tests>src</sonar.tests>
+        <sonar.test.inclusions>**/*.test.js</sonar.test.inclusions>
+        <sonar.exclusions>**/*.test.js</sonar.exclusions>
+        <sonar.javascript.lcov.reportPaths>${project.basedir}/coverage/lcov.info</sonar.javascript.lcov.reportPaths>
+        <sonar.nodejs.executable>${project.build.directory}/node/node</sonar.nodejs.executable>
     </properties>
 
     <build>
@@ -56,7 +64,9 @@
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <arguments>test -- --env=jsdom --coverage --watchAll=false</arguments>
+                            <arguments>test -- --env=jsdom --coverage --watchAll=false --reporters=default
+                                --testResultsProcessor ${project.basedir}/node_modules/jest-sonar-reporter/index.js
+                            </arguments>
                         </configuration>
                     </execution>
 

@@ -27,6 +27,11 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "jestSonar": {
+    "reportPath": "coverage",
+    "reportFile": "test-reporter.xml",
+    "indent": 4
+  },
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -45,6 +50,7 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
+    "jest-sonar-reporter": "^2.0.0",
     "source-map-explorer": "^2.5.1"
   }
 }

@@ -32,6 +32,15 @@
         <docker.plugin.version>0.34.1</docker.plugin.version>
         <docker.image.prefix>ghcr.io/vivekweb2013/commandhunt</docker.image.prefix>
         <janusgraph.version>0.5.2</janusgraph.version>
+
+        <sonar.organization>vivekweb2013</sonar.organization>
+        <sonar.projectKey>vivekweb2013_commandhunt</sonar.projectKey>
+        <sonar.projectName>${project.name}</sonar.projectName>
+        <sonar.projectVersion>${project.version}</sonar.projectVersion>
+        <sonar.buildString>${project.version}</sonar.buildString>
+        <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
+        <sonar.testExecutionReportPaths>frontend/coverage/test-reporter.xml</sonar.testExecutionReportPaths>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <build>
