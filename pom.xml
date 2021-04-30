@@ -26,7 +26,7 @@
     <description>CommandHunt</description>
 
     <properties>
-        <revision>1.0.0-SNAPSHOT</revision>
+        <revision>1.0.0</revision>
         <assembly.plugin.version>3.3.0</assembly.plugin.version>
         <frontend.maven.plugin.version>1.10.4</frontend.maven.plugin.version>
         <docker.plugin.version>0.34.1</docker.plugin.version>
