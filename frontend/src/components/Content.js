@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
-import Finder from './Finder';
-import Builder from './Builder';
-import Login from './Login';
-import UserCommands from './UserCommands';
-import './Content.scss';
-import { Redirect, withRouter } from 'react-router';
-import SignUp from './SignUp';
-import { connect } from 'react-redux';
-import PageNotFound from './common/PageNotFound';
+import React, { Component } from "react";
+import { Route, Switch } from "react-router-dom";
+import Finder from "./Finder";
+import Builder from "./Builder";
+import Login from "./Login";
+import UserCommands from "./UserCommands";
+import "./Content.scss";
+import { Redirect, withRouter } from "react-router";
+import SignUp from "./SignUp";
+import { connect } from "react-redux";
+import PageNotFound from "./common/PageNotFound";
 
 const ProtectedRoute = ({ component: Component, isLoggedIn, path, ...rest }) =>
     <Route path={path} {...rest} render={props => isLoggedIn ?

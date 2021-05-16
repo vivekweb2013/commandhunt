@@ -1,30 +1,30 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
-import * as API from '../api/API';
-import { getUserCommands } from '../actions';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { formatDate, formatTime } from '../Utils';
-import Pagination from './common/Pagination';
-import ItemsPerPage from './common/ItemsPerPage';
-import SearchInput from './common/SearchInput';
-import ToastMaker from 'toastmaker';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
+import * as API from "../api/API";
+import { getUserCommands } from "../actions";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { formatDate, formatTime } from "../Utils";
+import Pagination from "./common/Pagination";
+import ItemsPerPage from "./common/ItemsPerPage";
+import SearchInput from "./common/SearchInput";
+import ToastMaker from "toastmaker";
 import "toastmaker/dist/toastmaker.css";
-import { getQueryParamByName, getArrayQueryParamByName, getQueryParamsFromFilter } from '../Utils';
-import './UserCommands.scss';
+import { getQueryParamByName, getArrayQueryParamByName, getQueryParamsFromFilter } from "../Utils";
+import "./UserCommands.scss";
 
 class UserCommands extends Component {
     state = {
         filter: {
-            conditions: getArrayQueryParamByName('conditions'),
+            conditions: getArrayQueryParamByName("conditions"),
 
             pagination: {
-                pageNumber: Number(getQueryParamByName('pagination.pageNumber')) || 1,
-                pageSize: Number(getQueryParamByName('pagination.pageSize')) || 10,
+                pageNumber: Number(getQueryParamByName("pagination.pageNumber")) || 1,
+                pageSize: Number(getQueryParamByName("pagination.pageSize")) || 10,
                 sort: {
-                    by: getQueryParamByName('pagination.sort.by') || 'commandText',
-                    order: getQueryParamByName('pagination.sort.order') || 'ASC'
+                    by: getQueryParamByName("pagination.sort.by") || "commandText",
+                    order: getQueryParamByName("pagination.sort.order") || "ASC"
                 }
             }
         }
@@ -58,7 +58,7 @@ class UserCommands extends Component {
         this.setState({
             filter: {
                 ...this.state.filter,
-                conditions: value ? [{ key: 'commandText', value, operator: 'CONTAINS' }] : []
+                conditions: value ? [{ key: "commandText", value, operator: "CONTAINS" }] : []
             }
         }, () => history.push(getQueryParamsFromFilter(this.state.filter)));
     }
@@ -82,14 +82,14 @@ class UserCommands extends Component {
     handleDelete(e, userCommand) {
         e.preventDefault();
         this.props.deleteUserCommand(userCommand.id).then(() => {
-            ToastMaker('Deleted!');
+            ToastMaker("Deleted!");
             this.getUserCommands(this.state.filter);
         });
     }
 
     getSortIcon(columns) {
         const { filter } = this.state;
-        return filter.pagination.sort.by === columns ? (filter.pagination.sort.order === 'DESC' ? 'sort-down' : 'sort-up') : '';
+        return filter.pagination.sort.by === columns ? (filter.pagination.sort.order === "DESC" ? "sort-down" : "sort-up") : "";
     }
 
     sort(columns) {
@@ -100,7 +100,7 @@ class UserCommands extends Component {
                 ...filter, pagination: {
                     ...filter.pagination, sort: {
                         by: columns,
-                        order: filter.pagination.sort.by === columns && filter.pagination.sort.order === 'ASC' ? 'DESC' : 'ASC'
+                        order: filter.pagination.sort.by === columns && filter.pagination.sort.order === "ASC" ? "DESC" : "ASC"
                     }
                 }
             }
@@ -118,20 +118,20 @@ class UserCommands extends Component {
             <div className="user-commands">
                 <span className="heading">User Commands</span>
                 <div className="toolbar">
-                    <SearchInput defaultValue={filter.conditions[0] ? filter.conditions[0].value : ''}
+                    <SearchInput defaultValue={filter.conditions[0] ? filter.conditions[0].value : ""}
                         onChange={this.handleQueryUpdate.bind(this)} />
                     <ItemsPerPage pageSize={filter.pagination.pageSize} handlePageSizeChange={this.handlePageSizeChange.bind(this)} />
                 </div>
                 <table>
                     <thead><tr>
-                        <th className="command-column" onClick={(e) => this.sort('commandText')}>
-                            COMMAND {this.getSortIcon('commandText') && <FontAwesomeIcon icon={this.getSortIcon('commandText')} />}
+                        <th className="command-column" onClick={(e) => this.sort("commandText")}>
+                            COMMAND {this.getSortIcon("commandText") && <FontAwesomeIcon icon={this.getSortIcon("commandText")} />}
                         </th>
-                        <th className="type-column" onClick={(e) => this.sort('commandName')}>
-                            TYPE {this.getSortIcon('commandName') && <FontAwesomeIcon icon={this.getSortIcon('commandName')} />}
+                        <th className="type-column" onClick={(e) => this.sort("commandName")}>
+                            TYPE {this.getSortIcon("commandName") && <FontAwesomeIcon icon={this.getSortIcon("commandName")} />}
                         </th>
-                        <th className="date-column" onClick={(e) => this.sort('operatedOn')}>
-                            DATE {this.getSortIcon('operatedOn') && <FontAwesomeIcon icon={this.getSortIcon('operatedOn')} />}
+                        <th className="date-column" onClick={(e) => this.sort("operatedOn")}>
+                            DATE {this.getSortIcon("operatedOn") && <FontAwesomeIcon icon={this.getSortIcon("operatedOn")} />}
                         </th>
                         <th className="actions-column">ACTIONS</th>
                     </tr></thead>

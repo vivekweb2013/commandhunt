@@ -1,26 +1,26 @@
-import React, { Component } from 'react';
-import './Finder.scss';
-import SearchInput from './common/SearchInput';
-import Pagination from './common/Pagination';
-import ItemsPerPage from './common/ItemsPerPage';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
-import * as API from '../api/API';
-import { getQueryParamByName, getArrayQueryParamByName, getQueryParamsFromFilter } from '../Utils';
-import { getMetaCommands } from '../actions';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { Component } from "react";
+import "./Finder.scss";
+import SearchInput from "./common/SearchInput";
+import Pagination from "./common/Pagination";
+import ItemsPerPage from "./common/ItemsPerPage";
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
+import * as API from "../api/API";
+import { getQueryParamByName, getArrayQueryParamByName, getQueryParamsFromFilter } from "../Utils";
+import { getMetaCommands } from "../actions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class Finder extends Component {
     state = {
         filter: {
-            conditions: getArrayQueryParamByName('conditions'),
+            conditions: getArrayQueryParamByName("conditions"),
 
             pagination: {
-                pageNumber: Number(getQueryParamByName('pagination.pageNumber')) || 1,
-                pageSize: Number(getQueryParamByName('pagination.pageSize')) || 10,
+                pageNumber: Number(getQueryParamByName("pagination.pageNumber")) || 1,
+                pageSize: Number(getQueryParamByName("pagination.pageSize")) || 10,
                 sort: {
-                    by: getQueryParamByName('pagination.sort.by') || 'name',
-                    order: getQueryParamByName('pagination.sort.order') || 'ASC'
+                    by: getQueryParamByName("pagination.sort.by") || "name",
+                    order: getQueryParamByName("pagination.sort.order") || "ASC"
                 }
             }
         }
@@ -54,7 +54,7 @@ class Finder extends Component {
         this.setState({
             filter: {
                 ...this.state.filter,
-                conditions: value ? [{ key: 'name', value, operator: 'CONTAINS' }] : []
+                conditions: value ? [{ key: "name", value, operator: "CONTAINS" }] : []
             }
         }, () => history.push(getQueryParamsFromFilter(this.state.filter)));
     }
@@ -77,7 +77,7 @@ class Finder extends Component {
 
     getSortIcon(columns) {
         const { filter } = this.state;
-        return filter.pagination.sort.by === columns ? (filter.pagination.sort.order === 'DESC' ? 'sort-down' : 'sort-up') : '';
+        return filter.pagination.sort.by === columns ? (filter.pagination.sort.order === "DESC" ? "sort-down" : "sort-up") : "";
     }
 
     sort(columns) {
@@ -88,7 +88,7 @@ class Finder extends Component {
                 ...filter, pagination: {
                     ...filter.pagination, sort: {
                         by: columns,
-                        order: filter.pagination.sort.by === columns && filter.pagination.sort.order === 'ASC' ? 'DESC' : 'ASC'
+                        order: filter.pagination.sort.by === columns && filter.pagination.sort.order === "ASC" ? "DESC" : "ASC"
                     }
                 }
             }
@@ -104,7 +104,7 @@ class Finder extends Component {
 
         return (
             <div className="finder">
-                <SearchInput defaultValue={filter.conditions[0] ? filter.conditions[0].value : ''}
+                <SearchInput defaultValue={filter.conditions[0] ? filter.conditions[0].value : ""}
                     onChange={this.handleQueryUpdate.bind(this)} />
 
                 {metaCommands && metaCommands.totalSize > 0 ? <div>
@@ -114,11 +114,11 @@ class Finder extends Component {
                     <table>
                         <thead>
                             <tr>
-                                <th className="name-column" onClick={(e) => this.sort('name')}>
-                                    COMMAND {this.getSortIcon('name') && <FontAwesomeIcon icon={this.getSortIcon('name')} />}
+                                <th className="name-column" onClick={(e) => this.sort("name")}>
+                                    COMMAND {this.getSortIcon("name") && <FontAwesomeIcon icon={this.getSortIcon("name")} />}
                                 </th>
-                                <th className="syntax-column" onClick={(e) => this.sort('syntax')}>
-                                    SYNTAX {this.getSortIcon('syntax') && <FontAwesomeIcon icon={this.getSortIcon('syntax')} />}
+                                <th className="syntax-column" onClick={(e) => this.sort("syntax")}>
+                                    SYNTAX {this.getSortIcon("syntax") && <FontAwesomeIcon icon={this.getSortIcon("syntax")} />}
                                 </th>
                                 <th className="desc-column">DESCRIPTION</th>
                             </tr>
@@ -128,7 +128,7 @@ class Finder extends Component {
                                 onClick={e => { e.preventDefault(); history.push(`/public/command/${metaCommand.properties.name}?mode=build`) }}>
                                 <td className="name">{metaCommand.properties.name} </td>
                                 <td className="syntax">
-                                    <code>{metaCommand.properties.syntax.replace(/\.\.\./g, '···') /* replacing dots to avoid confusion with ellipsis */}</code>
+                                    <code>{metaCommand.properties.syntax.replace(/\.\.\./g, "···") /* replacing dots to avoid confusion with ellipsis */}</code>
                                 </td>
                                 <td className="desc">
                                     <span>{metaCommand.properties.desc}</span><br />

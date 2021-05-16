@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import Header from './components/Header';
-import Content from './components/Content';
-import Footer from './components/Footer';
-import Spinner from './components/common/Spinner';
-import * as API from './api/API';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
-import { userLogin, userLogout } from './actions';
-import './App.scss';
+import React, { Component } from "react";
+import Header from "./components/Header";
+import Content from "./components/Content";
+import Footer from "./components/Footer";
+import Spinner from "./components/common/Spinner";
+import * as API from "./api/API";
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
+import { userLogin, userLogout } from "./actions";
+import "./App.scss";
 
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faHome, faSignInAlt, faSignOutAlt, faUserCog, faEye, faCog, faClipboard, faEdit, faTrashAlt, faSortUp, faSortDown, faCircleNotch, faBug, faHeart, faCodeBranch, faQuestion } from '@fortawesome/free-solid-svg-icons';
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faHome, faSignInAlt, faSignOutAlt, faUserCog, faEye, faCog, faClipboard, faEdit, faTrashAlt, faSortUp, faSortDown, faCircleNotch, faBug, faHeart, faCodeBranch, faQuestion } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faHome, faSignInAlt, faSignOutAlt, faUserCog, faEye, faCog, faClipboard, faEdit, faTrashAlt, faSortUp, faSortDown, faCircleNotch, faBug, faHeart, faCodeBranch, faQuestion);
 

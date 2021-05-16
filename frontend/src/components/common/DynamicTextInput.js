@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class DynamicTextInput extends Component {
 
@@ -9,7 +9,7 @@ class DynamicTextInput extends Component {
     }
 
     addClick() {
-        const values = [...this.props.values, ''];
+        const values = [...this.props.values, ""];
         this.props.handleChange(this.props.name, values);
     }
 
@@ -24,10 +24,10 @@ class DynamicTextInput extends Component {
 
         return (<div>{values.map((val, i) =>
             <span key={i} className="dynamic-text-ip-wrapper">
-                <input id={`${id}_${i}`} name={name} type="text" value={val || ''} onChange={this.handleChange.bind(this, i)}
+                <input id={`${id}_${i}`} name={name} type="text" value={val || ""} onChange={this.handleChange.bind(this, i)}
                     pattern={pattern} required={required} disabled={disabled} />
 
-                {isRepeatable && !disabled && <input type='button' value={i === 0 ? ' ＋ ' : ' － '}
+                {isRepeatable && !disabled && <input type="button" value={i === 0 ? " ＋ " : " － "}
                     onClick={i === 0 ? this.addClick.bind(this) : this.removeClick.bind(this, i)} />}
             </span>)}
         </div>);

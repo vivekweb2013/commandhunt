@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
-import Spinner from './common/Spinner';
-import * as API from '../api/API';
-import './SignUp.scss';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
+import Spinner from "./common/Spinner";
+import * as API from "../api/API";
+import "./SignUp.scss";
 
 class SignUp extends Component {
     state = {
@@ -22,7 +22,7 @@ class SignUp extends Component {
         e.preventDefault();
         const { signUpRequest } = this.state;
         this.props.userSignUp(signUpRequest).then(() => {
-            this.props.history.push('/login');
+            this.props.history.push("/login");
         });
     }
     render() {

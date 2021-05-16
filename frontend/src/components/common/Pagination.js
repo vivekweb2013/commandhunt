@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import './Pagination.scss';
+import React, { Component } from "react";
+import "./Pagination.scss";
 
 class Pagination extends Component {
 
@@ -25,7 +25,7 @@ class Pagination extends Component {
 
                 <button type="button" onClick={() => this.props.handlePageChange(totalPages)}>&raquo;</button>
             </div>
-        ) : '';
+        ) : "";
     }
 }
 

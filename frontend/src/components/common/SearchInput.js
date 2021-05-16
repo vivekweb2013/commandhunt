@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import './SearchInput.scss';
+import React, { Component } from "react";
+import "./SearchInput.scss";
 
 class SearchInput extends Component {
     constructor(props) {
@@ -27,7 +27,7 @@ class SearchInput extends Component {
 
     handleInputReset = (e) => {
         e.preventDefault();
-        this.props.onChange('');
+        this.props.onChange("");
     }
 
     render() {
@@ -36,7 +36,7 @@ class SearchInput extends Component {
             <fieldset className="search-input">
                 <input type="text" onChange={e => this.handleOnChange(e)} placeholder="Search..."
                     defaultValue={defaultValue} className="field" />
-                <div className={'icons-container ' + (defaultValue ? 'icons-container-flip' : '')}>
+                <div className={"icons-container " + (defaultValue ? "icons-container-flip" : "")}>
                     <div className="icon-search"></div>
                     <div className="icon-close" onClick={e => this.handleInputReset(e)}> </div>
                 </div>

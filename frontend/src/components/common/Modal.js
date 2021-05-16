@@ -1,27 +1,27 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import { createPortal } from "react-dom";
-import './Modal.scss';
+import "./Modal.scss";
 
 
 class Modal extends Component {
     constructor(props) {
         super(props);
-        // Create a div that we'll render the modal into. Because each
+        // Create a div that we"ll render the modal into. Because each
         // Modal component has its own element, we can render multiple
         // modal components into the modal container.
-        this.el = document.createElement('div');
-        this.el.setAttribute('class', 'modal-wrapper');
+        this.el = document.createElement("div");
+        this.el.setAttribute("class", "modal-wrapper");
     }
 
     componentDidMount() {
-        // Append the element into the DOM on mount. We'll render
+        // Append the element into the DOM on mount. We"ll render
         // into the modal container element (see the HTML tab).
-        document.getElementById('modal-root').appendChild(this.el);
+        document.getElementById("modal-root").appendChild(this.el);
     }
 
     componentWillUnmount() {
         // Remove the element from the DOM when we unmount
-        document.getElementById('modal-root').removeChild(this.el);
+        document.getElementById("modal-root").removeChild(this.el);
     }
 
     /**
@@ -30,7 +30,7 @@ class Modal extends Component {
      */
     render() {
         const { title, children, style, onClose, onConfirm } = this.props;
-        const type = this.props.type || 'info';
+        const type = this.props.type || "info";
         // Use a portal to render the children into the element
         return createPortal(
             // Any valid React child: JSX, strings, arrays, etc.
@@ -44,8 +44,8 @@ class Modal extends Component {
                         {children}
                     </div>
                     <div className="modal-footer">
-                        {type === 'confirm' && <button type="button" className="footer-btn confirm" onClick={e => onConfirm()}>OKAY</button>}
-                        <button type="button" className="footer-btn" onClick={e => onClose && onClose()}>{type === 'confirm' ? 'CANCEL' : 'CLOSE'}</button>
+                        {type === "confirm" && <button type="button" className="footer-btn confirm" onClick={e => onConfirm()}>OKAY</button>}
+                        <button type="button" className="footer-btn" onClick={e => onClose && onClose()}>{type === "confirm" ? "CANCEL" : "CLOSE"}</button>
                     </div>
                 </div>
             </div>,

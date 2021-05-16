@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import './ItemsPerPage.scss';
+import React, { Component } from "react";
+import "./ItemsPerPage.scss";
 
 class ItemsPerPage extends Component {
     render() {

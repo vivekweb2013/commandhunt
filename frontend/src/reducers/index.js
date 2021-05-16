@@ -1,9 +1,9 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from "redux";
 import {
     GET_META_COMMANDS, GET_META_COMMAND,
     GET_USER_COMMANDS,
     USER_LOGIN, USER_LOGOUT, IS_MANUAL_AUTH_ALLOWED
-} from '../actions';
+} from "../actions";
 
 const metaCommandReducer = (state = {}, action) => {
     const { metaCommands, metaCommand } = action;

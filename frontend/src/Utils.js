@@ -1,33 +1,33 @@
-import tinydate from 'tinydate';
+import tinydate from "tinydate";
 
 export const getValidationRegex = (dataType) => {
     // Note that HTML5 engines wraps the whole pattern inside ^(?: and )$ constructs
     switch (dataType) {
-        case 'PATH':
+        case "PATH":
             return '((\\.{0,2}/(?!/))(\\.?[a-zA-Z0-9_*-])*)+|"((\\.{0,2}/(?!/))(\\.?[ ]*[a-zA-Z0-9_*-])*)+"';
-        case 'NUMBER':
-            return '[0-9]*';
-        case 'PERMISSION':
-            return '[0-9]{3}';
+        case "NUMBER":
+            return "[0-9]*";
+        case "PERMISSION":
+            return "[0-9]{3}";
         default:
-            return '[\\s\\S]*'; // match anything
+            return "[\\s\\S]*"; // match anything
     }
 }
 
 export const getQueryParamByName = (name, url) => {
     if (!url) url = window.location.href;
-    name = name.replace(/[[\]]/g, '\\$&');
-    const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+    name = name.replace(/[[\]]/g, "\\$&");
+    const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
     const results = regex.exec(url);
     if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    if (!results[2]) return "";
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
 export const getArrayQueryParamByName = (name, url) => {
     if (!url) url = decodeURIComponent(window.location.search);
     name = name.replace(/[[\]]/g, "\\$&");
-    const regex = new RegExp(`[?|&](${name})\\[(\\d+)\\]\\.(\\w+)=(\\w+)`, 'gm');
+    const regex = new RegExp(`[?|&](${name})\\[(\\d+)\\]\\.(\\w+)=(\\w+)`, "gm");
 
     let match, result = [];
     while ((match = regex.exec(url)) !== null) {
@@ -43,14 +43,14 @@ export const getQueryParamsFromFilter = (filter) => {
         + `&pagination.sort.by=${filter.pagination.sort.by}`
         + `&pagination.sort.order=${filter.pagination.sort.order}&`
         + filter.conditions.reduce((a, c, i) => a +
-            `conditions%5B${i}%5D.key=${c.key}&conditions%5B${i}%5D.operator=${c.operator}&conditions%5B${i}%5D.value=${c.value}`, '');
+            `conditions%5B${i}%5D.key=${c.key}&conditions%5B${i}%5D.operator=${c.operator}&conditions%5B${i}%5D.value=${c.value}`, "");
 
     return queryParamStr;
 }
 
 export const formatDate = (date) => {
-    const stamp = tinydate('{DD} {MMMM} {YYYY}', {
-        MMMM: d => date.toLocaleString('default', { month: 'long' }),
+    const stamp = tinydate("{DD} {MMMM} {YYYY}", {
+        MMMM: d => date.toLocaleString("default", { month: "long" }),
         DD: d => date.getDate()
     });
 
@@ -58,8 +58,8 @@ export const formatDate = (date) => {
 }
 
 export const formatTime = (date) => {
-    const stamp = tinydate('{HH}:{mm} {A}', {
-        A: date => date.getHours() >= 12 ? 'PM' : 'AM',
+    const stamp = tinydate("{HH}:{mm} {A}", {
+        A: date => date.getHours() >= 12 ? "PM" : "AM",
         HH: date => {
             const h = date.getHours();
             return h > 12 ? h - 12 : h;
@@ -85,7 +85,7 @@ export function deepCompare() {
 
         // remember that NaN === NaN returns false
         // and isNaN(undefined) returns true
-        if (isNaN(x) && isNaN(y) && typeof x === 'number' && typeof y === 'number') {
+        if (isNaN(x) && isNaN(y) && typeof x === "number" && typeof y === "number") {
             return true;
         }
 
@@ -99,7 +99,7 @@ export function deepCompare() {
         // Works in case when functions are created in constructor.
         // Comparing dates is a common scenario. Another built-ins?
         // We can even handle functions passed across iframes
-        if ((typeof x === 'function' && typeof y === 'function') ||
+        if ((typeof x === "function" && typeof y === "function") ||
             (x instanceof Date && y instanceof Date) ||
             (x instanceof RegExp && y instanceof RegExp) ||
             (x instanceof String && y instanceof String) ||
@@ -149,8 +149,8 @@ export function deepCompare() {
             }
 
             switch (typeof (x[p])) {
-                case 'object':
-                case 'function':
+                case "object":
+                case "function":
 
                     leftChain.push(x);
                     rightChain.push(y);
@@ -175,7 +175,7 @@ export function deepCompare() {
     }
 
     if (arguments.length < 1) {
-        return true; //Die silently? Don't know how to handle such case, please help...
+        return true; //Die silently? Don"t know how to handle such case, please help...
         // throw "Need two or more arguments to compare";
     }
 
