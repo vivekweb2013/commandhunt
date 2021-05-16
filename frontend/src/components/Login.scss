@@ -8,73 +8,34 @@ $gh-btn-color: #1b1817;
   flex-direction: column;
   justify-content: center;
   user-select: none;
+
   .icon-s-nw-login {
     background: url(../styles/icons/social/social.svg) no-repeat center left;
     height: 100px;
     margin: 10px;
     width: 100px;
   }
+
   .s-nw-login-text {
     text-align: center;
-    color: #444444;
+    color: #444;
     font-weight: 500;
     font-size: medium;
     margin-bottom: 5px;
   }
+
   .box {
     display: flex;
     flex-direction: row;
     justify-content: center;
     padding: 5px;
-    .manual-login {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 10px 50px;
-      input {
-        background-color: #f1f0f3;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-        font-size: 1.2rem;
-        margin: 5px;
-        padding: 8px;
-        resize: vertical;
-      }
-      button {
-        background-color: green;
-        border: none;
-        border-radius: 3px;
-        color: white;
-        cursor: pointer;
-        font-size: 1rem;
-        margin: 5px;
-        opacity: 0.8;
-        padding: 10px;
-        text-decoration: none;
-        &:hover {
-          opacity: 1;
-        }
-      }
-    }
-    .divide {
-      border: 1px solid #ddd;
-      margin: 10px;
-      transform: translate(-50%);
-      .divide-text {
-        background-color: #f1f1f1;
-        border: 1px solid #ccc;
-        border-radius: 50%;
-        padding: 8px 10px;
-        position: absolute;
-        top: 50%;
-        transform: translate(-50%, -50%);
-      }
-    }
+
     .s-nw-buttons {
       align-self: center;
       display: flex;
       flex-direction: column;
       padding: 10px 50px;
+
       button {
         border-radius: 3px;
         border-style: none;
@@ -86,6 +47,7 @@ $gh-btn-color: #1b1817;
         outline: none;
         padding: 10px;
         text-align: left;
+
         span {
           background-size: contain;
           display: inline-block;
@@ -94,46 +56,109 @@ $gh-btn-color: #1b1817;
           vertical-align: middle;
           width: 25px;
         }
+
         /* Social icon names & classes are renamed to short form to avoid getting filtered/blocked by adblock plugin */
         &.ggl {
           background-color: $ggl-btn-color;
+
           span.icon-ggl {
             background: url(../styles/icons/social/ggl.svg) no-repeat center left;
           }
         }
+
         &.fbk {
           background-color: $fb-btn-color;
+
           span.icon-fbk {
             background: url(../styles/icons/social/fbk.svg) no-repeat center left;
           }
         }
+
         &.gh {
           background-color: $gh-btn-color;
+
           span.icon-gh {
             background: url(../styles/icons/social/gh.svg) no-repeat center left;
           }
         }
+
         &:hover {
           opacity: 1;
         }
       }
     }
+
+    .manual-login {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 10px 50px;
+
+      input {
+        background-color: #f1f0f3;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        font-size: 1.2rem;
+        margin: 5px;
+        padding: 8px;
+        resize: vertical;
+      }
+
+      button {
+        background-color: green;
+        border: none;
+        border-radius: 3px;
+        color: white;
+        cursor: pointer;
+        font-size: 1rem;
+        margin: 5px;
+        opacity: 0.8;
+        padding: 10px;
+        text-decoration: none;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+
+    .divide {
+      border: 1px solid #ddd;
+      margin: 10px;
+      transform: translate(-50%);
+
+      .divide-text {
+        background-color: #f1f1f1;
+        border: 1px solid #ccc;
+        border-radius: 50%;
+        padding: 8px 10px;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
   }
+
   @media screen and (max-width: 715px) {
     .box {
       flex-wrap: wrap;
+
       .manual-login {
         width: 100%;
       }
+
       .s-nw-buttons {
         flex-direction: row;
+
         button {
           font-size: 0;
+
           span {
             margin-right: 0;
           }
         }
       }
+
       .divide,
       .s-nw-login-text {
         display: none;

@@ -61,16 +61,6 @@ $avatar-size: 40px;
     height: 100%;
     position: relative;
 
-    &:hover {
-      .dropdown-btn {
-        filter: contrast(180%);
-      }
-      .dropdown-content {
-        display: block;
-        width: 100%;
-      }
-    }
-
     .dropdown-btn {
       background-color: lighten($color-primary, 15%);
       border: none;
@@ -91,11 +81,12 @@ $avatar-size: 40px;
 
     .dropdown-content {
       background-color: #f1f1f1;
-      box-shadow: 0px 8px 16px 0px rgba(240, 208, 208, 0.2);
+      box-shadow: 0 8px 16px 0 rgba(240, 208, 208, 0.2);
       display: none;
       min-width: fit-content;
       white-space: nowrap;
       z-index: 1;
+
       button {
         background-color: transparent;
         border: none;
@@ -105,6 +96,7 @@ $avatar-size: 40px;
         padding: 0;
         width: inherit;
       }
+
       a,
       button {
         color: black;
@@ -116,6 +108,17 @@ $avatar-size: 40px;
         &:hover {
           background-color: #ddd;
         }
+      }
+    }
+
+    &:hover {
+      .dropdown-btn {
+        filter: contrast(180%);
+      }
+
+      .dropdown-content {
+        display: block;
+        width: 100%;
       }
     }
   }

@@ -1,214 +1,240 @@
 @import "../../styles/shared";
 
 .page-not-found {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+
+  .scene {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .text-main {
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+  }
+
+  .text-note {
+    font-weight: bold;
+    color: $color-primary;
+    margin-top: 10px;
+  }
+
+  .sheep {
+    display: inline-block;
+    position: relative;
+    margin-bottom: 40px;
+    $skin: $color-primary;
+
+    .top {
+      position: relative;
+      top: 0;
+      animation: head-move 1s infinite;
+    }
+
+    .head {
+      display: inline-block;
+      width: 5rem;
+      height: 5rem;
+      border-radius: 100%;
+      background: $skin;
+      vertical-align: middle;
+      position: relative;
+      top: 1rem;
+      transform: rotate(30deg);
+      z-index: 3;
+
+      &::before {
+        content: "";
+        display: inline-block;
+        width: 80%;
+        height: 50%;
+        background: $skin;
+        position: absolute;
+        bottom: 0;
+        right: -10%;
+        border-radius: 50% 40%;
+      }
+
+      .eye {
+        display: inline-block;
+        width: 1rem;
+        height: 1rem;
+        border-radius: 100%;
+        background: white;
+        position: absolute;
+        overflow: hidden;
+
+        &::before {
+          content: "";
+          display: inline-block;
+          background: $color-primary;
+          width: 50%;
+          height: 50%;
+          border-radius: 100%;
+          position: absolute;
+          right: 10%;
+          bottom: 10%;
+          transition: all 0.3s;
+        }
+
+        &.one {
+          right: -2%;
+          top: 1.7rem;
+        }
+
+        &.two {
+          right: 2.5rem;
+          top: 1.7rem;
+        }
+      }
+
+      .ear {
+        background: $skin;
+        width: 50%;
+        height: 30%;
+        border-radius: 100%;
+        position: absolute;
+
+        &.one {
+          left: -10%;
+          top: 5%;
+          transform: rotate(-30deg);
+        }
+
+        &.two {
+          top: 2%;
+          right: -5%;
+          transform: rotate(20deg);
+        }
+      }
+
+      &:hover {
+        .ear {
+          &.one,
+          &.two {
+            transform: rotate(0deg);
+          }
+        }
+      }
+    }
+
+    &:hover {
+      .head {
+        transform: rotate(0deg);
+
+        .eye {
+          width: 1.25rem;
+          height: 1.25rem;
+
+          &::before {
+            right: 30%;
+          }
+        }
+      }
+
+      .top {
+        animation-play-state: paused;
+      }
+    }
+
+    .body {
+      display: inline-block;
+      width: 8rem;
+      height: 7rem;
+      border-radius: 100%;
+      background: white;
+      position: relative;
+      vertical-align: middle;
+      margin-right: -3rem;
+      z-index: 2;
+    }
+
+    .legs {
+      display: inline-block;
+      position: absolute;
+      top: 80%;
+      left: 10%;
+      z-index: 1;
+
+      .leg {
+        display: inline-block;
+        background: darken($skin, 5%);
+        width: 0.5rem;
+        height: 2.5rem;
+        margin: 0.3rem;
+      }
+    }
+
+    &::before {
+      content: "";
+      display: inline-block;
+      position: absolute;
+      top: 112%;
+      width: 100%;
+      height: 20%;
+      border-radius: 100%;
+      background: rgba($color-primary, 0.4);
+    }
+
+    * {
+      transition: transform 0.3s;
+    }
+  }
+
+  a.home-link {
+    display: inline-block;
+    border-radius: 4px;
+    background-color: $color-secondary;
+    border: none;
+    color: #fff;
     text-align: center;
+    outline: none;
+    font-size: 18px;
+    padding: 10px;
+    width: 150px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 20px;
+    user-select: none;
 
-    .scene {
-        display: inline-block;
-        vertical-align: middle;
-    }
-    .text-main {
-        color: white;
-        font-size: 2rem;
-        font-weight: bold;
-    }
-    .text-note {
-        font-weight: bold;
-        color: $color-primary;
-        margin-top: 10px;
+    & span {
+      cursor: pointer;
+      display: inline-block;
+      position: relative;
+      transition: 0.5s;
+
+      &::after {
+        content: "\00ab";
+        position: absolute;
+        opacity: 0;
+        top: 0;
+        left: -20px;
+        transition: 0.5s;
+      }
     }
 
-    .sheep {
-        display: inline-block;
-        position: relative;
-        $skin: $color-primary;
-        margin-bottom: 40px;
-        * {
-            transition: transform 0.3s;
-        }
-        .top {
-            position: relative;
-            top: 0;
-            animation: head-move 1s infinite;
-        }
-        &:hover {
-            .head {
-                transform: rotate(0deg);
-                .eye {
-                    width: 1.25rem;
-                    height: 1.25rem;
-                    &:before {
-                        right: 30%;
-                    }
-                }
-            }
-            .top {
-                animation-play-state: paused;
-            }
-        }
-        .head {
-            display: inline-block;
-            width: 5rem;
-            height: 5rem;
-            border-radius: 100%;
-            background: $skin;
-            vertical-align: middle;
-            position: relative;
-            top: 1rem;
-            transform: rotate(30deg);
-            z-index: 3;
-            &:before {
-                content: "";
-                display: inline-block;
-                width: 80%;
-                height: 50%;
-                background: $skin;
-                position: absolute;
-                bottom: 0;
-                right: -10%;
-                border-radius: 50% 40%;
-            }
-            &:hover {
-                .ear {
-                    &.one,
-                    &.two {
-                        transform: rotate(0deg);
-                    }
-                }
-            }
-            .eye {
-                display: inline-block;
-                width: 1rem;
-                height: 1rem;
-                border-radius: 100%;
-                background: white;
-                position: absolute;
-                overflow: hidden;
-                &:before {
-                    content: "";
-                    display: inline-block;
-                    background: $color-primary;
-                    width: 50%;
-                    height: 50%;
-                    border-radius: 100%;
-                    position: absolute;
-                    right: 10%;
-                    bottom: 10%;
-                    transition: all 0.3s;
-                }
-                &.one {
-                    right: -2%;
-                    top: 1.7rem;
-                }
-                &.two {
-                    right: 2.5rem;
-                    top: 1.7rem;
-                }
-            }
-            .ear {
-                background: $skin;
-                width: 50%;
-                height: 30%;
-                border-radius: 100%;
-                position: absolute;
-                &.one {
-                    left: -10%;
-                    top: 5%;
-                    transform: rotate(-30deg);
-                }
-                &.two {
-                    top: 2%;
-                    right: -5%;
-                    transform: rotate(20deg);
-                }
-            }
-        }
-        .body {
-            display: inline-block;
-            width: 8rem;
-            height: 7rem;
-            border-radius: 100%;
-            background: white;
-            position: relative;
-            vertical-align: middle;
-            margin-right: -3rem;
-            z-index: 2;
-        }
-        .legs {
-            display: inline-block;
-            position: absolute;
-            top: 80%;
-            left: 10%;
-            z-index: 1;
-            .leg {
-                display: inline-block;
-                background: darken($skin, 5%);
-                width: 0.5rem;
-                height: 2.5rem;
-                margin: 0.3rem;
-            }
-        }
-        &:before {
-            content: "";
-            display: inline-block;
-            position: absolute;
-            top: 112%;
-            width: 100%;
-            height: 20%;
-            border-radius: 100%;
-            background: rgba($color-primary, 0.4);
-        }
-    }
-    a.home-link {
-        display: inline-block;
-        border-radius: 4px;
-        background-color: $color-secondary;
-        border: none;
-        color: #ffffff;
-        text-align: center;
-        outline: none;
-        font-size: 18px;
-        padding: 10px;
-        width: 150px;
-        transition: all 0.5s;
-        cursor: pointer;
-        margin: 20px;
-        user-select: none;
+    &:hover span {
+      padding-left: 20px;
 
-        & span {
-            cursor: pointer;
-            display: inline-block;
-            position: relative;
-            transition: 0.5s;
-            &:after {
-                content: "\00ab";
-                position: absolute;
-                opacity: 0;
-                top: 0;
-                left: -20px;
-                transition: 0.5s;
-            }
-        }
-
-        &:hover span {
-            padding-left: 20px;
-            &:after {
-                opacity: 1;
-                left: 0;
-            }
-        }
+      &::after {
+        opacity: 1;
+        left: 0;
+      }
     }
+  }
 }
 
 @keyframes head-move {
-    0% {
-        top: 0;
-    }
-    50% {
-        top: 0.2rem;
-    }
+  0% {
+    top: 0;
+  }
+
+  50% {
+    top: 0.2rem;
+  }
 }

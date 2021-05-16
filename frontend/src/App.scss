@@ -21,6 +21,7 @@
   position: relative;
   text-align: left;
   width: 100%;
+
   @media screen and (max-width: 700px) {
     flex-direction: column;
   }

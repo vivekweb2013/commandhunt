@@ -29,8 +29,8 @@ body {
 }
 
 body *,
-body *:before,
-body *:after {
+body *::before,
+body *::after {
   box-sizing: inherit;
 }
 

@@ -6,8 +6,8 @@
 [data-tooltip] {
   position: relative;
 
-  &:before,
-  &:after {
+  &::before,
+  &::after {
     display: block;
     opacity: 0;
     pointer-events: none;
@@ -15,12 +15,14 @@
     transform: translate3d(0, -10px, 0);
     transition: all 0.15s ease-in-out;
   }
-  &:after {
+
+  &::after {
     content: "";
     height: 0;
     width: 0;
   }
-  &:before {
+
+  &::before {
     background-color: black;
     border-radius: 2px;
     color: #fff;
@@ -30,19 +32,20 @@
     white-space: nowrap;
   }
 
-  &:hover:after,
-  &:hover:before {
+  &:hover::after,
+  &:hover::before {
     opacity: 1;
     transform: translate3d(0, 0, 0);
     z-index: 9999;
   }
 
   &.tooltip-t {
-    &:after {
+    &::after {
       border-top: 6px solid black;
       bottom: 100%;
     }
-    &:before {
+
+    &::before {
       bottom: 100%;
       left: 0;
       margin-bottom: 6px;
@@ -50,11 +53,12 @@
   }
 
   &.tooltip-b {
-    &:after {
+    &::after {
       border-bottom: 6px solid black;
       top: 100%;
     }
-    &:before {
+
+    &::before {
       left: 0;
       margin-top: 6px;
       top: 100%;
@@ -62,12 +66,13 @@
   }
 
   &.tooltip-r {
-    &:after {
+    &::after {
       border-right: 6px solid black;
       left: 100%;
       top: 2px;
     }
-    &:before {
+
+    &::before {
       left: 100%;
       margin-left: 6px;
       top: -5px;
@@ -75,27 +80,28 @@
   }
 
   &.tooltip-l {
-    &:after {
+    &::after {
       border-left: 6px solid black;
       right: 100%;
       top: 2px;
     }
-    &:before {
+
+    &::before {
       margin-right: 6px;
       right: 100%;
       top: -5px;
     }
   }
 
-  &.tooltip-t:after,
-  &.tooltip-b:after {
+  &.tooltip-t::after,
+  &.tooltip-b::after {
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
     left: 20px;
   }
 
-  &.tooltip-r:after,
-  &.tooltip-l:after {
+  &.tooltip-r::after,
+  &.tooltip-l::after {
     border-bottom: 6px solid transparent;
     border-top: 6px solid transparent;
   }
@@ -104,11 +110,12 @@
 button[data-tooltip] {
   &.tooltip-l,
   &.tooltip-r {
-    &:after {
+    &::after {
       margin-top: -6px;
       top: 50%;
     }
-    &:before {
+
+    &::before {
       top: auto;
     }
   }
@@ -137,6 +144,7 @@ button[data-tooltip] {
     outline: none;
     cursor: pointer;
     margin: 0; // required for safari
+
     &:hover {
       filter: brightness(80%);
     }

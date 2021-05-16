@@ -2,19 +2,21 @@
 // Define all the modal stylings here
 
 #modal-root .modal .modal-body {
-    .profile-modal {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        .avatar {
-            height: 100px;
-            width: 100px;
-        }
-        .name,
-        .email {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-top: 5px;
-        }
+  .profile-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .avatar {
+      height: 100px;
+      width: 100px;
     }
+
+    .name,
+    .email {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-top: 5px;
+    }
+  }
 }

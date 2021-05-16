@@ -2,35 +2,38 @@
 $border-radius: 5px;
 
 .pagination {
-    display: block;
-    float: right;
-    margin: 20px 0;
+  display: block;
+  float: right;
+  margin: 20px 0;
 
-    button {
-        background-color: lighten($color-primary, 40%);
-        border: 1px solid lighten($color-primary, 20%);
-        border-width: 1px 0 1px 1px;
-        color: black;
-        float: left;
-        margin: 0;
-        outline: none;
-        padding: 8px 16px;
-        text-decoration: none;
+  button {
+    background-color: lighten($color-primary, 40%);
+    border: 1px solid lighten($color-primary, 20%);
+    border-width: 1px 0 1px 1px;
+    color: black;
+    float: left;
+    margin: 0;
+    outline: none;
+    padding: 8px 16px;
+    text-decoration: none;
 
-        &[disabled] {
-            background-color: lighten($color-primary, 15%);
-            color: white;
-        }
-        &:hover:not([disabled]) {
-            background-color: lighten($color-primary, 30%);
-            cursor: pointer;
-        }
-        &:first-child {
-            border-radius: $border-radius 0 0 $border-radius;
-        }
-        &:last-child {
-            border-radius: 0 $border-radius $border-radius 0;
-            border-width: 1px;
-        }
+    &[disabled] {
+      background-color: lighten($color-primary, 15%);
+      color: white;
     }
+
+    &:first-child {
+      border-radius: $border-radius 0 0 $border-radius;
+    }
+
+    &:last-child {
+      border-radius: 0 $border-radius $border-radius 0;
+      border-width: 1px;
+    }
+
+    &:hover:not([disabled]) {
+      background-color: lighten($color-primary, 30%);
+      cursor: pointer;
+    }
+  }
 }

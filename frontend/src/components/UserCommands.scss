@@ -12,6 +12,7 @@ $search-field-font-size: ($search-input-height/30px * 1rem);
   .no-data-msg {
     text-align: center;
   }
+
   .heading {
     font-size: 1.5rem;
   }
@@ -19,29 +20,36 @@ $search-field-font-size: ($search-input-height/30px * 1rem);
   .toolbar {
     padding: 6px 0;
     overflow: hidden;
+
     .search-input {
       display: inline-block;
       width: 18rem;
       height: $search-input-height;
+
       .field {
         padding: 5px $search-input-height 5px 10px;
         font-size: $search-field-font-size;
       }
+
       .icons-container {
         width: $search-input-height;
+
         .icon-search {
           border-width: 2px;
+
           &::after {
             bottom: -50%;
             width: 2px;
           }
         }
+
         .icon-close,
         .icon-search {
           left: 4px;
         }
       }
     }
+
     .items-per-page {
       float: right;
     }
@@ -57,9 +65,11 @@ $search-field-font-size: ($search-input-height/30px * 1rem);
     table-layout: fixed;
     user-select: none;
     width: 100%;
+
     td.actions > span {
       cursor: pointer;
       padding: 6px;
+
       &.view-icon,
       &.copy-icon,
       &.edit-icon {
@@ -67,10 +77,12 @@ $search-field-font-size: ($search-input-height/30px * 1rem);
           color: blue;
         }
       }
+
       &.delete-icon svg:hover {
         color: red;
       }
     }
+
     td,
     th {
       overflow: hidden;
@@ -79,6 +91,7 @@ $search-field-font-size: ($search-input-height/30px * 1rem);
       text-overflow: ellipsis;
       white-space: pre;
     }
+
     thead tr {
       background: lighten($color-primary, 15%);
       color: lighten($color-primary, 60%);
@@ -86,26 +99,33 @@ $search-field-font-size: ($search-input-height/30px * 1rem);
       font-size: 1.2rem;
       height: 60px;
     }
+
     tbody tr {
       border-bottom: 1px solid lighten($color-primary, 60%);
       font-size: 1.1rem;
       height: 60px;
+
       td:first-child {
         font-weight: 500;
       }
+
       &:last-child {
         border: 0;
       }
+
       &:hover {
         background-color: $table-row-hover-bg-color;
       }
     }
+
     th.command-column {
       width: 50%;
     }
+
     th.actions-column {
       width: 175px;
     }
+
     th.date-column {
       width: 135px;
     }

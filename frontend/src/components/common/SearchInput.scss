@@ -7,96 +7,102 @@ $search-input-height: 50px;
 $search-field-font-size: ($search-input-height/30px * 1rem);
 
 .search-input {
-    border: 0;
-    height: $search-input-height;
-    margin: 0 auto;
-    padding: 0;
-    position: relative;
+  border: 0;
+  height: $search-input-height;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
 
-    .field {
-        background: white;
-        border: 0;
+  .field {
+    background: white;
+    border: 0;
+    border-radius: 3px;
+    box-shadow: 0 8px 15px rgba(#4b4848, 0.1);
+    font-size: $search-field-font-size;
+    height: 100%;
+    padding: 10px $search-input-height 10px 20px;
+    transition: all 0.4s ease;
+    width: 100%;
+
+    .icon-close,
+    .icon-search {
+      left: 8px;
+    }
+
+    .icon-search {
+      border: 3px solid mix($cornflower-blue, white, 35%);
+      border-radius: 50%;
+      bottom: -22%;
+      height: 50%;
+      opacity: 1;
+      position: relative;
+      transition: opacity 0.25s ease, transform 0.43s $cubic-bezier;
+      width: 50%;
+
+      &::after {
+        background-color: mix($cornflower-blue, white, 35%);
         border-radius: 3px;
-        box-shadow: 0px 8px 15px rgba(#4b4848, 0.1);
-        font-size: $search-field-font-size;
-        height: 100%;
-        padding: 10px $search-input-height 10px 20px;
-        transition: all 0.4s ease;
-        width: 100%;
-        &:focus {
-            box-shadow: 0px 9px 20px rgba(#4b4848, 0.3);
-            outline: none;
-        }
-        + .icons-container-flip {
-            .icon-close {
-                opacity: 1;
-                transform: translateX(0);
-            }
-            .icon-search {
-                opacity: 0;
-                transform: translateX(200%);
-            }
-        }
+        bottom: -30%;
+        content: "";
+        height: 50%;
+        position: absolute;
+        right: -2px;
+        transform: rotate(-45deg);
+        width: 4px;
+      }
     }
 
     .icons-container {
-        height: inherit;
-        overflow: hidden;
+      height: inherit;
+      overflow: hidden;
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: $search-input-height;
+
+      .icon-close {
+        cursor: pointer;
+        opacity: 0;
         position: absolute;
-        right: 0px;
-        top: 0px;
-        width: $search-input-height;
+        padding-top: 50%;
+        padding-bottom: 50%;
+        top: 0;
+        transform: translateX(-200%);
+        transition: opacity 0.25s ease, transform 0.43s $cubic-bezier;
+        width: 60%;
 
-        .icon-close {
-            cursor: pointer;
-            opacity: 0;
-            position: absolute;
-            padding-top: 50%;
-            padding-bottom: 50%;
-            top: 0;
-            transform: translateX(-200%);
-            transition: opacity 0.25s ease, transform 0.43s $cubic-bezier;
-            width: 60%;
-            &:before,
-            &:after {
-                background-color: $cornflower-blue;
-                content: "";
-                height: 2px;
-                left: 0px;
-                position: absolute;
-                transform: rotate(45deg);
-                width: 100%;
-            }
-            &:after {
-                transform: rotate(-45deg);
-            }
+        &::before,
+        &::after {
+          background-color: $cornflower-blue;
+          content: "";
+          height: 2px;
+          left: 0;
+          position: absolute;
+          transform: rotate(45deg);
+          width: 100%;
         }
 
-        .icon-search {
-            border: 3px solid mix($cornflower-blue, white, 35%);
-            border-radius: 50%;
-            bottom: -22%;
-            height: 50%;
-            opacity: 1;
-            position: relative;
-            transition: opacity 0.25s ease, transform 0.43s $cubic-bezier;
-            width: 50%;
-            &:after {
-                background-color: mix($cornflower-blue, white, 35%);
-                border-radius: 3px;
-                bottom: -30%;
-                content: "";
-                height: 50%;
-                position: absolute;
-                right: -2px;
-                transform: rotate(-45deg);
-                width: 4px;
-            }
+        &::after {
+          transform: rotate(-45deg);
         }
-
-        .icon-close,
-        .icon-search {
-            left: 8px;
-        }
+      }
     }
+
+    + .icons-container-flip {
+      .icon-close {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .icon-search {
+        opacity: 0;
+        transform: translateX(200%);
+      }
+    }
+
+    &:focus {
+      box-shadow: 0 9px 20px rgba(#4b4848, 0.3);
+      outline: none;
+    }
+  }
 }
