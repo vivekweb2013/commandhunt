@@ -6,6 +6,7 @@ import com.wirehall.commandhunt.backend.model.UserEntity.OAuthProvider;
 import java.util.Map;
 
 public class OAuthUserFactory {
+  private static final String PICTURE_ATTRIBUTE_KEY = "picture";
 
   private OAuthUserFactory() {
     // Utility classes should not have public constructors.
@@ -27,7 +28,7 @@ public class OAuthUserFactory {
 
     if (oAuthProvider.equals(OAuthProvider.GOOGLE)) {
       userEntity.setProviderId(String.valueOf(attributes.get("sub")));
-      userEntity.setImageUrl((String) attributes.get("picture"));
+      userEntity.setImageUrl((String) attributes.get(PICTURE_ATTRIBUTE_KEY));
       userEntity.setEmailVerified((boolean) attributes.get("email_verified"));
     } else if (oAuthProvider.equals(OAuthProvider.FACEBOOK)) {
       userEntity.setProviderId(String.valueOf(attributes.get("id")));
@@ -40,8 +41,8 @@ public class OAuthUserFactory {
   }
 
   private static String getFacebookImageUrl(Map<String, Object> attributes) {
-    if (attributes.containsKey("picture")) {
-      Map<String, Object> pictureObj = (Map<String, Object>) attributes.get("picture");
+    if (attributes.containsKey(PICTURE_ATTRIBUTE_KEY)) {
+      Map<String, Object> pictureObj = (Map<String, Object>) attributes.get(PICTURE_ATTRIBUTE_KEY);
       if (pictureObj.containsKey("data")) {
         Map<String, Object> dataObj = (Map<String, Object>) pictureObj.get("data");
         if (dataObj.containsKey("url")) {

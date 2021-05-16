@@ -13,7 +13,7 @@ class Sidebar extends Component {
                     <Link to="/about" key="about">About</Link>
                 </div>
             </div >
-        )
+        );
     }
 }
 

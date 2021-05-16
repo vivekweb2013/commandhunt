@@ -13,6 +13,7 @@ import com.wirehall.commandhunt.backend.model.graph.VertexType;
 import com.wirehall.commandhunt.backend.model.graph.props.FlagProperty;
 import com.wirehall.commandhunt.backend.model.graph.props.MetaCommandProperty;
 import com.wirehall.commandhunt.backend.model.graph.props.OptionProperty;
+import com.wirehall.commandhunt.backend.util.SecurityUtil;
 import org.apache.tinkerpop.gremlin.process.traversal.Order;
 import org.apache.tinkerpop.gremlin.process.traversal.Scope;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
@@ -132,8 +133,9 @@ public class MetaCommandRepository {
    * @return The command DTO This will return the command DTO with the matching name.
    */
   public MetaCommand getMetaCommandByName(String name) {
-    LOGGER.debug("Retrieving command with name: {}", name);
-
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("Retrieving command with name: {}", SecurityUtil.sanitizeForLogging(name));
+    }
     Vertex commandVertex =
         gt.V().hasLabel(VertexType.METACOMMAND.toLowerCase()).has("name", name).next();
     return getCommand(commandVertex);
@@ -194,11 +196,6 @@ public class MetaCommandRepository {
     return metaCommand;
   }
 
-  public List<MetaCommand> getMatchingMetaCommands(Filter filter) {
-    // TODO: To be implemented.
-    return new ArrayList<>();
-  }
-
   /**
    * This is used to filter retrieve commands based on query argument.
    *
@@ -206,7 +203,10 @@ public class MetaCommandRepository {
    * @return List of all the matching command.
    */
   public List<MetaCommand> getMatchingMetaCommands(String query) {
-    LOGGER.debug("Retrieving matching meta-commands by query: {}", query);
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug(
+          "Retrieving matching meta-commands by query: {}", SecurityUtil.sanitizeForLogging(query));
+    }
 
     List<Vertex> vertices =
         gt.V()

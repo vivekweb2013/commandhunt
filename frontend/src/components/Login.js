@@ -58,7 +58,7 @@ class Login extends Component {
 
     render() {
         const { user, history, manualAuthAllowed } = this.props;
-        if (user) history.replace(this.state.postLoginRedirectUrl);
+        if (user) { history.replace(this.state.postLoginRedirectUrl); }
 
         const { loginInProgress, loginError } = this.state;
         const isRedirected = window.location.href.match(/[&?]token=/);
@@ -70,13 +70,13 @@ class Login extends Component {
 
                         {manualAuthAllowed && <>
                             <form action={`${API.API_URL}/auth/login` + this.getRedirectQueryParam()} method="post" className="manual-login">
-                                <input type="email" name="email" onChange={e => this.handleInputChange(e)} placeholder="Email" required />
-                                <input type="password" name="password" onChange={e => this.handleInputChange(e)} placeholder="Password" required />
+                                <input type="email" name="email" onChange={(e) => this.handleInputChange(e)} placeholder="Email" required />
+                                <input type="password" name="password" onChange={(e) => this.handleInputChange(e)} placeholder="Password" required />
 
                                 <button type="submit">
                                     {loginInProgress && <FontAwesomeIcon icon="circle-notch" spin />} Login
                             </button>
-                                <button type="button" onClick={e => this.handleSignUp(e)}>Sign Up</button>
+                                <button type="button" onClick={(e) => this.handleSignUp(e)}>Sign Up</button>
                             </form>
 
                             <div className="divide">
@@ -93,7 +93,7 @@ class Login extends Component {
                     {loginError && <Modal onClose={this.onCloseModal.bind(this)} title="Something Went Wrong..." type="error">
                         <span>{loginError}</span></Modal>}
                 </div>
-        )
+        );
     }
 
     componentWillUnmount() {
@@ -101,14 +101,14 @@ class Login extends Component {
     }
 }
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = (state) => {
     return {
         user: state.authReducer.user,
         manualAuthAllowed: state.authReducer.manualAuthAllowed
-    }
-}
+    };
+};
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
         getUserProfile: (token) => {
             return API.getUserProfile(token).then((user) => {
@@ -120,7 +120,7 @@ const mapDispatchToProps = dispatch => {
                 dispatch(isManualAuthAllowed(manualAuthAllowed === "true"));
             });
         }
-    }
-}
+    };
+};
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login));

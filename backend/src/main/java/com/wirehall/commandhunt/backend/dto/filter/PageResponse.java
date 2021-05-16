@@ -52,8 +52,8 @@ public class PageResponse<T> {
     this.records = records;
   }
 
-  public void addRecord(T record) {
-    this.records.add(record);
+  public void addRecord(T newRecord) {
+    this.records.add(newRecord);
   }
 
   @Override

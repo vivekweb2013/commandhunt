@@ -43,9 +43,4 @@ public class MetaCommandController {
   public List<MetaCommand> getMatchingMetaCommands(@RequestParam(name = "query") String query) {
     return metaCommandService.getMatchingMetaCommands(query);
   }
-
-  @PostMapping(value = "/meta-command/search", consumes = MediaType.APPLICATION_JSON_VALUE)
-  public List<MetaCommand> getMatchingMetaCommands(@RequestBody Filter filter) {
-    return metaCommandService.getMatchingMetaCommands(filter);
-  }
 }

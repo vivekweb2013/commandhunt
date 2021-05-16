@@ -7,7 +7,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-/** This component is can be to seed the database on startup. */
+/** This component is used to seed the database on application startup. */
 @Component
 public class DatabaseSeed implements ApplicationRunner {
 
@@ -25,6 +25,10 @@ public class DatabaseSeed implements ApplicationRunner {
       metadataManager.load();
     } catch (Exception e) {
       LOGGER.error(e.getMessage(), e);
+
+      // Restore interrupted state...
+      Thread.currentThread().interrupt();
+
       // Exit with error status code
       System.exit(1);
     }

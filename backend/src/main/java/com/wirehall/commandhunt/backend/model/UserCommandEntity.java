@@ -15,12 +15,15 @@ public class UserCommandEntity {
   @Type(type = "jsonb")
   @Column(columnDefinition = "jsonb")
   Set<String> flags = new HashSet<>();
+
   @Type(type = "jsonb")
   @Column(columnDefinition = "jsonb")
   Map<String, List<String>> options = new HashMap<>();
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
+
   @Column(nullable = false, updatable = false)
   private String commandName;
 

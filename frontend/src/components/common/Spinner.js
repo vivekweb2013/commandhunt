@@ -7,7 +7,7 @@ class Spinner extends Component {
         const style = { height: size + "px", width: size + "px", borderWidth: size / 10 + "px" };
         return (
             <div className="spinner" style={style} />
-        )
+        );
     }
 }
 

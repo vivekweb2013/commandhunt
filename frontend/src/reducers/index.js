@@ -5,7 +5,7 @@ import {
     USER_LOGIN, USER_LOGOUT, IS_MANUAL_AUTH_ALLOWED
 } from "../actions";
 
-const metaCommandReducer = (state = {}, action) => {
+const metaCommandReducer = (state = {}, action = {}) => {
     const { metaCommands, metaCommand } = action;
     switch (action.type) {
         case GET_META_COMMANDS:
@@ -23,7 +23,7 @@ const metaCommandReducer = (state = {}, action) => {
     }
 };
 
-const userCommandReducer = (state = {}, action) => {
+const userCommandReducer = (state = {}, action = {}) => {
     const { userCommands } = action;
     switch (action.type) {
         case GET_USER_COMMANDS:
@@ -36,7 +36,7 @@ const userCommandReducer = (state = {}, action) => {
     }
 };
 
-const authReducer = (state = {}, action) => {
+const authReducer = (state = {}, action = {}) => {
     const { user, manualAuthAllowed } = action;
     switch (action.type) {
         case USER_LOGIN:

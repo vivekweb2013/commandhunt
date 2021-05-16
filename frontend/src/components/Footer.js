@@ -7,7 +7,7 @@ class Footer extends Component {
             <footer className="site-footer no-print">
                 &copy; Copyright 2020
             </footer>
-        )
+        );
     }
 }
 

@@ -13,7 +13,7 @@ class SearchInput extends Component {
             const functionCall = () => fn.apply(this, args);
             clearTimeout(timeout);
             timeout = setTimeout(functionCall, time);
-        }
+        };
     }
 
     handleOnChange = (e) => {
@@ -34,14 +34,14 @@ class SearchInput extends Component {
         const { defaultValue } = this.props;
         return (
             <fieldset className="search-input">
-                <input type="text" onChange={e => this.handleOnChange(e)} placeholder="Search..."
+                <input type="text" onChange={(e) => this.handleOnChange(e)} placeholder="Search..."
                     defaultValue={defaultValue} className="field" />
                 <div className={"icons-container " + (defaultValue ? "icons-container-flip" : "")}>
                     <div className="icon-search"></div>
-                    <div className="icon-close" onClick={e => this.handleInputReset(e)}> </div>
+                    <div className="icon-close" onClick={(e) => this.handleInputReset(e)}> </div>
                 </div>
             </fieldset>
-        )
+        );
     }
 }
 

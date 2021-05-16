@@ -10,6 +10,7 @@ import com.wirehall.commandhunt.backend.mapper.UserCommandMapper;
 import com.wirehall.commandhunt.backend.model.UserCommandEntity;
 import com.wirehall.commandhunt.backend.repository.UserCommandRepository;
 import com.wirehall.commandhunt.backend.repository.UserCommandSpecification;
+import com.wirehall.commandhunt.backend.util.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -118,9 +120,17 @@ public class UserCommandService {
     userCommand.setCreatedOn(timestamp);
     userCommand.setOperatedOn(timestamp);
     UserCommandEntity userCommandEntity = mapper.mapToUserCommandEntity(userCommand, userEmail);
-    LOGGER.info("Inserting user-command entity: {}", userCommandEntity);
+    if (LOGGER.isInfoEnabled()) {
+      LOGGER.info(
+          "Inserting user-command entity: {}",
+          SecurityUtil.sanitizeForLogging(Objects.toString(userCommandEntity)));
+    }
     userCommandRepository.save(userCommandEntity);
-    LOGGER.info("Inserted user-command entity with id: {}", userCommandEntity.getId());
+    if (LOGGER.isInfoEnabled()) {
+      LOGGER.info(
+          "Inserted user-command entity with id: {}",
+          SecurityUtil.sanitizeForLogging(Objects.toString(userCommandEntity.getId())));
+    }
   }
 
   /**

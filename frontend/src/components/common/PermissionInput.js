@@ -5,7 +5,7 @@ class PermissionInput extends Component {
     handleChange(e, assigneeIndex, permissionIndex) {
         const binaryPermissions = [4, 2, 1];
         let value = this.props.value[0];
-        const valArray = value.split("").map(v => +v);
+        const valArray = value.split("").map((v) => +v);
         valArray[assigneeIndex] = valArray[assigneeIndex] + (e.target.checked ? 1 : -1) * binaryPermissions[permissionIndex];
         this.props.handleChange(e.target.name, [valArray.join("")]);
     }
@@ -21,20 +21,20 @@ class PermissionInput extends Component {
     toggle(e) {
         e.stopPropagation();
         const { name, value } = this.props;
-        const valArray = value[0].split("").map(v => +v);
-        valArray.length === 0 ? this.props.handleChange(name, ["000"]) : this.props.handleChange(name, [""])
+        const valArray = value[0].split("").map((v) => +v);
+        valArray.length === 0 ? this.props.handleChange(name, ["000"]) : this.props.handleChange(name, [""]);
     }
 
     render() {
         const { id, name, pattern, required, disabled, value } = this.props;
         const binaryPermissions = [4, 2, 1];
-        const valArray = value[0].split("").map(v => +v); // get array of permission numbers
+        const valArray = value[0].split("").map((v) => +v); // get array of permission numbers
 
         return (<div className="permission-ip-wrapper">
             <span className="dynamic-text-ip-wrapper">
                 <input id={id} name={name} pattern={pattern} type="text" value={value[0]}
                     onChange={this.handleTextChange.bind(this)} required={required} disabled={disabled} />
-                {!disabled && <input type="button" disabled={disabled} onClick={e => this.toggle(e)} className="small" value={valArray.length === 0 ? " ＋ " : " － "} />}
+                {!disabled && <input type="button" disabled={disabled} onClick={(e) => this.toggle(e)} className="small" value={valArray.length === 0 ? " ＋ " : " － "} />}
             </span>
             <div className="permission-container">
                 {valArray.map((v, i) => <div key={i} className="permission-row">

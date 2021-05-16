@@ -1,6 +1,7 @@
 package com.wirehall.commandhunt.backend.dto;
 
 import com.wirehall.commandhunt.backend.model.graph.props.FlagProperty;
+import org.springframework.lang.NonNull;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -20,9 +21,20 @@ public class Flag extends Node<FlagProperty> implements Comparable<Flag> {
   }
 
   @Override
-  public int compareTo(Flag o) {
+  public int compareTo(@NonNull Flag f) {
+    if (this.equals(f)) return 0;
     byte i = (byte) this.properties.get(FlagProperty.SEQUENCE);
-    byte j = (byte) o.properties.get(FlagProperty.SEQUENCE);
+    byte j = (byte) f.properties.get(FlagProperty.SEQUENCE);
     return i - j;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return super.equals(obj);
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
   }
 }

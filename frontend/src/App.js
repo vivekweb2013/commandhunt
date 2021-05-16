@@ -42,13 +42,13 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = (state) => {
   return {
     user: state.authReducer.user
-  }
-}
+  };
+};
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     getUserProfile: () => {
       return API.getUserProfile().then((user) => {
@@ -58,7 +58,7 @@ const mapDispatchToProps = dispatch => {
     userLogout: () => {
       dispatch(userLogout());
     },
-  }
-}
+  };
+};
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

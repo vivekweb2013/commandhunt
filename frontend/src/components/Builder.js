@@ -65,7 +65,7 @@ class Builder extends Component {
                 ...this.state.commandInstance.options,
                 [name]: value
             }
-        }
+        };
 
         this.setState({ commandInstance });
     }
@@ -81,7 +81,7 @@ class Builder extends Component {
             options: {
                 ...this.state.commandInstance.options
             }
-        }
+        };
 
         this.setState({ commandInstance });
     }
@@ -96,18 +96,18 @@ class Builder extends Component {
 
         if (currentSolitaryFlag) {
             return commandInstance.flags[currentSolitaryFlag.properties.name] !== true &&
-                (Object.keys(commandInstance.options).filter(k => commandInstance.options[k].filter(val => !!val).length > 0).length > 0
-                    || Object.keys(commandInstance.flags).filter(k => commandInstance.flags[k]).length > 0)
+                (Object.keys(commandInstance.options).filter((k) => commandInstance.options[k].filter((val) => !!val).length > 0).length > 0
+                    || Object.keys(commandInstance.flags).filter((k) => commandInstance.flags[k]).length > 0);
         }
-        return metaCommand.flags.filter(cf => cf.properties.is_solitary).map(cf => cf.properties.name)
-            .includes(Object.keys(commandInstance.flags).filter(k => commandInstance.flags[k])[0]);
+        return metaCommand.flags.filter((cf) => cf.properties.is_solitary).map((cf) => cf.properties.name)
+            .includes(Object.keys(commandInstance.flags).filter((k) => commandInstance.flags[k])[0]);
     }
 
     getGeneratedFlags(metaCommand) {
         let flagsStr = "";
         let hyphenPrefixedFlags = "";
         let otherFlags = "";
-        metaCommand.flags.filter(f => this.state.commandInstance.flags[f.properties.name]).forEach(f => {
+        metaCommand.flags.filter((f) => this.state.commandInstance.flags[f.properties.name]).forEach((f) => {
             if (f.properties.prefix === "-") {
                 // normally only single hyphen prefixed flags are allowed to group
                 hyphenPrefixedFlags += f.properties.name;
@@ -129,8 +129,8 @@ class Builder extends Component {
     getGeneratedOptions(metaCommand) {
         const { commandInstance } = this.state;
         let optionsStr = "";
-        metaCommand.options.filter(o => (commandInstance.options[o.properties.name] != null)
-            && (commandInstance.options[o.properties.name].filter(val => !!val).length > 0)).forEach(o => {
+        metaCommand.options.filter((o) => (commandInstance.options[o.properties.name] != null)
+            && (commandInstance.options[o.properties.name].filter((val) => !!val).length > 0)).forEach((o) => {
                 const prefix = !o.properties.prefix.endsWith("=") ? `${o.properties.prefix} ` : o.properties.prefix;
                 optionsStr += ` ${prefix}${commandInstance.options[o.properties.name].join(" ")}`;
             });
@@ -139,7 +139,7 @@ class Builder extends Component {
     }
 
     getGeneratedCommand(metaCommand) {
-        if (!metaCommand) return null;
+        if (!metaCommand) { return null; }
         let commandStr = "";
         const flagsStr = this.getGeneratedFlags(metaCommand);
         const optionsStr = this.getGeneratedOptions(metaCommand);
@@ -322,8 +322,8 @@ class Builder extends Component {
                             )}
                         </div>
                         <div className="form-buttons no-print">
-                            <button className="ripple" onClick={e => window.print()} type="button">PRINT</button>
-                            {showDeleteButton && <button type="button" className="ripple tooltip-t" onClick={e => this.handlePublicCommandDelete(e)}>
+                            <button className="ripple" onClick={(e) => window.print()} type="button">PRINT</button>
+                            {showDeleteButton && <button type="button" className="ripple tooltip-t" onClick={(e) => this.handlePublicCommandDelete(e)}>
                                 {this.state.deleteInProgress && <FontAwesomeIcon icon="circle-notch" spin />} DELETE
                             </button>}
                             {showSaveButton && <button className="ripple tooltip-t" title="Save to My Account"
@@ -331,7 +331,7 @@ class Builder extends Component {
                                 disabled={!user || this.state.saveInProgress}>
                                 {this.state.saveInProgress && <FontAwesomeIcon icon="circle-notch" spin />} SAVE
                             </button>}
-                            {showPublishButton && <button type="button" className="ripple tooltip-t" onClick={e => this.handlePublish(e)}
+                            {showPublishButton && <button type="button" className="ripple tooltip-t" onClick={(e) => this.handlePublish(e)}
                                 {...(!user ? { "data-tooltip": "Login to Publish" } : {})}
                                 disabled={!user || this.state.publishInProgress}>
                                 {this.state.publishInProgress && <FontAwesomeIcon icon="circle-notch" spin />} PUBLISH
@@ -343,7 +343,7 @@ class Builder extends Component {
                     <Modal title="Command Published" style={{ width: "90%", maxWidth: "500px" }} type="info" onClose={this.onClosePublishModal.bind(this)}>
                         <span style={{ fontSize: "1rem", lineHeight: "2rem" }}>Link to Published Command</span>
                         <span className="txt-btn-input-wrapper">
-                            <input type="text" value={window.location.href} onFocus={e => e.target.select()} readOnly />
+                            <input type="text" value={window.location.href} onFocus={(e) => e.target.select()} readOnly />
                             <CopyToClipboard text={window.location.href}>
                                 <button onClick={(e) => ToastMaker("Link Copied!")} type="button" style={{ width: "45px" }}>
                                     <FontAwesomeIcon icon="clipboard" color="#666666" size="lg" />
@@ -360,17 +360,17 @@ class Builder extends Component {
     }
 }
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = (state) => {
     return {
         metaCommand: state.metaCommandReducer.metaCommand,
         user: state.authReducer.user
-    }
-}
+    };
+};
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
         getMetaCommand: (commandId) => {
-            API.getMetaCommand(commandId).then(metaCommand => dispatch(getMetaCommand(metaCommand)));
+            API.getMetaCommand(commandId).then((metaCommand) => dispatch(getMetaCommand(metaCommand)));
         },
         getUserCommand: (userCommandId) => {
             return API.getUserCommand(userCommandId);
@@ -387,7 +387,7 @@ const mapDispatchToProps = dispatch => {
         deletePublicCommand: (publicCommandId) => {
             return API.deletePublicCommand(publicCommandId);
         }
-    }
-}
+    };
+};
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Builder));

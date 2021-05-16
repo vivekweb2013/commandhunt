@@ -11,6 +11,7 @@ import com.wirehall.commandhunt.backend.security.CurrentUser;
 import com.wirehall.commandhunt.backend.service.UserService;
 import com.wirehall.commandhunt.backend.util.AuthUtil;
 import com.wirehall.commandhunt.backend.util.JwtUtil;
+import com.wirehall.commandhunt.backend.util.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,18 +61,22 @@ public class AuthController {
   @PostMapping("/login")
   public ModelAndView authenticateUser(
       @Valid @ModelAttribute Login loginRequest, @RequestParam("redirect_uri") String redirectUri) {
-    LOGGER.debug("Login requested: {}", loginRequest);
+
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug(
+          "Login requested for email: {}",
+          SecurityUtil.sanitizeForLogging(loginRequest.getEmail()));
+    }
 
     if (!isManualAuthAllowed) {
       throw new BadRequestException("Manual login is not allowed, use OAuth login instead");
     }
-
-    LOGGER.debug("Send redirect to: {}", redirectUri);
     String redirectUrl = "redirect:" + redirectUri + (redirectUri.contains("?") ? "&" : "?");
 
     try {
       if (!AuthUtil.isAuthorizedRedirectUri(redirectUri, authorizedRedirectUris)) {
-        throw new BadRequestException("Invalid redirect_uri provided: " + redirectUri);
+        throw new BadRequestException(
+            "Invalid redirect_uri provided: " + SecurityUtil.sanitizeForLogging(redirectUri));
       }
       Authentication authentication =
           authenticationManager.authenticate(
@@ -96,8 +101,11 @@ public class AuthController {
    */
   @PostMapping("/signup")
   public ResponseEntity<User> registerUser(@Valid @RequestBody SignUp signUpRequest) {
-    LOGGER.debug("Signup requested: {}", signUpRequest);
-
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug(
+          "Signup requested for email: {}",
+          SecurityUtil.sanitizeForLogging(signUpRequest.getEmail()));
+    }
     if (!isManualAuthAllowed) {
       throw new BadRequestException("Manual sign-up is not allowed at the moment");
     }

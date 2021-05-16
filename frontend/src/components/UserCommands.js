@@ -5,13 +5,12 @@ import * as API from "../api/API";
 import { getUserCommands } from "../actions";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { formatDate, formatTime } from "../Utils";
 import Pagination from "./common/Pagination";
 import ItemsPerPage from "./common/ItemsPerPage";
 import SearchInput from "./common/SearchInput";
 import ToastMaker from "toastmaker";
 import "toastmaker/dist/toastmaker.css";
-import { getQueryParamByName, getArrayQueryParamByName, getQueryParamsFromFilter } from "../Utils";
+import { formatDate, formatTime, getQueryParamByName, getArrayQueryParamByName, getQueryParamsFromFilter } from "../Utils";
 import "./UserCommands.scss";
 
 class UserCommands extends Component {
@@ -45,8 +44,8 @@ class UserCommands extends Component {
 
             if (userCommands.pageNumber !== 0 && (filter.pagination.pageNumber > userCommands.totalPages && this._isMounted)) {
                 this.setState({ filter: { ...filter, pagination: { ...filter.pagination, pageNumber: userCommands.totalPages } } }, () => {
-                    const { filter } = this.state;
-                    history.push(getQueryParamsFromFilter(filter))
+                    const newFilter = this.state.filter;
+                    history.push(getQueryParamsFromFilter(newFilter));
                 });
             }
         });
@@ -66,7 +65,7 @@ class UserCommands extends Component {
     handlePageChange(pageNumber) {
         const { history } = this.props;
         this.setState({ filter: { ...this.state.filter, pagination: { ...this.state.filter.pagination, pageNumber } } }, () => {
-            history.push(getQueryParamsFromFilter(this.state.filter))
+            history.push(getQueryParamsFromFilter(this.state.filter));
         });
     }
 
@@ -75,7 +74,7 @@ class UserCommands extends Component {
         const { history } = this.props;
         const pageSize = Number(e.target.value);
         this.setState({ filter: { ...this.state.filter, pagination: { ...this.state.filter.pagination, pageSize } } }, () => {
-            history.push(getQueryParamsFromFilter(this.state.filter))
+            history.push(getQueryParamsFromFilter(this.state.filter));
         });
     }
 
@@ -105,8 +104,8 @@ class UserCommands extends Component {
                 }
             }
         }, () => {
-            const { filter } = this.state;
-            history.push(getQueryParamsFromFilter(filter))
+            const newFilter = this.state.filter;
+            history.push(getQueryParamsFromFilter(newFilter));
         });
     }
 
@@ -137,7 +136,7 @@ class UserCommands extends Component {
                     </tr></thead>
 
                     <tbody>
-                        {userCommands && userCommands.totalSize > 0 ? userCommands.records.map(userCommand =>
+                        {userCommands && userCommands.totalSize > 0 ? userCommands.records.map((userCommand) =>
                             <tr key={userCommand.id} >
                                 <td className="command"><code>{userCommand.commandText}</code></td>
                                 <td className="type">
@@ -173,7 +172,7 @@ class UserCommands extends Component {
                 {userCommands && <Pagination pageNumber={filter.pagination.pageNumber} totalSize={userCommands.totalSize}
                     totalPages={userCommands.totalPages} maxPagesToShow={5} handlePageChange={this.handlePageChange.bind(this)} />}
             </div>
-        )
+        );
     }
 
     componentWillUnmount() {
@@ -181,18 +180,18 @@ class UserCommands extends Component {
     }
 }
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = (state) => {
     return {
         user: state.authReducer.user,
         userCommands: state.userCommandReducer.userCommands
-    }
-}
+    };
+};
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
-        getUserCommands: (filters) => API.getUserCommands(filters).then(userCommands => dispatch(getUserCommands(userCommands))),
+        getUserCommands: (filters) => API.getUserCommands(filters).then((userCommands) => dispatch(getUserCommands(userCommands))),
         deleteUserCommand: (userCommandId) => API.deleteUserCommand(userCommandId)
-    }
-}
+    };
+};
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserCommands));

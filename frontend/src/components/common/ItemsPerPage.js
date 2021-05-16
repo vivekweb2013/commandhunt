@@ -14,10 +14,10 @@ class ItemsPerPage extends Component {
             <div className="items-per-page">
                 <span className="icon-pagesize" title="Items per page"></span>
                 <select defaultValue={this.props.pageSize} onChange={(e) => this.props.handlePageSizeChange(e)}>
-                    {pageSizeOptions.sort((a, b) => a - b).map(pageSize => <option key={pageSize} value={pageSize}>{pageSize}</option>)}
+                    {pageSizeOptions.map((pageSize) => <option key={pageSize} value={pageSize}>{pageSize}</option>)}
                 </select>
             </div>
-        )
+        );
     }
 }
 

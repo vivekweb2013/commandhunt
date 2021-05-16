@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 @Component
@@ -31,17 +32,13 @@ public class MetadataManager {
    *
    * <p>This method supports importing graph file from resources path.
    */
-  public void load() {
-    try {
-      SchemaBuilder.load(graph);
-      LOGGER.info("Importing graph from file {}", GRAPH_FILE);
-      InputStream stream = MetadataManager.class.getClassLoader().getResourceAsStream(GRAPH_FILE);
-      graph.io(IoCore.graphml()).reader().create().readGraph(stream, graph);
-      graph.tx().commit();
-      LOGGER.info("Graph import successful!");
-    } catch (Exception e) {
-      graph.tx().rollback();
-      throw new Error("Failed to import graph", e);
-    }
+  public void load() throws InterruptedException, IOException {
+    SchemaBuilder.load(graph);
+    LOGGER.info("Importing graph from file {}", GRAPH_FILE);
+    InputStream stream = MetadataManager.class.getClassLoader().getResourceAsStream(GRAPH_FILE);
+    // Using deprecated api since there are no alternative APIs for loading graphml form jar file
+    graph.io(IoCore.graphml()).reader().create().readGraph(stream, graph); // NOSONAR
+    graph.tx().commit();
+    LOGGER.info("Graph import successful!");
   }
 }

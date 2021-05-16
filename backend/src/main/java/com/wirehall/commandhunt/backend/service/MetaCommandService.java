@@ -35,10 +35,6 @@ public class MetaCommandService {
     return metaCommandRepository.getMetaCommandByName(name);
   }
 
-  public List<MetaCommand> getMatchingMetaCommands(Filter filter) {
-    return metaCommandRepository.getMatchingMetaCommands(filter);
-  }
-
   public List<MetaCommand> getMatchingMetaCommands(String query) {
     return metaCommandRepository.getMatchingMetaCommands(query);
   }

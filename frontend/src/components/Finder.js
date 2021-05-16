@@ -41,8 +41,8 @@ class Finder extends Component {
             if (metaCommands.pageNumber !== 0 && (filter.pagination.pageNumber > metaCommands.totalPages)) {
                 this._isMounted &&
                     this.setState({ filter: { ...filter, pagination: { ...filter.pagination, pageNumber: metaCommands.totalPages } } }, () => {
-                        const { filter } = this.state;
-                        history.push(getQueryParamsFromFilter(filter));
+                        const newFilter = this.state.filter;
+                        history.push(getQueryParamsFromFilter(newFilter));
                     });
             }
         });
@@ -62,7 +62,7 @@ class Finder extends Component {
     handlePageChange(pageNumber) {
         const { history } = this.props;
         this.setState({ filter: { ...this.state.filter, pagination: { ...this.state.filter.pagination, pageNumber } } }, () => {
-            history.push(getQueryParamsFromFilter(this.state.filter))
+            history.push(getQueryParamsFromFilter(this.state.filter));
         });
     }
 
@@ -71,7 +71,7 @@ class Finder extends Component {
         const { history } = this.props;
         const pageSize = Number(e.target.value);
         this.setState({ filter: { ...this.state.filter, pagination: { ...this.state.filter.pagination, pageSize } } }, () => {
-            history.push(getQueryParamsFromFilter(this.state.filter))
+            history.push(getQueryParamsFromFilter(this.state.filter));
         });
     }
 
@@ -93,8 +93,8 @@ class Finder extends Component {
                 }
             }
         }, () => {
-            const { filter } = this.state;
-            history.push(getQueryParamsFromFilter(filter))
+            const newFilter = this.state.filter;
+            history.push(getQueryParamsFromFilter(newFilter));
         });
     }
 
@@ -124,8 +124,8 @@ class Finder extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {metaCommands.records.map(metaCommand => <tr key={metaCommand.id}
-                                onClick={e => { e.preventDefault(); history.push(`/public/command/${metaCommand.properties.name}?mode=build`) }}>
+                            {metaCommands.records.map((metaCommand) => <tr key={metaCommand.id}
+                                onClick={(e) => { e.preventDefault(); history.push(`/public/command/${metaCommand.properties.name}?mode=build`); }}>
                                 <td className="name">{metaCommand.properties.name} </td>
                                 <td className="syntax">
                                     <code>{metaCommand.properties.syntax.replace(/\.\.\./g, "···") /* replacing dots to avoid confusion with ellipsis */}</code>
@@ -143,7 +143,7 @@ class Finder extends Component {
                 </div> : <div className="no-data-msg">No Commands Found!</div>
                 }
             </div>
-        )
+        );
     }
 
     componentWillUnmount() {
@@ -151,18 +151,18 @@ class Finder extends Component {
     }
 }
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = (state) => {
     return {
         metaCommands: state.metaCommandReducer.metaCommands
-    }
-}
+    };
+};
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
-        getMetaCommands: (filter) => API.getMetaCommands(filter).then(metaCommands => {
+        getMetaCommands: (filter) => API.getMetaCommands(filter).then((metaCommands) => {
             dispatch(getMetaCommands(metaCommands));
         })
-    }
-}
+    };
+};
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Finder));

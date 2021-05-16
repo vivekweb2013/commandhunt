@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 import PageNotFound from "./common/PageNotFound";
 
 const ProtectedRoute = ({ component: Component, isLoggedIn, path, ...rest }) =>
-    <Route path={path} {...rest} render={props => isLoggedIn ?
+    <Route path={path} {...rest} render={(props) => isLoggedIn ?
         <Component {...props} /> : <Redirect to={{ pathname: "/login", state: { referer: props.location.pathname + props.location.search } }} />} />
 
 class Content extends Component {
@@ -30,14 +30,14 @@ class Content extends Component {
                 <ProtectedRoute isLoggedIn={!!user} path="/user/commands" key={relativeUrl} component={UserCommands} />
                 <Route component={PageNotFound} />
             </Switch>
-        </div>
+        </div>;
     }
 }
 
 const mapStateToProps = (state) => {
     return {
         user: state.authReducer.user
-    }
-}
+    };
+};
 
 export default withRouter(connect(mapStateToProps)(Content));

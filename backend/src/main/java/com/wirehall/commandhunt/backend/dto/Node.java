@@ -10,7 +10,7 @@ public abstract class Node<E extends Enum<E>> {
   protected Map<E, Object> properties;
   private Object id;
 
-  public Node(Class<E> enumClass) {
+  protected Node(Class<E> enumClass) {
     this.enumClass = enumClass;
   }
 

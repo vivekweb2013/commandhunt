@@ -6,6 +6,7 @@ import com.wirehall.commandhunt.backend.exception.BadRequestException;
 import com.wirehall.commandhunt.backend.mapper.UserMapper;
 import com.wirehall.commandhunt.backend.model.UserEntity;
 import com.wirehall.commandhunt.backend.repository.UserRepository;
+import com.wirehall.commandhunt.backend.util.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,11 @@ public class UserService {
    */
   public User registerUser(SignUp signUpRequest) {
     if (userRepository.findById(signUpRequest.getEmail()).isPresent()) {
-      LOGGER.error("Email: {} is already in use", signUpRequest.getEmail());
+      if (LOGGER.isErrorEnabled()) {
+        LOGGER.error(
+            "Email: {} is already in use",
+            SecurityUtil.sanitizeForLogging(signUpRequest.getEmail()));
+      }
       throw new BadRequestException("Email address already in use.");
     }
 

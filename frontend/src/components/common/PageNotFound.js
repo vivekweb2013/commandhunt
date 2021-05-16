@@ -30,7 +30,7 @@ function PageNotFound() {
                 <Link to="/" replace={true} className="home-link"><span>Go to Home</span></Link>
             </div>
         </div>
-    )
+    );
 }
 
 export default PageNotFound;

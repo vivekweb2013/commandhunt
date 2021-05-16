@@ -5,7 +5,7 @@ import { withRouter } from "react-router";
 import * as API from "../api/API";
 import { userLogout } from "../actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import userSVG from "../styles/icons/user.svg"
+import userSVG from "../styles/icons/user.svg";
 import "./Header.scss";
 import Modal from "./common/Modal";
 
@@ -62,8 +62,8 @@ class Header extends Component {
                         }
                     </button>
                     {user && <div className="dropdown-content">
-                        <Link to="/" key="Profile" onClick={e => this.handleViewProfile(e)}><FontAwesomeIcon icon="user-cog" />&nbsp;Profile</Link>
-                        <button key="Logout" onClick={e => this.handleLogout(e)} type="button"><FontAwesomeIcon icon="sign-out-alt" />&nbsp;Logout</button>
+                        <Link to="/" key="Profile" onClick={(e) => this.handleViewProfile(e)}><FontAwesomeIcon icon="user-cog" />&nbsp;Profile</Link>
+                        <button key="Logout" onClick={(e) => this.handleLogout(e)} type="button"><FontAwesomeIcon icon="sign-out-alt" />&nbsp;Logout</button>
                     </div>}
                 </div>
                 <button disabled={!user} {...(!user ? { "data-tooltip": "Login Required!" } : {})}
@@ -86,23 +86,23 @@ class Header extends Component {
                     </div>
                 </Modal>}
             </header>
-        )
+        );
     }
 }
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = (state) => {
     return {
         user: state.authReducer.user
-    }
-}
+    };
+};
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
         userLogout: () => {
             // This will remove token from localStorage & also remove user from store
             API.userLogout().then(() => dispatch(userLogout()));
         }
-    }
-}
+    };
+};
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

@@ -27,7 +27,7 @@ class SignUp extends Component {
     }
     render() {
         const { user } = this.props;
-        if (user) this.props.history.goBack();
+        if (user) { this.props.history.goBack(); }
 
         const { signupInProgress } = this.state;
         return (
@@ -40,34 +40,34 @@ class SignUp extends Component {
                             <hr />
 
                             <label htmlFor="name"><b>Name</b></label>
-                            <input type="text" placeholder="Enter Name" name="name" onChange={e => this.handleInputChange(e)} required />
+                            <input type="text" placeholder="Enter Name" name="name" onChange={(e) => this.handleInputChange(e)} required />
 
                             <label htmlFor="email"><b>Email</b></label>
-                            <input type="text" placeholder="Enter Email" name="email" onChange={e => this.handleInputChange(e)} required />
+                            <input type="text" placeholder="Enter Email" name="email" onChange={(e) => this.handleInputChange(e)} required />
 
                             <label htmlFor="password"><b>Password</b></label>
-                            <input type="password" placeholder="Password" name="password" onChange={e => this.handleInputChange(e)} required />
+                            <input type="password" placeholder="Password" name="password" onChange={(e) => this.handleInputChange(e)} required />
 
                             <button type="submit" className="registerbtn">Register</button>
                         </div>
                     </form>
                 </div>
-        )
+        );
     }
 }
 
 const mapStateToProps = (state) => {
     return {
         user: state.authReducer.user
-    }
-}
+    };
+};
 
 const mapDispatchToProps = () => {
     return {
         userSignUp: (signUpRequest) => {
             return API.userSignUp(signUpRequest);
         }
-    }
-}
+    };
+};
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SignUp));

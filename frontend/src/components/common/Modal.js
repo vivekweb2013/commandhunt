@@ -36,7 +36,7 @@ class Modal extends Component {
             // Any valid React child: JSX, strings, arrays, etc.
             <div className="modal">
                 <div className="modal-content" style={{ ...style }}>
-                    <span className="top-close-btn" onClick={e => onClose()}>&#x2715;</span>
+                    <span className="top-close-btn" onClick={(e) => onClose()}>&#x2715;</span>
                     <div className={`modal-header ${type}`}>
                         {title}
                     </div>
@@ -44,8 +44,8 @@ class Modal extends Component {
                         {children}
                     </div>
                     <div className="modal-footer">
-                        {type === "confirm" && <button type="button" className="footer-btn confirm" onClick={e => onConfirm()}>OKAY</button>}
-                        <button type="button" className="footer-btn" onClick={e => onClose && onClose()}>{type === "confirm" ? "CANCEL" : "CLOSE"}</button>
+                        {type === "confirm" && <button type="button" className="footer-btn confirm" onClick={(e) => onConfirm()}>OKAY</button>}
+                        <button type="button" className="footer-btn" onClick={(e) => onClose && onClose()}>{type === "confirm" ? "CANCEL" : "CLOSE"}</button>
                     </div>
                 </div>
             </div>,
