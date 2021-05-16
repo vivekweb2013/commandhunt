@@ -1,20 +1,18 @@
-# CommandHunt Backend Module
+## CommandHunt Backend Module
 This is the backend module of commandhunt application.
-
 
 ### Build the backend module
 
 The following command is used to build this backend module.
-```
+```shell
 mvn clean install -e
 ```
 This will build the project. It also runs the tests in the build process.
 
 Alternately, you can also build the project & skip the test execution with below command.
-```
+```shell
 mvn clean install -DskipTests
 ```
-
 
 ### Running the backend module locally
 
@@ -24,6 +22,6 @@ There are several ways to run a Spring Boot application on your local machine. O
 
 Alternatively you can also use the below maven command that start the module using spring-boot plugin:
 
-```
+```shell
 mvn spring-boot:run
 ```

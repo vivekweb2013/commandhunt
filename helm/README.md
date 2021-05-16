@@ -1,26 +1,22 @@
 ## CommandHunt Helm Chart
 The helm chat for deploying CommandHunt application on a kubernetes cluster.
 
-
 ### Before you begin
-- Create a kubernetes cluster.
-- Create a postgres database cluster on cloud platform & if required add the trusted sources to it.
-Make sure to also add the kubernetes cluster in the trusted sources.
-- Postgres cluster may contain default database created by cloud provider.
-If you want you can create a new one with required name.
-- Connect to database using pgAdmin and create `commandhunt` schema inside the database.
-- Make sure you create the kubernetes cluster and database cluster in the same region to avoid any latency issues.
-
+-   Create a kubernetes cluster.
+-   Create a postgres database cluster on cloud platform & if required add the trusted sources to it. Make sure to also add the kubernetes cluster in the trusted sources.
+-   Postgres cluster may contain default database created by cloud provider. If you want you can create a new one with required name.
+-   Connect to database using pgAdmin and create `commandhunt` schema inside the database.
+-   Make sure you create the kubernetes cluster and database cluster in the same region to avoid any latency issues.
 
 #### Install ingress controller
-```
+```shell
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
 helm install nginx-ingress ingress-nginx/ingress-nginx -n ingress-nginx --create-namespace --set controller.publishService.enabled=true
 ```
 
 Check if load balancer become available using below command
-```
+```shell
 kubectl get svc -o wide nginx-ingress-ingress-nginx-controller -n ingress-nginx
 ```
 
@@ -28,30 +24,27 @@ kubectl get svc -o wide nginx-ingress-ingress-nginx-controller -n ingress-nginx
 This needs to be done before installing the application. Verify the updates are available using `nslookup` command.
 If not then decrease the TTL of A-record and try `nslookup` again.
 
-
 #### Install cert-manager
-```
+```shell
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
 helm install cert-manager jetstack/cert-manager -n cert-manager --create-namespace --version v1.2.0 --set installCRDs=true
 ```
 
 Verify cert-manager pods
-```
+```shell
 kubectl get pods -n cert-manager
 ```
-
 
 ### Install CommandHunt Application
 
 #### Create a namespace for CommandHunt application
-```
+```shell
 kubectl create namespace ch
 ```
 
-
-#### Create `regcred` secret to allow pulling docker images from the private registry.
-```
+#### Create `regcred` secret to allow pulling docker images from the private registry
+```shell
 kubectl create secret generic regcred \
     --from-file=.dockerconfigjson=<path/to/.docker/config.json> \
     --type=kubernetes.io/dockerconfigjson -n ch
@@ -60,13 +53,12 @@ kubectl create secret generic regcred \
 **NOTE:** Replace `<path/to/.docker/config.json>` token with correct path
 
 To verify the secret, run the below command
-```
+```shell
 kubectl get secret regcred -o jsonpath='{.data}' -n ch
 ```
 
-
-#### Create `postgres-secret` to allow connecting to postgres database.
-```
+#### Create `postgres-secret` to allow connecting to postgres database
+```shell
 kubectl create secret generic postgres-secret \
     --from-literal=POSTGRES_USER=<POSTGRES_USER> \
     --from-literal=POSTGRES_PASSWORD=<POSTGRES_PASSWORD> \
@@ -78,13 +70,12 @@ kubectl create secret generic postgres-secret \
 **NOTE:** Replace `<POSTGRES_USER>` `<POSTGRES_PASSWORD>` `<POSTGRES_DB>` `<POSTGRES_HOST>` and `<POSTGRES_PORT>` with correct values.
 
 To verify the secret, run the below command
-```
+```shell
 kubectl get secret postgres-secret -o jsonpath='{.data}' -n ch
 ```
 
-
 #### Create `oauth-api-secret` to allow application to connect to oAuth providers
-```
+```shell
 kubectl create secret generic oauth-api-secret \
 	--from-literal=GOOGLE_CLIENT_ID=<GOOGLE_CLIENT_ID> \
 	--from-literal=GOOGLE_CLIENT_SECRET=<GOOGLE_CLIENT_SECRET> \
@@ -98,38 +89,35 @@ kubectl create secret generic oauth-api-secret \
 **NOTE:** Replace `<GOOGLE_CLIENT_ID>` `<GOOGLE_CLIENT_SECRET>` `<FACEBOOK_CLIENT_ID>` `<FACEBOOK_CLIENT_SECRET>` `<GITHUB_CLIENT_ID>` `<GITHUB_CLIENT_SECRET>` and `<APP_JWT_SECRET>` with correct values.
 
 To verify the secret, run the below command
-```
+```shell
 kubectl get secret oauth-api-secret -o jsonpath='{.data}' -n ch
 ```
 
-
-#### Install the chart with below command.
-```
+#### Install the chart with below command
+```shell
 helm install commandhunt helm -n ch --create-namespace
 ```
 **Note:** Execute this command from the parent directory
 
-
 #### Verify the installation
 Check all the pods are up and running with below command
-```
+```shell
 kubectl get pods -n ch
 ```
 
 Check all the services is in active state
-```
+```shell
 kubectl get svc -n ch -o wide
 ```
 
 Verify Let’s Encrypt certificate status
-```
+```shell
 kubectl describe certificate commandhunt-tls -n ch
 kubectl describe clusterissuer letsencrypt-prod -n ch
 kubectl get certificaterequest -n ch -o wide
 kubectl get orders -n ch
 kubectl get challenges -n ch
 ```
-
 
 #### Point name-servers of your website to cloud provider
 Make sure to link the name-servers of your cloud service provider to your domain using the interface provided by your domain registrar.

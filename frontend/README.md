@@ -1,50 +1,45 @@
-# CommandHunt Frontend Module
+## CommandHunt Frontend Module
 This is the frontend module of commandhunt application.
-
 
 ### Build the frontend module
 
 The following commands are used to build this frontend module.
-```
+```shell
 npm install
 npm run build
 ```
 
-
 ### Running the frontend module locally
 The following command is used to run this frontend module.
-```
+```shell
 npm start
 ```
 This will start the react app in the development mode.
 
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-
 ### Analyzing the bundle size
 Source map explorer analyzes JavaScript bundles using the source maps. This helps you understand where code bloat is coming from.
 
 Run below command to generate the report.
-```
+```shell
 npm run analyze
 ```
 
-
 ### Create production build
-```
+```shell
 npm run build
 ```
 
 This will create the production build of application in the `build` folder.
 It correctly bundles application in production mode and optimizes the build for the best performance.
 
-
 ### Running the production build of frontend module
 When you do `npm start` the app is started in development mode.
 
 If you have built the app and you want to run the app in production mode (i.e.from build directory), 
 Install `serve` and start the app using below commands
-```
+```shell
 npm install serve -g
 npm run build
 serve -s build
